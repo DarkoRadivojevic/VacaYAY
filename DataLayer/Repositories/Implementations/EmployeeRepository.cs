@@ -51,13 +51,7 @@ namespace DataLayer.Implementations
 
         public async Task<List<Employee>> EmployeeGetDeletedEmployees()
         {
-            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeDeletedOn != null)
-                                                     .Select(x => new Employee
-                                                     {
-                                                         EmployeeName = x.EmployeeName,
-                                                         EmployeeSurname = x.EmployeeSurname,
-                                                         EmployeeDeletedOn = x.EmployeeDeletedOn
-                                                     }).ToListAsync();
+            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeDeletedOn != null).ToListAsync();
             return employeesToReturn;
         }
 
@@ -69,26 +63,13 @@ namespace DataLayer.Implementations
 
         public async Task<Employee> EmployeeGetEmployee(string employeeEmail)
         {
-            Employee employeeToReturn = await DbContext.Employees.Where(x => x.AspNetUser.Email == employeeEmail)
-                                                .Select(x => new Employee
-                                                {
-                                                    EmployeeUID = x.EmployeeUID,
-                                                    EmployeeName = x.EmployeeName,
-                                                    EmployeeSurname = x.EmployeeSurname,
-                                                    EmployeeBacklogDays = x.EmployeeBacklogDays
-                                                }).FirstAsync();
+            Employee employeeToReturn = await DbContext.Employees.Where(x => x.AspNetUser.Email == employeeEmail).FirstAsync();
             return employeeToReturn;
         }
 
         public async Task<List<Employee>> EmployeeGetEmployees(DateTime employeeEmploymentDate)
         {
-            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeEmploymentDate > employeeEmploymentDate && x.EmployeeDeletedOn == null)
-                                                    .Select(x => new Employee
-                                                    {
-                                                        EmployeeName = x.EmployeeName,
-                                                        EmployeeSurname = x.EmployeeSurname,
-                                                        EmployeeUID = x.EmployeeUID
-                                                    }).ToListAsync();
+            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeEmploymentDate > employeeEmploymentDate && x.EmployeeDeletedOn == null).ToListAsync();
             return employeesToReturn;
         }
 
@@ -102,27 +83,14 @@ namespace DataLayer.Implementations
         public async Task<List<Employee>> EmployeeGetEmployeesWithBacklogDays()
         {
 
-            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeBacklogDays != 0 && x.EmployeeDeletedOn == null)
-                                                     .Select(x => new Employee
-                                                     {
-                                                         EmployeeUID = x.EmployeeUID,
-                                                         EmployeeName = x.EmployeeName,
-                                                         EmployeeSurname = x.EmployeeSurname,
-                                                         EmployeeBacklogDays = x.EmployeeBacklogDays
-                                                     }).ToListAsync();
+            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeBacklogDays != 0 && x.EmployeeDeletedOn == null).ToListAsync();
             return employeesToReturn;
 
         }
 
         public async Task<List<Employee>> EmployeeGetEmployees(string employeeName, string employeeSurname)
         {
-            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeName.Contains(employeeName) || x.EmployeeSurname.Contains(employeeSurname) && x.EmployeeDeletedOn == null)
-                                              .Select(x => new Employee
-                                              {
-                                                  EmployeeName = x.EmployeeName,
-                                                  EmployeeSurname = x.EmployeeSurname,
-                                                  EmployeeUID = x.EmployeeUID
-                                              }).ToListAsync();
+            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeName.Contains(employeeName) || x.EmployeeSurname.Contains(employeeSurname) && x.EmployeeDeletedOn == null).ToListAsync();
             return employeesToReturn;
         }
         public async Task<bool> EmployeeGetCardIDNumber(string employeeCardIDNumber)

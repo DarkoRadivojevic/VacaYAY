@@ -204,5 +204,11 @@
       <LastGenOutput>VacaYAYModel.cs</LastGenOutput>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Enums\Enums.csproj">
+      <Project>{9beaf8e8-bf7f-4865-9198-732cdf8976b7}</Project>
+      <Name>Enums</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

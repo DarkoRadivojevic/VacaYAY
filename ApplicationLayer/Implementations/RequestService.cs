@@ -97,6 +97,7 @@ namespace ApplicationLayer.Implementations
                 RequestUID = x.RequestUID,
                 RequestType = x.RequestType,
                 RequestNumber = x.RequestNumber,
+                RequestNumberOfDays = x.RequestNumberOfDays
             }).ToList();
 
             return requestsToReturn;

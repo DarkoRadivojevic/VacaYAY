@@ -64,3 +64,15 @@ C:\Users\ING\source\repos\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs
 C:\Users\ING\source\repos\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
 C:\Users\ING\source\repos\DataLayer\obj\Debug\DataLayer.dll
 C:\Users\ING\source\repos\DataLayer\obj\Debug\DataLayer.pdb
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\DataLayer\bin\Debug\aspnet-VacaYAY-20190806013511.mdf
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\DataLayer\bin\Debug\aspnet-VacaYAY-20190806013511_log.ldf
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\DataLayer\bin\Debug\DataLayer.dll.config
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\DataLayer\bin\Debug\DataLayer.dll
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\DataLayer\bin\Debug\DataLayer.pdb
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\DataLayer\bin\Debug\Enums.dll
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\DataLayer\bin\Debug\Enums.pdb
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\DataLayer\obj\Debug\DataLayer.dll
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\DataLayer\obj\Debug\DataLayer.pdb
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\DataLayer\obj\Debug\DataLayer.csprojAssemblyReference.cache

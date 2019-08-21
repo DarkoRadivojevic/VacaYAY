@@ -65,7 +65,7 @@ namespace VacaYAY.Models
         public Guid EmployeeUID { get; set; }
         public string EmployeeName { get; set; }
         public string EmployeeSurname { get; set; }
-        public int EmployeeBacklogDays { get; set; }
+        public int? EmployeeBacklogDays { get; set; }
         public DateTime? EmployeeDeletedOn { get; set; }
     }
 }

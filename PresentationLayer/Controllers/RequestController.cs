@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using ApplicationLayer;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -12,44 +13,73 @@ namespace VacaYAY.Controllers
     [Authorize]
     public class RequestController : Controller
     {
-
-
+        #region Atributes
+        private ApplicationService _applicationService;
+        #endregion
         #region Constructors
         public RequestController()
         {
-             
+
         }
-      
+        public RequestController(ApplicationService applicationService)
+        {
+            ApplicationService = applicationService;
+        }
         #endregion
-      
+        #region Properties
+        public ApplicationService ApplicationService
+        {
+            get
+            {
+                return _applicationService;
+            }
+            private set
+            {
+                _applicationService = value;
+            }
+        }
+        #endregion
         public static void SetValues(int pageOffset, int pageCount)
         {
 
         }
 
         [HttpGet]
-        [Route("Requests")]
+        [Route("Requests/GetRequests/{pageOffset}/{pageCount}")]
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> GetRequests()
         {
 
-            var val1 = Request.Cookies["pageOffset"].Value;
-            var val2 = Request.Cookies["pageCount"].Value;
-            
-            return View();
+            int requestOffset = Int32.Parse(Request["pageOffset"]);
+            int requestCount = Int32.Parse(Request["pageCount"]);
+
+            var requests = await ApplicationService.RequestService.RquestGetRequests((int)requestCount, (int)requestOffset);
+            var requestsToReturn = requests.Select(x => new ReturnRequestViewModel()
+            {
+                RequestUID = x.RequestUID,
+                RequestNumber = x.RequestNumber,
+                RequestNumberOfDays = x.RequestNumberOfDays,
+                RequestType = x.RequestType
+            }).ToList();
+
+            return View(requestsToReturn);
         }
 
         [HttpGet]
-        [Route("Requests/{UID}")]
+        [Route("Requests/GetRequest/{UID}")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ActionResult> GetRequest(Guid UID)
+        public async Task<ActionResult> GetRequest(Guid? UID)
         {
-            if(!ModelState.IsValid)
-            {
-                return View();
-            }
 
-            return View();
+            var requestUID = Guid.Parse(Request["requestUID"]);
+            var request = await ApplicationService.RequestService.RequestGetRequest(requestUID);
+            var requestToReturn = new RequestViewModel()
+            {
+                RequestType = request.RequestType,
+                RequestStartDate = request.RequestStartDate,
+                RequestEndDate = request.RequestEndDate
+            };
+            return View(requestToReturn);
         }
 
         [HttpPost]
@@ -58,7 +88,7 @@ namespace VacaYAY.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddRequest(RequestViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View();
             }
@@ -103,7 +133,7 @@ namespace VacaYAY.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> PermitOrDenyRequest(ProcessRequestViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View();
             }
@@ -140,13 +170,13 @@ namespace VacaYAY.Controllers
             return View();
         }
 
-        
+
         [HttpPost]
         [Route("Request/Alter")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AlterRequest(AlterViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View();
             }
@@ -170,6 +200,6 @@ namespace VacaYAY.Controllers
             return View();
         }
 
-        
+
     }
 }

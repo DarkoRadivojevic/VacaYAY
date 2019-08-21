@@ -1,24 +1,15 @@
 ﻿@model VacaYAY.Models.ReturnEmployeeViewModel
 @{
-    ViewBag.Title = "Employee";
+    Layout = null;
 }
-<h2>@ViewBag.Title</h2>
-<div class="row">
-    <div class="col-md-6 control-label">
-        @Html.Label("EmployeeName", Model.EmployeeName)
-    </div>
-    <div class="col-md-6 control-label">
-
+@Html.Hidden("EmployeeUID", Model.EmployeeUID)
+<div class="container-fluid">
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Employee Name: @Model.EmployeeName</li>
+            <li class="list-group-item">Employee Surname: @Model.EmployeeSurname</li>
+            <li class="list-group-item">Employee Backlog days: @Model.EmployeeBacklogDays</li>
+        </ul>
     </div>
 </div>
-<script>
-    function func() {
-        let tmp = document.getElementById("Form")
-        tmp.style.visibility = "visible"
-    }
-</script>
-@section Scripts
-{
-    @Scripts.Render("~/bundles/jqueryval")
-}
 

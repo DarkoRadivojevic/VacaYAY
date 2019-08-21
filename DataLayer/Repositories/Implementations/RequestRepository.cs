@@ -57,7 +57,8 @@ namespace DataLayer.Implementations
         public async Task<List<Request>> RequestGetRequests(int requestSize, int requestOffset)
         {
             List<Request> requestToReturn = await DbContext.Requests.Where(x => x.RequestDeletedOn == null && x.RequestStatus == (int)RequestStatus.InReview)
-                                                                    .Skip(requestSize * (requestOffset - 1))
+                                                                    .OrderBy(x => x.RequestCreatedOn)
+                                                                    .Skip(requestOffset * ( requestSize - 1))
                                                                     .Take(requestOffset).ToListAsync();
 
             return requestToReturn;

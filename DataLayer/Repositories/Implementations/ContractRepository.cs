@@ -43,15 +43,7 @@ namespace DataLayer.Implementations
 
         public async Task<List<Contract>> ContractGetAllContracts()
         {
-            List<Contract> contractsToReturn = await DbContext.Contracts.Where(x => x.ContractDeletedOn == null)
-                                                    .Select(x => new Contract
-                                                    {
-                                                        EmployeeID = x.EmployeeID,
-                                                        ContractNumber = x.ContractNumber,
-                                                        ContractType = x.ContractType,
-                                                        ContractStartDate = x.ContractStartDate,
-                                                        ContractEndDate = x.ContractEndDate
-                                                    }).ToListAsync();
+            List<Contract> contractsToReturn = await DbContext.Contracts.Where(x => x.ContractDeletedOn == null).ToListAsync();
             return contractsToReturn;
         }
 
@@ -68,14 +60,7 @@ namespace DataLayer.Implementations
 
         public async Task<List<Contract>> ContractsGetContractByEmployee(Guid employeeUID)
         {
-            List<Contract> contractsToReturn = await DbContext.Contracts.Where(x => x.Employee.EmployeeUID == employeeUID && x.ContractDeletedOn == null)
-                                                     .Select(x => new Contract
-                                                     {
-                                                         ContractNumber = x.ContractNumber,
-                                                         ContractType = x.ContractType,
-                                                         ContractStartDate = x.ContractStartDate,
-                                                         ContractEndDate = x.ContractEndDate
-                                                     }).ToListAsync();
+            List<Contract> contractsToReturn = await DbContext.Contracts.Where(x => x.Employee.EmployeeUID == employeeUID && x.ContractDeletedOn == null).ToListAsync();
             return contractsToReturn;
         }
 

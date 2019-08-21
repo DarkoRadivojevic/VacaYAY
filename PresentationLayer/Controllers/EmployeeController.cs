@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using ApplicationLayer;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -14,13 +15,32 @@ namespace VacaYAY.Controllers
     [Authorize]
     public class EmployeeController : Controller
     {
+        #region Atributes
+        private ApplicationService _applicationService;
+        #endregion
         #region Constructors
         public EmployeeController()
         {
 
         }
+        public EmployeeController(ApplicationService applicationService)
+        {
+            ApplicationService = applicationService;
+        }
         #endregion
-    
+        #region Properties
+        public ApplicationService ApplicationService
+        {
+            get
+            {
+                return _applicationService;
+            }
+            private set
+            {
+                _applicationService = value;
+            }
+        }
+        #endregion
         [HttpGet]
         [Authorize(Roles = "ADMIN")]
         //[ValidateAntiForgeryToken]
@@ -35,9 +55,17 @@ namespace VacaYAY.Controllers
         public async Task<ActionResult> FindCurrentEmployee()
         {
             var email = User.Identity.Name;
-            
 
-            return PartialView();
+            var employee = await ApplicationService.EmployeeService.EmployeeFindCurrentEmployee(email);
+            var employeeToReturn = new ReturnEmployeeViewModel()
+            {
+                EmployeeUID = employee.EmployeeUID,
+                EmployeeName = employee.EmployeeName,
+                EmployeeSurname = employee.EmployeeSurname,
+                EmployeeBacklogDays = employee.EmployeeBacklogDays
+            };
+
+            return PartialView(employeeToReturn);
         }
         [HttpGet]
         [Authorize(Roles = "ADMIN")]

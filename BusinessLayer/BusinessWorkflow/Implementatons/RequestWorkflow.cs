@@ -85,6 +85,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             var requestsToReturn = requests.Select(x => new RequestsEntity()
             {
                 RequestUID = x.RequestUID,
+                RequestNumber = x.RequestNumber,
                 RequestType = x.RequestType,
                 RequestNumberOfDays = x.RequestNumberOfDays,
                 RequestStardDate = x.RequestStartDate,
