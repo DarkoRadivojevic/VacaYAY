@@ -1,0 +1,21 @@
+﻿<head>
+    <title>VacaYAY</title>
+</head>
+<div class="row">
+    <div class="col-md-4">
+        @if (!Request.IsAuthenticated)
+        {
+            <h2>Welcome</h2>
+            <p>
+                Pleaase login to your account.
+            </p>
+        }
+        else
+        {
+            @Html.Partial("HomeView");
+        }
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

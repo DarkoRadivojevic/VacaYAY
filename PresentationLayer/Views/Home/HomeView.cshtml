@@ -1,0 +1,10 @@
+﻿@Html.AntiForgeryToken()
+@if (User.IsInRole("ADMIN") && Request.IsAuthenticated)
+{
+
+    @Html.Partial("AdminView");
+}
+else
+{
+    @Html.Partial("UserView");
+}
