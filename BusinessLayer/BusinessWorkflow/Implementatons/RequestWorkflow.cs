@@ -66,6 +66,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             var request = await RequestRepository.RequestsGetRequest(requestUID);
             return new RequestsEntity()
             {
+                EmployeeUID = request.Employee.EmployeeUID,
                 RequestUID = request.RequestUID,
                 RequestNumber = request.RequestNumber,
                 RequestType = request.RequestType,
@@ -99,6 +100,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
         {
             var request = await RequestRepository.RequestsGetRequest(requestUID);
             request.RequestStatus = (int)RequestStatus.Accepted;
+            await RequestRepository.RequestSave();
             
         }
 

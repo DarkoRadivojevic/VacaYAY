@@ -4,16 +4,20 @@
 }
 @Html.Hidden("pageCount", 1)
 @Html.Hidden("pageOffset", 0)
+@Html.AntiForgeryToken()
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-3" id="currentUser"></div>
-        <div class="col-md-6">
+        <div class="col-md-2" id="currentUser"></div>
+        <div class="col-md-8">
             <div id="accordion">
             </div>
+            <div id="request"></div>
         </div>
-        <div class="col-md-3"></div>
+        <div class="col-md-2"></div>
     </div>
 </div>
+<!-- The Modal -->
+<div class="modal" id="myModal"></div>
 <script src="~/Scripts/AdminView/admin.scripts.js"></script>
 <script>
     var requestUrl = '@Url.Action("GetRequests", "Request")';

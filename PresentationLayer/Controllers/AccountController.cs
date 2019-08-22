@@ -48,13 +48,22 @@ namespace VacaYAY.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await ApplicationService.AccountService.AccountLogin(model.Email, model.Password, model.RememberMe);
+                return View(model);
             }
-            return View();
+            var result = await ApplicationService.AccountService.AccountLogin(model.Email, model.Password, model.RememberMe);
+            if (result)
+            {
+                return View("~/Views/Home/Index.cshtml");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Failed login attempt");
+                return View(model);
+            }
         }
 
 

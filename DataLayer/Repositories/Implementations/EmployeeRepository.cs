@@ -111,6 +111,12 @@ namespace DataLayer.Implementations
         {
             DbContext.Entry(employee).State = EntityState.Modified;
         }
+
+        public async Task<Employee> EmployeeGetEmployee(int employeeID)
+        {
+            var employee = await DbContext.Employees.Where(x => employeeID == x.EmployeeID).FirstAsync();
+            return employee;
+        }
         #endregion
     }
 }

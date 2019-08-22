@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolutionEnums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace VacaYAY.Models
         public Guid RequestUID { get; set; }
         [Required]
         [DataType(DataType.Text)]
-        public int RequestStatus { get; set; }
+        public RequestStatus RequestStatus { get; set; }
 
     }
 

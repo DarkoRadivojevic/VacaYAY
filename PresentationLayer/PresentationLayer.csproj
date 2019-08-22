@@ -402,6 +402,11 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Request\GetRequest.cshtml" />
+    <Content Include="Views\Modal\ApproveModal.cshtml" />
+    <Content Include="Views\Modal\DenyModal.cshtml" />
+    <Content Include="Views\Request\PermitOrDenyRequest.cshtml" />
+    <Content Include="Views\Request\AddRequest.cshtml" />
+    <Content Include="Views\Request\AddRequestView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

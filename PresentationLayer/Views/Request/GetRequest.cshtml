@@ -1,11 +1,19 @@
-﻿@model  VacaYAY.Models.RequestViewModel
+﻿@model  VacaYAY.Models.ReturnRequestViewModel
 @{
     Layout = null;
 }
-
-<div>
-    <span>@Model.RequestType</span>
-    <span>@Model.RequestStartDate</span>
-    <span>@Model.RequestEndDate</span>
+@Html.AntiForgeryToken()
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card-body">Request by: @Model.EmployeeName @Model.EmployeeSurname </div>
+        <div class="card-body">Request type: @Model.RequestType</div>
+        <div class="card-body">Starts on: @Model.RequestStartDate.ToShortDateString()</div>
+        <div class="card-body">Ends on: @Model.RequestEndDate.ToShortDateString()</div>
+    </div>
+    <div class="col mr-2 row d-flex align-content-end flex-column justify-content-between">
+        <button type="button" id="approve-@Model.RequestUID" value="0" class="btn btn-success  btn-sm">Approve</button>
+        <button type="button" id="edit-@Model.RequestUID" value="0" class="btn btn-warning btn-sm">Edit</button>
+        <button type="button" id="deny-@Model.RequestUID" value="0" class="btn btn-danger btn-sm">Deny</button>
+    </div>
 </div>
 

@@ -1,5 +1,7 @@
 ﻿using ApplicationLayer;
+using ApplicationLayer.Entities;
 using Microsoft.AspNet.Identity.Owin;
+using SolutionEnums;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -39,11 +41,20 @@ namespace VacaYAY.Controllers
             }
         }
         #endregion
-        public static void SetValues(int pageOffset, int pageCount)
+        [Route("Requests/ApproveModal")]
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet]
+        public  ActionResult ApproveModal()
         {
-
+            return View("~/Views//Modal/ApproveModal.cshtml");
         }
-
+        [Route("Requests/DenyModal")]
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet]
+        public ActionResult DenyModal()
+        {
+            return View("~/Views/Modal/DenyModal.cshtml");
+        }
         [HttpGet]
         [Route("Requests/GetRequests/{pageOffset}/{pageCount}")]
         [Authorize(Roles = "ADMIN")]
@@ -73,25 +84,48 @@ namespace VacaYAY.Controllers
 
             var requestUID = Guid.Parse(Request["requestUID"]);
             var request = await ApplicationService.RequestService.RequestGetRequest(requestUID);
-            var requestToReturn = new RequestViewModel()
+            var employee = await ApplicationService.EmployeeService.EmployeeGetEmployee(request.EmployeeUID);
+            var requestToReturn = new ReturnRequestViewModel()
             {
+                EmployeeName = employee.EmployeeName,
+                EmployeeSurname = employee.EmployeeSurname,
                 RequestType = request.RequestType,
                 RequestStartDate = request.RequestStartDate,
-                RequestEndDate = request.RequestEndDate
+                RequestEndDate = request.RequestEndDate,
+                RequestUID = request.RequestUID
             };
             return View(requestToReturn);
         }
 
+        [HttpGet]
+        [Route("Requests/AddRequestView")]
+        [Authorize(Roles ="ADMIN, USER")]
+        public ActionResult AddRequestView()
+        {
+            return View();
+        }
+
         [HttpPost]
-        [Route("Requests/Add")]
+        [Route("Request/AddRequest")]
         [Authorize(Roles = "ADMIN, USER")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddRequest(RequestViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View("AddRequestView");
             }
+
+            var request = new ApplicationRequest()
+            {
+                RequestComment = model.RequestComment,
+                RequestType = model.RequestType,
+                RequestNumberOfDays = model.RequestNumberOfDays,
+                RequestStartDate = model.RequestStartDate,
+                RequestEndDate = model.RequestEndDate
+            };
+
+            await ApplicationService.RequestService.RequestAddRequest(User.Identity.Name, request);
 
             //var availableDays = await DbContext.AdditionalDays.Where(x => x.EmployeeID == UserManager.FindByNameAsync(User.Identity.Name).Id)
             //                                                  .Select(x => x.AdditionalDaysNumberOfAdditionalDays)
@@ -128,7 +162,7 @@ namespace VacaYAY.Controllers
         }
 
         [HttpPost]
-        [Route("Request/Process")]
+        [Route("Request/PermitOrDenyRequest")]
         [Authorize(Roles = "ADMIN")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> PermitOrDenyRequest(ProcessRequestViewModel model)
@@ -137,7 +171,14 @@ namespace VacaYAY.Controllers
             {
                 return View();
             }
-
+            if(model.RequestStatus == RequestStatus.Accepted)
+            {
+                await ApplicationService.RequestService.RequestPermit(model.RequestUID);
+            }
+            else
+            {
+                
+            }
             //var request = await DbContext.Requests.Where(x => x.ReqeustUID == model.RequestUID).FirstAsync();
             //request.RequestDenialComment = model.RequestDenialComment;
             //request.RequestStatus = model.RequestStatus;

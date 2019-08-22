@@ -7,6 +7,7 @@ namespace DataLayer
     public interface IEmployeeRepository
     {
         Task<Employee> EmployeeGetEmployee(Guid employeeUID);
+        Task<Employee> EmployeeGetEmployee(int employeeID);
         Task<Employee> EmployeeGetEmployee(string emlpoyeeEmail);
         Task<List<Employee>> EmployeeGetEmployees(string employeeName, string employeeSurname);
         Task<List<Employee>> EmployeeGetEmployees(DateTime employeeEmploymentDate);

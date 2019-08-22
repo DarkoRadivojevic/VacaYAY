@@ -68,6 +68,7 @@ namespace ApplicationLayer.Implementations
 
             var requestToReturn = new ApplicationRequest()
             {
+                RequestUID = request.RequestUID,
                 RequestComment = request.RequestComment,
                 EmployeeUID = request.EmployeeUID,
                 RequestDenialComment = request.RequestDenialComment,

@@ -1,0 +1,56 @@
+﻿@model VacaYAY.Models.RequestViewModel
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("AddRequest", "Request", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", id="requestForm"}))
+{   
+    @Html.AntiForgeryToken()
+    <h4>Request form</h4>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.RequestComment, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.RequestComment, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.RequestComment, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.RequestStartDate, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.RequestStartDate, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.RequestStartDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.RequestEndDate, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.RequestEndDate, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.RequestEndDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.RequestNumberOfDays, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.RequestNumberOfDays, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.RequestNumberOfDays, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.RequestType, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.RequestType, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.RequestType, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group justify-content-between">
+        <div class="col">
+            <input type="submit" value="Request" class="btn btn-default" />
+        </div>
+        <div class="col">
+            <button type="button" id="requestCancel" class="btn btn-default">Cancel</button>
+        </div>
+    </div>
+}
+<script>
+    $('#requestCancel').on('click', restore);
+</script>
