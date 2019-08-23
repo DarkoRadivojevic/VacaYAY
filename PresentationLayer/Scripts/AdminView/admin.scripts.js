@@ -1,11 +1,30 @@
 ﻿function StartUp(requestUrl, employeeUrl) {
     $(document).ready(function () {
         $("#pageOffset").val($(window).height() / 100);
-        GetRequests(requestUrl);
-        FindCurrentEmployee(employeeUrl);
+        InfiniteRegister();
+        SetButtons();
+        GetRequests();
+        FindCurrentEmployee();
     });
 }
-function GetRequests(requestUrl) {
+
+function InfiniteRegister() {
+    $(window).scroll(function () {
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+            $('.btn-primary').each(function (index, element) {
+                if (element.value == 1) {
+                    element.click();
+                }
+
+            })
+        }
+    });
+}
+
+function GetRequests() {
+    SetButtonInFocus(this);
+    
+    requestUrl = $('#requestUrl').val();
     $(document).ready(function () {
         $.ajax({
             type: 'GET',
@@ -13,15 +32,16 @@ function GetRequests(requestUrl) {
             dataType: 'html',
             data: { pageOffset: parseInt($('#pageOffset').val()), pageCount: parseInt($('#pageCount').val()) },
             success: function (partialViewData) {
-                $('#accordion').html(partialViewData);
+                $('#accordion').append(partialViewData);
             }
 
         });
-        var count = parseInt($('#pageCount').val());
-        $("#pageCount").val(count + 1)
     });
+    var count = parseInt($('#pageCount').val());
+    $("#pageCount").val(count + 1)
 }
-function FindCurrentEmployee(employeeUrl) {
+function FindCurrentEmployee() {
+    employeeUrl = $('#currentEmployeeUrl').val();
     $(document).ready(function () {
         $.ajax({
             type: 'GET',
@@ -55,11 +75,9 @@ function ButtonAddValue(collapse) {
     ButtonsAddAction(collapse.value);
 }
 function ButtonsAddAction(id) {
-    console.log('id neki')
-    console.log($('#approve-' + id).val());
     $('#approve-' + id).on('click', () => ShowApproveModal($('#approve-' + id).val()));
-    $('#deny-' + id).on('click', () => ShowDenyModal($('#deny').val()));
-    $('#edit-' + id).on('click', () => ShowEditComponents($('#edit').val()));
+    $('#deny-' + id).on('click', () => ShowDenyModal($('#deny-' + id).val()));
+    $('#edit-' + id).on('click', () => ShowEditComponents($('#edit-' + id).val()));
 }
 function ShowApproveModal(value) {
     $.ajax({
@@ -74,14 +92,22 @@ function ShowApproveModal(value) {
     });
 }
 function ApproveRequest(url) {
-    console.log('pozvan sam');
-    console.log($('#yes').val());
     var token = $('input[name="__RequestVerificationToken"]').val();
-    console.log(token);
     $.ajax({
         type: 'POST',
         url: url,
         data: ({ "__RequestVerificationToken": token, "RequestUID": $('#yes').val(), "RequestStatus": 'Accepted' }),
+        success: function () {
+            $('#item-' + $('#yes').val()).remove();
+        }
+    })
+}
+function DenyRequest(url) {
+    var token = $('input[name="__RequestVerificationToken"]').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: ({ "__RequestVerificationToken": token, "RequestUID": $('#yes').val(), "RequestStatus": 'Denied' }),
         success: function () {
             $('#item-' + $('#yes').val()).remove();
         }
@@ -105,21 +131,93 @@ function ShowEditComponents(value) {
 
 }
 function RequestForm(url) {
-    console.log('pozvan sma')
     $('#accordion').hide()
     ShowRequestForm(url);
 }
 function ShowRequestForm(url) {
     $.ajax({
         type: 'GET',
-        url:  url,
+        url: url,
         datatype: 'html',
         success: function (partialViewData) {
-            $('#request').html(partialViewData);       
+            $('#request').html(partialViewData);
         }
     });
 }
 function restore() {
     $('#requestForm').remove();
     $('#accordion').show();
+}
+function asyncFormSubmit() {
+    $(document).ready(function () {
+        $('#requestForm').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('action') || windows.location.pathname,
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (data) {
+                    $('#request').hmtl(data);
+                }
+            })
+        })
+    });
+}
+function SetButtons() {
+    $(document).ready(function () {
+        $('#requestShow').on('mousedown ', () => {
+            console.log('promenjeno');
+            $('#pageCount').val(1)
+            $('#accordion').html(" ");
+        });
+        $('#requestShow').on('click', GetRequests);
+        $('#requestShow').val(1);
+
+        $('#employeesShow').on('mousedown', () => {
+            console.log('promenjeno');
+            $('#pageCount').val(1);
+            $('#accordion').html(" ");
+        });
+        $('#employeesShow').on('click', GetEmployees);
+        $('#employeesShow').val(0);
+    });
+}
+
+function GetEmployees() {
+    var token = $('input[name="__RequestVerificationToken"]').val();
+    SetButtonInFocus(this);
+    $('#requestForm').remove();
+    $.ajax({
+        type: 'POST',
+        url: 'Employee/GetEmployees',
+        data: { "__RequestVerificationToken": token, pageOffset: parseInt($('#pageOffset').val()), pageCount: parseInt($('#pageCount').val()) },
+        dataType: 'html',
+        success: function (PartialViewData) {
+            $('#accordion').append(PartialViewData);
+        }
+    })
+    var count = parseInt($('#pageCount').val());
+    $("#pageCount").val(count + 1)
+}
+function SetButtonInFocus(button) {
+    $('.btn-primary').each(function (index, element) {
+        element.value = 0;
+    });
+    $(button).val(1);
+}
+
+function GetEmployeeDetails(collapse, requestDetailsUrl) {
+    $(collapse).ready(function () {
+        var token = $('input[name="__RequestVerificationToken"').val();
+        $.ajax({
+            type: 'POST',
+            url: requestDetailsUrl,
+            data: { "__RequestVerificationToken": token, EmployeeUID: collapse.value },
+            dataType: 'html',
+            success: function (PartialViewData) {
+                $('#card-' + collapse.value).html(PartialViewData)
+                ButtonAddValue(collapse)
+            }
+        });
+    });
 }

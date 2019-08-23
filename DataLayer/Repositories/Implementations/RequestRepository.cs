@@ -54,11 +54,11 @@ namespace DataLayer.Implementations
             await this.RequestSave();
         }
 
-        public async Task<List<Request>> RequestGetRequests(int requestSize, int requestOffset)
+        public async Task<List<Request>> RequestGetRequests(int requestCount, int requestOffset)
         {
             List<Request> requestToReturn = await DbContext.Requests.Where(x => x.RequestDeletedOn == null && x.RequestStatus == (int)RequestStatus.InReview)
                                                                     .OrderBy(x => x.RequestCreatedOn)
-                                                                    .Skip(requestOffset * ( requestSize - 1))
+                                                                    .Skip(requestCount * (requestCount - 1))
                                                                     .Take(requestOffset).ToListAsync();
 
             return requestToReturn;

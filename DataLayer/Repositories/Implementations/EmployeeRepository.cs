@@ -57,7 +57,7 @@ namespace DataLayer.Implementations
 
         public async Task<Employee> EmployeeGetEmployee(Guid employeeUID)
         {
-            Employee employeeToReturn = await DbContext.Employees.Where(x => x.EmployeeUID == employeeUID).FirstAsync();
+            Employee employeeToReturn = await DbContext.Employees.Where(x => x.EmployeeUID == employeeUID && x.EmployeeDeletedOn == null).FirstAsync();
             return employeeToReturn;
         }
 
@@ -73,9 +73,13 @@ namespace DataLayer.Implementations
             return employeesToReturn;
         }
 
-        public async Task<List<Employee>> EmployeeGetEmployees()
+        public async Task<List<Employee>> EmployeeGetEmployees(int employeeCount, int employeeOffset)
         {
-            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeDeletedOn == null).ToListAsync();
+            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeDeletedOn == null)
+                                                                        .OrderBy(x => x.EmployeeCreatedOn)
+                                                                        .Skip(employeeOffset * (employeeCount - 1))
+                                                                        .Take(employeeOffset)
+                                                                        .ToListAsync();
 
             return employeesToReturn;
         }

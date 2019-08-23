@@ -4,23 +4,28 @@
 }
 @Html.Hidden("pageCount", 1)
 @Html.Hidden("pageOffset", 0)
+@Html.Hidden("requestUrl", Url.Action("GetRequests", "Request"))
+@Html.Hidden("currentEmployeeUrl", Url.Action("FindCurrentEmployee", "Employee"))
 @Html.AntiForgeryToken()
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2" id="currentUser"></div>
-        <div class="col-md-8">
-            <div id="accordion">
-            </div>
-            <div id="request"></div>
+    <div class="container-fluid">
+        <div class="row justify-content-sm-start m-3">
+            <button class="btn btn-primary m-0 ml-1" id="requestShow">Requests</button>
+            <button class="btn btn-primary m-0 ml-1" id="employeesShow">Employees</button>
+            <button class="btn btn-primary m-0 ml-1">Contracts</button>
+            <input class="form-control" placeholder="Name"/>
         </div>
-        <div class="col-md-2"></div>
+        <div class="row">
+            <div class="col-md-2 " id="currentUser"></div>
+            <div class="col-md-8">
+                <div id="accordion">
+                </div>
+                <div id="request"></div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
     </div>
-</div>
-<!-- The Modal -->
 <div class="modal" id="myModal"></div>
 <script src="~/Scripts/AdminView/admin.scripts.js"></script>
 <script>
-    var requestUrl = '@Url.Action("GetRequests", "Request")';
-    var employeeUrl = '@Url.Action("FindCurrentEmployee", "Employee")';
-    StartUp(requestUrl, employeeUrl);
+    StartUp();
 </script>

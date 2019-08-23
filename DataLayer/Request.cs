@@ -17,7 +17,6 @@ namespace DataLayer
         public int RequestID { get; set; }
         public int EmployeeID { get; set; }
         public System.Guid RequestUID { get; set; }
-        public int RequestNumber { get; set; }
         public string RequestType { get; set; }
         public string RequestComment { get; set; }
         public int RequestStatus { get; set; }

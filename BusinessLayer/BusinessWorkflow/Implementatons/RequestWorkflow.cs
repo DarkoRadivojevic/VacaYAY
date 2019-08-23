@@ -68,7 +68,6 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             {
                 EmployeeUID = request.Employee.EmployeeUID,
                 RequestUID = request.RequestUID,
-                RequestNumber = request.RequestNumber,
                 RequestType = request.RequestType,
                 RequestComment = request.RequestComment,
                 RequestStatus = request.RequestStatus,
@@ -86,7 +85,6 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             var requestsToReturn = requests.Select(x => new RequestsEntity()
             {
                 RequestUID = x.RequestUID,
-                RequestNumber = x.RequestNumber,
                 RequestType = x.RequestType,
                 RequestNumberOfDays = x.RequestNumberOfDays,
                 RequestStardDate = x.RequestStartDate,
@@ -95,7 +93,6 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
 
             return requestsToReturn;
         }
-
         public async Task RequestPermit(Guid requestUID)
         {
             var request = await RequestRepository.RequestsGetRequest(requestUID);
@@ -103,7 +100,6 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             await RequestRepository.RequestSave();
             
         }
-
         public async Task RequestAddRequest(string employeeEmail, RequestsEntity requestsEntitiy)
         {
 

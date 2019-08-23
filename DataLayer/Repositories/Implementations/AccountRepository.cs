@@ -180,6 +180,14 @@ namespace DataLayer
 
             var result = await UserManager.ResetPasswordAsync(user.Id, token, accountPassword);
         }
+
+        public async Task<string> AccountGetAccountRole(Guid employeeUID)
+        {
+            var employeeID = await DbContext.Employees.Where(x => x.EmployeeUID == employeeUID).Select(x => x.EmployeeID).FirstAsync();
+            var role = await UserManager.GetRolesAsync(employeeID);
+
+            return role.First().ToString();
+        }
         #endregion
     }
 }

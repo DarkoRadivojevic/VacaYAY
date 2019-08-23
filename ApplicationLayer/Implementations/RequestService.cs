@@ -75,7 +75,6 @@ namespace ApplicationLayer.Implementations
                 RequestType = request.RequestType,
                 RequestStartDate = request.RequestStardDate,
                 RequestEndDate = request.RequestEndDate,
-                RequestNumber = request.RequestNumber,
                 RequestNumberOfDays = request.RequestNumberOfDays,
                 RequestStatus = (RequestStatus)request.RequestStatus,
                 RequestFile = request.RequestFile
@@ -97,7 +96,6 @@ namespace ApplicationLayer.Implementations
             {
                 RequestUID = x.RequestUID,
                 RequestType = x.RequestType,
-                RequestNumber = x.RequestNumber,
                 RequestNumberOfDays = x.RequestNumberOfDays
             }).ToList();
 

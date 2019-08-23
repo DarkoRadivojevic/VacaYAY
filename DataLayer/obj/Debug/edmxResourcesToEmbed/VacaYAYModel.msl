@@ -106,7 +106,6 @@
           <ScalarProperty Name="RequestID" ColumnName="RequestID" />
           <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
           <ScalarProperty Name="RequestUID" ColumnName="RequestUID" />
-          <ScalarProperty Name="RequestNumber" ColumnName="RequestNumber" />
           <ScalarProperty Name="RequestType" ColumnName="RequestType" />
           <ScalarProperty Name="RequestComment" ColumnName="RequestComment" />
           <ScalarProperty Name="RequestStatus" ColumnName="RequestStatus" />

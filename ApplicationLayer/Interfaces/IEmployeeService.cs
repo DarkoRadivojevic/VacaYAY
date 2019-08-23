@@ -14,7 +14,7 @@ namespace ApplicationLayer.Interfaces
         Task<List<ApplicationEmployee>> EmployeeFindEmployeesByName(string employeeName, string employeeSurname);
         Task<List<ApplicationEmployee>> EmployeeFindEmployeesByEmploymentDate(DateTime employeeEmploymentDay);
         Task<List<ApplicationEmployee>> EmployeeGetEmployeesWithBacklogDays();
-        Task<List<ApplicationEmployee>> EmployeeGetEmployees();
+        Task<List<ApplicationEmployee>> EmployeeGetEmployees(int employeeCount, int employeeOffset);
         Task<List<ApplicationEmployee>> EmployeeGetDeletedEmployees();
         Task EmployeeEditEmployee(ApplicationEmployee applicationEmployee, string employeeRole);
         Task EmployeeDeleteEmployee(Guid employeeUID);

@@ -10,7 +10,6 @@ namespace BusinessLayer.BusinessEntity
     {
         public Guid EmployeeUID { get; set; }
         public Guid RequestUID { get; set; }
-        public int RequestNumber { get; set; }
         public string RequestType { get; set; }
         public string RequestComment { get; set; }
         public int RequestStatus { get; set; }

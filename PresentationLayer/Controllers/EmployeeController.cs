@@ -108,29 +108,49 @@ namespace VacaYAY.Controllers
             return View();
         }
 
-        [HttpGet]
-        [Route("Employee/{UID}")]
+        [HttpPost]
+        [Route("Employee/GetEmployee")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ActionResult> GetEmployee(Guid UID)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> GetEmployee(Guid employeeUID)
         {
             if (!ModelState.IsValid)
             {
-                return View(UID);
+                return View(employeeUID);
             }
 
-            return View();
+            var employee = await ApplicationService.EmployeeService.EmployeeGetEmployee(employeeUID);
+            var employeeToReturn = new ReturnEmployeeViewModel()
+            {
+                EmployeeUID = employee.EmployeeUID,
+                EmployeeName = employee.EmployeeName,
+                EmployeeSurname = employee.EmployeeSurname,
+                EmployeeBacklogDays = employee.EmployeeBacklogDays,
+                EmployeeCardIDNumber = employee.EmployeeCardIDNumber,
+                EmployeeEmploymentDate = employee.EmployeeEmploymentDate,
+                EmployeeRole = employee.EmployeeRole
+            };
+            return View(employeeToReturn);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize(Roles = "ADMIN")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> GetEmployees()
         {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
+            int employeeOffset = Int32.Parse(Request["pageOffset"]);
+            int employeeCount = Int32.Parse(Request["pageCount"]);
 
-            return View();
+            var employees = await ApplicationService.EmployeeService.EmployeeGetEmployees(employeeCount, employeeOffset);
+            var employeesToReturn = employees.Select(x => new ReturnEmployeeViewModel()
+            {
+                EmployeeUID = x.EmployeeUID,
+                EmployeeName = x.EmployeeName,
+                EmployeeSurname = x.EmployeeSurname
+            }).ToList();
+
+
+            return View(employeesToReturn);
         }
 
         [HttpGet]

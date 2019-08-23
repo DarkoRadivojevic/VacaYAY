@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using VacaYAY.Models;
 
@@ -41,13 +42,15 @@ namespace VacaYAY.Controllers
             }
         }
         #endregion
+
         [Route("Requests/ApproveModal")]
         [Authorize(Roles = "ADMIN")]
         [HttpGet]
-        public  ActionResult ApproveModal()
+        public ActionResult ApproveModal()
         {
             return View("~/Views//Modal/ApproveModal.cshtml");
         }
+
         [Route("Requests/DenyModal")]
         [Authorize(Roles = "ADMIN")]
         [HttpGet]
@@ -68,9 +71,8 @@ namespace VacaYAY.Controllers
             var requestsToReturn = requests.Select(x => new ReturnRequestViewModel()
             {
                 RequestUID = x.RequestUID,
-                RequestNumber = x.RequestNumber,
                 RequestNumberOfDays = x.RequestNumberOfDays,
-                RequestType = x.RequestType
+                RequestType = x.RequestType,
             }).ToList();
 
             return View(requestsToReturn);
@@ -92,14 +94,15 @@ namespace VacaYAY.Controllers
                 RequestType = request.RequestType,
                 RequestStartDate = request.RequestStartDate,
                 RequestEndDate = request.RequestEndDate,
-                RequestUID = request.RequestUID
+                RequestUID = request.RequestUID,
+                RequestComment = request.RequestComment ?? "No employee comment"
             };
             return View(requestToReturn);
         }
 
         [HttpGet]
         [Route("Requests/AddRequestView")]
-        [Authorize(Roles ="ADMIN, USER")]
+        [Authorize(Roles = "ADMIN, USER")]
         public ActionResult AddRequestView()
         {
             return View();
@@ -171,13 +174,13 @@ namespace VacaYAY.Controllers
             {
                 return View();
             }
-            if(model.RequestStatus == RequestStatus.Accepted)
+            if (model.RequestStatus == RequestStatus.Accepted)
             {
                 await ApplicationService.RequestService.RequestPermit(model.RequestUID);
             }
             else
             {
-                
+
             }
             //var request = await DbContext.Requests.Where(x => x.ReqeustUID == model.RequestUID).FirstAsync();
             //request.RequestDenialComment = model.RequestDenialComment;
@@ -207,8 +210,9 @@ namespace VacaYAY.Controllers
             //        request.Employee.EmployeeBacklogDays -= totalDays;
             //}
             //await DbContext.SaveChangesAsync();
-
             return View();
+
+           // return new Json(new { HasError }); //todo ende
         }
 
 

@@ -12,8 +12,17 @@
             Do you want to deny the selected request?
         </div>
         <div class="modal-footer row justify-content-between mx-0">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Yes</button>
-            <button type="button" class="btn btn-danger " data-dismiss="modal">No</button>
+            <button type="button" id="yes" onlick="action()" class="btn btn-success" data-dismiss="modal">Yes</button>
+            <button type="button" id="no" class="btn btn-danger " data-dismiss="modal">No</button>
         </div>
     </div>
 </div>
+<script>
+    function action() {
+        $(document).ready(function () {
+            console.log('uso sam');
+            var requestUrl = '@Url.Action("PermitOrDenyRequest", "Request")';
+            DenyRequest(requestUrl);
+        });
+    }
+</script>

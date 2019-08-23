@@ -111,10 +111,9 @@
     <Key>
       <PropertyRef Name="RequestID" />
     </Key>
-    <Property Name="RequestID" Type="Int32" Nullable="false" />
+    <Property Name="RequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="EmployeeID" Type="Int32" Nullable="false" />
     <Property Name="RequestUID" Type="Guid" Nullable="false" />
-    <Property Name="RequestNumber" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="RequestType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="RequestComment" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
     <Property Name="RequestStatus" Type="Int32" Nullable="false" />

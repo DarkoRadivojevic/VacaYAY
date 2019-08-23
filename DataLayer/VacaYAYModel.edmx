@@ -111,10 +111,9 @@
           <Key>
             <PropertyRef Name="RequestID" />
           </Key>
-          <Property Name="RequestID" Type="int" Nullable="false" />
+          <Property Name="RequestID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmployeeID" Type="int" Nullable="false" />
           <Property Name="RequestUID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="RequestNumber" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RequestType" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="RequestComment" Type="nvarchar" MaxLength="256" />
           <Property Name="RequestStatus" Type="int" Nullable="false" />
@@ -401,10 +400,9 @@
           <Key>
             <PropertyRef Name="RequestID" />
           </Key>
-          <Property Name="RequestID" Type="Int32" Nullable="false" />
+          <Property Name="RequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmployeeID" Type="Int32" Nullable="false" />
           <Property Name="RequestUID" Type="Guid" Nullable="false" />
-          <Property Name="RequestNumber" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RequestType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="RequestComment" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="RequestStatus" Type="Int32" Nullable="false" />
@@ -658,7 +656,6 @@
                 <ScalarProperty Name="RequestID" ColumnName="RequestID" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="RequestUID" ColumnName="RequestUID" />
-                <ScalarProperty Name="RequestNumber" ColumnName="RequestNumber" />
                 <ScalarProperty Name="RequestType" ColumnName="RequestType" />
                 <ScalarProperty Name="RequestComment" ColumnName="RequestComment" />
                 <ScalarProperty Name="RequestStatus" ColumnName="RequestStatus" />

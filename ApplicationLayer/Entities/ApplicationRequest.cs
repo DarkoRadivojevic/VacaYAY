@@ -11,7 +11,6 @@ namespace ApplicationLayer.Entities
     {
         public Guid RequestUID { get; set; }
         public Guid EmployeeUID { get; set; }
-        public int RequestNumber { get; set; }
         public string RequestType { get; set; }
         public string RequestComment { get; set; }
         public RequestStatus RequestStatus { get; set; }

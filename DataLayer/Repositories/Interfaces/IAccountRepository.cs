@@ -10,6 +10,7 @@ namespace DataLayer
     {
         Task<int> AccountRegister(string accountEmail, string accountPassowrd, string accountRole);
         Task<bool> AccountValidateEmail(string accountEmail);
+        Task<string> AccountGetAccountRole(Guid employeeUID);
         Task AccountChangeRole(Guid employeeUID, string employeeRole);
         Task<bool> AccountLogin(string accountEmail, string accountPassword, bool accountPersist);
         void AccountLogout(string accountCookie);

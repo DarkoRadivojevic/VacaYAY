@@ -2,7 +2,7 @@
 @{
     Layout = null;
 }
-@using (Html.BeginForm("AddRequest", "Request", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", id="requestForm"}))
+@using (Html.BeginForm("AddRequest", "Request", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Get, new { @class = "form-horizontal", role = "form", id="requestForm"}))
 {   
     @Html.AntiForgeryToken()
     <h4>Request form</h4>
@@ -52,5 +52,6 @@
     </div>
 }
 <script>
+    
     $('#requestCancel').on('click', restore);
 </script>

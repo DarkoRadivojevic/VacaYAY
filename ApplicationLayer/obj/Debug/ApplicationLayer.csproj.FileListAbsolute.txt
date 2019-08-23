@@ -56,8 +56,6 @@ C:\Users\ING\source\repos\ApplicationLayer\obj\Debug\ApplicationLayer.dll
 C:\Users\ING\source\repos\ApplicationLayer\obj\Debug\ApplicationLayer.pdb
 C:\Users\ING\source\repos\ApplicationLayer\bin\Debug\aspnet-VacaYAY-20190806013511.mdf
 C:\Users\ING\source\repos\ApplicationLayer\bin\Debug\aspnet-VacaYAY-20190806013511_log.ldf
-C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\bin\Debug\aspnet-VacaYAY-20190806013511.mdf
-C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\bin\Debug\aspnet-VacaYAY-20190806013511_log.ldf
 C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\bin\Debug\ApplicationLayer.dll.config
 C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\bin\Debug\ApplicationLayer.dll
 C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\bin\Debug\ApplicationLayer.pdb
@@ -92,3 +90,5 @@ C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\obj\Debug\Application
 C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\obj\Debug\ApplicationLayer.csproj.CopyComplete
 C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\obj\Debug\ApplicationLayer.dll
 C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\obj\Debug\ApplicationLayer.pdb
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\bin\Debug\aspnet-VacaYAY-20190806013511.mdf
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\bin\Debug\aspnet-VacaYAY-20190806013511_log.ldf

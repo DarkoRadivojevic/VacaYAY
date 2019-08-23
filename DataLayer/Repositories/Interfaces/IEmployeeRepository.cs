@@ -11,7 +11,7 @@ namespace DataLayer
         Task<Employee> EmployeeGetEmployee(string emlpoyeeEmail);
         Task<List<Employee>> EmployeeGetEmployees(string employeeName, string employeeSurname);
         Task<List<Employee>> EmployeeGetEmployees(DateTime employeeEmploymentDate);
-        Task<List<Employee>> EmployeeGetEmployees();
+        Task<List<Employee>> EmployeeGetEmployees(int employeeCount, int employeeOffset);
         Task<List<Employee>> EmployeeGetEmployeesWithBacklogDays();
         Task<List<Employee>> EmployeeGetDeletedEmployees();
         Task<bool> EmployeeGetCardIDNumber(string employeeCardIDNumber);

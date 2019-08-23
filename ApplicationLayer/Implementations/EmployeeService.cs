@@ -1,7 +1,6 @@
 ﻿using ApplicationLayer.Entities;
 using ApplicationLayer.Interfaces;
 using BusinessLayer.BusinessEntity;
-using BusinessLayer.BusinessWorkflow.Implementatons;
 using BusinessLayer.BusinessWorkflow.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -164,20 +163,22 @@ namespace ApplicationLayer.Implementations
 
             var employeeToReturn = new ApplicationEmployee()
             {
+                EmployeeUID = employee.EmployeeUID,
                 EmployeeName = employee.EmployeeName,
                 EmployeeSurname = employee.EmployeeSurname,
                 EmployeeBacklogDays = employee.EmployeeBacklogDays,
                 EmployeeCardIDNumber = employee.EmployeeCardIDNumber,
                 EmployeeEmploymentDate = employee.EmployeeEmploymentDate,
-                EmployeeDeletedOn = employee.EmployeeDeletedOn
+                EmployeeDeletedOn = employee.EmployeeDeletedOn,
+                EmployeeRole = employee.EmployeeRole
             };
 
             return employeeToReturn;
         }
 
-        public async Task<List<ApplicationEmployee>> EmployeeGetEmployees()
+        public async Task<List<ApplicationEmployee>> EmployeeGetEmployees(int employeeCount, int employeeOffset)
         {
-            var employees = await EmployeeWorkflow.EmployeeGetEmployees();
+            var employees = await EmployeeWorkflow.EmployeeGetEmployees(employeeCount, employeeOffset);
 
             var employeesToReturn = employees.Select(x => new ApplicationEmployee()
             {

@@ -407,6 +407,8 @@
     <Content Include="Views\Request\PermitOrDenyRequest.cshtml" />
     <Content Include="Views\Request\AddRequest.cshtml" />
     <Content Include="Views\Request\AddRequestView.cshtml" />
+    <Content Include="Views\Employee\GetEmployees.cshtml" />
+    <Content Include="Views\Employee\GetEmployee.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

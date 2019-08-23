@@ -1,0 +1,22 @@
+﻿
+@model  VacaYAY.Models.ReturnEmployeeViewModel
+@{
+    Layout = null;
+}
+@Html.AntiForgeryToken()
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card-body">Employee name: @Model.EmployeeName</div>
+        <div class="card-body">Employee Surname: @Model.EmployeeSurname</div>
+        <div class="card-body">ID Card number: @Model.EmployeeCardIDNumber</div>
+        <div class="card-body">Employment started: @Model.EmployeeEmploymentDate.ToShortDateString()</div>
+        <div class="card-body">Employed as: @Model.EmployeeRole</div>
+        <div class="card-body">Backlog days: @Model.EmployeeBacklogDays </div>
+    </div>
+    <div class="col mr-2 row d-flex align-content-end flex-column justify-content-between">
+        <button type="button" id="approve-@Model.EmployeeUID" value="0" class="btn btn-success  btn-sm">Approve</button>
+        <button type="button" id="edit-@Model.EmployeeUID" value="0" class="btn btn-warning btn-sm">Edit</button>
+        <button type="button" id="deny-@Model.EmployeeUID" value="0" class="btn btn-danger btn-sm">Deny</button>
+    </div>
+</div>
+

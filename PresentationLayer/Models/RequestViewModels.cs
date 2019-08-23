@@ -73,7 +73,6 @@ namespace VacaYAY.Models
         public Guid RequestUID { get; set; }
         public string EmployeeName { get; set; }
         public string EmployeeSurname { get; set; }
-        public int RequestNumber { get; set; }
         public string RequestType { get; set; }
         public string RequestComment { get; set; }
         public int RequestNumberOfDays { get; set; }

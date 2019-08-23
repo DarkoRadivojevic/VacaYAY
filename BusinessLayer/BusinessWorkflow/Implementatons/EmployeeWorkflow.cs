@@ -181,20 +181,23 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
         public async Task<EmployeeEntity> EmployeeGetEmployee(Guid employeeUID)
         {
             var employee = await EmployeeRepository.EmployeeGetEmployee(employeeUID);
+            var employeRole = await AccountRepository.AccountGetAccountRole(employeeUID);
 
             return new EmployeeEntity()
             {
+                EmployeeUID = employee.EmployeeUID,
                 EmployeeName = employee.EmployeeName,
                 EmployeeSurname = employee.EmployeeSurname,
                 EmployeeCardIDNumber = employee.EmlpoyeeCardIDNumber,
                 EmployeeBacklogDays = employee.EmployeeBacklogDays,
-                EmployeeEmploymentDate = employee.EmployeeEmploymentDate
+                EmployeeEmploymentDate = employee.EmployeeEmploymentDate,
+                EmployeeRole = employeRole
             };
         }
 
-        public async Task<List<EmployeeEntity>> EmployeeGetEmployees()
+        public async Task<List<EmployeeEntity>> EmployeeGetEmployees(int employeeCount, int employeeOffset)
         {
-            var employees = await EmployeeRepository.EmployeeGetEmployees();
+            var employees = await EmployeeRepository.EmployeeGetEmployees(employeeCount, employeeOffset);
 
             var employeesToReturn = employees.Select(x => new EmployeeEntity()
             {
