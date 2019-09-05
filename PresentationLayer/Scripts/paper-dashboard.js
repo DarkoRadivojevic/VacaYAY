@@ -26,8 +26,8 @@
   }
 })();
 
-transparent = true;
-transparentDemo = true;
+transparent = false;
+transparentDemo = false;
 fixedTop = false;
 
 navbar_initialized = false;
@@ -40,14 +40,6 @@ seq2 = 0, delays2 = 80, durations2 = 500;
 
 $(document).ready(function() {
 
-  if ($('.full-screen-map').length == 0 && $('.bd-docs').length == 0) {
-    // On click navbar-collapse the menu will be white not transparent
-    $('.collapse').on('show.bs.collapse', function() {
-      $(this).closest('.navbar').removeClass('navbar-transparent').addClass('bg-white');
-    }).on('hide.bs.collapse', function() {
-      $(this).closest('.navbar').addClass('navbar-transparent').removeClass('bg-white');
-    });
-  }
 
   paperDashboard.initMinimizeSidebar();
 
@@ -117,10 +109,9 @@ $(window).resize(function() {
   if ($('.full-screen-map').length == 0 && $('.bd-docs').length == 0) {
     $navbar = $('.navbar');
     isExpanded = $('.navbar').find('[data-toggle="collapse"]').attr("aria-expanded");
-    if ($navbar.hasClass('bg-white') && $(window).width() > 991) {
-      $navbar.removeClass('bg-white').addClass('navbar-transparent');
+    if ($navbar.hasClass('bg-dark') && $(window).width() > 991) {
     } else if ($navbar.hasClass('navbar-transparent') && $(window).width() < 991 && isExpanded != "false") {
-      $navbar.addClass('bg-white').removeClass('navbar-transparent');
+      $navbar.addClass('bg-dark').removeClass('navbar-transparent');
     }
   }
 });

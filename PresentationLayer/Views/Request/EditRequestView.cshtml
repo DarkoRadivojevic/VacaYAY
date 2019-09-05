@@ -1,0 +1,51 @@
+﻿@model VacaYAY.Models.EditRequestViewModel
+@{
+    Layout = null;
+}
+@Html.Hidden("getEditRequestAction", Url.Action("EditRequest", "Request"))
+@using (Html.BeginForm("EditRequest", "Request", FormMethod.Post, new { @class = "form-horizontal p-0 m-0", role = "form", id = "editRequestForm-" + Model.RequestUID }))
+{
+
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.HiddenFor(m => m.RequestUID, new { @id = "EmployeeFormUID" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.RequestType, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.EnumDropDownListFor(m => m.RequestType, new { @class = "form-control form-control-sm" })
+            @Html.ValidationMessageFor(m => m.RequestType, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.RequestStartDate, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.RequestStartDate, new { @class = "form-control datepicker", autocomplete = "off", id = "requestStart-" + Model.RequestUID })
+            @Html.ValidationMessageFor(m => m.RequestStartDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.RequestEndDate, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.RequestEndDate, new { @class = "form-control datepicker", autocomplete = "off", id = "requestEnd-" + Model.RequestUID })
+            @Html.ValidationMessageFor(m => m.RequestEndDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.RequestComment, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(m => m.RequestComment, new { @class = "form-control form-control-sm" })
+            @Html.ValidationMessageFor(m => m.RequestComment, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group justify-content-center">
+        <input type="submit" value="Change" id="editRequest" class="btn btn-sm btn-success" />
+        <button type="button" id="requestCancel" onclick="RestoreRequestCard('@Model.RequestUID')" class="btn btn-sm btn-danger">Cancel</button>
+    </div>
+}
+<script>
+    SubmitEditRequest('@Model.RequestUID');
+    InitializeEditRequestPikady('@Model.RequestUID');
+</script>

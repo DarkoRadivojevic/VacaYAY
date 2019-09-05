@@ -8,8 +8,9 @@ namespace DataLayer
     {
         Task<Employee> EmployeeGetEmployee(Guid employeeUID);
         Task<Employee> EmployeeGetEmployee(int employeeID);
+        Task<int> EmployeeGetEmployeeBacklogDays(Guid employeeUID);
         Task<Employee> EmployeeGetEmployee(string emlpoyeeEmail);
-        Task<List<Employee>> EmployeeGetEmployees(string employeeName, string employeeSurname);
+        Task<List<Employee>> EmployeeSearchEmployees(string[] searchString, DateTime employeeEmploymentDate);
         Task<List<Employee>> EmployeeGetEmployees(DateTime employeeEmploymentDate);
         Task<List<Employee>> EmployeeGetEmployees(int employeeCount, int employeeOffset);
         Task<List<Employee>> EmployeeGetEmployeesWithBacklogDays();

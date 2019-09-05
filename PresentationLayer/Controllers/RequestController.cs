@@ -1,13 +1,11 @@
-﻿using ApplicationLayer;
+﻿
+using ApplicationLayer;
 using ApplicationLayer.Entities;
-using Microsoft.AspNet.Identity.Owin;
+using Enums;
 using SolutionEnums;
 using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Helpers;
 using System.Web.Mvc;
 using VacaYAY.Models;
 
@@ -42,24 +40,33 @@ namespace VacaYAY.Controllers
             }
         }
         #endregion
-
+        #region Methods
         [Route("Requests/ApproveModal")]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "ADMIN")]
-        [HttpGet]
+        [HttpPost]
         public ActionResult ApproveModal()
         {
-            return View("~/Views//Modal/ApproveModal.cshtml");
+            return View("~/Views/Modal/ApproveModal.cshtml");
         }
 
         [Route("Requests/DenyModal")]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "ADMIN")]
-        [HttpGet]
-        public ActionResult DenyModal()
+        [HttpPost]
+        public ActionResult DenyModal(Guid RequestUID)
         {
-            return View("~/Views/Modal/DenyModal.cshtml");
+
+            var model = new ProcessRequestViewModel()
+            {
+                RequestUID = RequestUID
+            };
+            return View("~/Views/Modal/DenyModal.cshtml", model);
         }
-        [HttpGet]
-        [Route("Requests/GetRequests/{pageOffset}/{pageCount}")]
+
+        [HttpPost]
+        [Route("Requests/GetRequests")]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> GetRequests()
         {
@@ -67,45 +74,83 @@ namespace VacaYAY.Controllers
             int requestOffset = Int32.Parse(Request["pageOffset"]);
             int requestCount = Int32.Parse(Request["pageCount"]);
 
-            var requests = await ApplicationService.RequestService.RquestGetRequests((int)requestCount, (int)requestOffset);
+            var requests = await ApplicationService.RequestService.RequestGetRequests((int)requestCount, (int)requestOffset);
             var requestsToReturn = requests.Select(x => new ReturnRequestViewModel()
             {
                 RequestUID = x.RequestUID,
                 RequestNumberOfDays = x.RequestNumberOfDays,
-                RequestType = x.RequestType,
+                RequestType = (RequestTypes)x.RequestType,
             }).ToList();
 
             return View(requestsToReturn);
         }
 
-        [HttpGet]
-        [Route("Requests/GetRequest/{UID}")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Requests/GetRequest")]
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> GetRequest(Guid? UID)
         {
 
             var requestUID = Guid.Parse(Request["requestUID"]);
+
             var request = await ApplicationService.RequestService.RequestGetRequest(requestUID);
             var employee = await ApplicationService.EmployeeService.EmployeeGetEmployee(request.EmployeeUID);
+
             var requestToReturn = new ReturnRequestViewModel()
             {
                 EmployeeName = employee.EmployeeName,
                 EmployeeSurname = employee.EmployeeSurname,
-                RequestType = request.RequestType,
-                RequestStartDate = request.RequestStartDate,
-                RequestEndDate = request.RequestEndDate,
+                RequestType = (RequestTypes)request.RequestType,
+                RequestStartDate = (DateTime)request.RequestStartDate,
+                RequestEndDate = (DateTime)request.RequestEndDate,
+                RequestNumberOfDays = request.RequestNumberOfDays,
                 RequestUID = request.RequestUID,
                 RequestComment = request.RequestComment ?? "No employee comment"
             };
             return View(requestToReturn);
         }
 
-        [HttpGet]
+        [HttpPost]
+        [Route("Requests/GetEmployeeRequests")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<ActionResult> GetEmployeeRequests(Guid employeeUID)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var requests = await ApplicationService.RequestService.RequestGetRequests(employeeUID);
+            var requestsToReturn = requests.Select(x => new ReturnRequestViewModel()
+            {
+                RequestStartDate = (DateTime)x.RequestStartDate,
+                RequestEndDate = (DateTime)x.RequestEndDate,
+                RequestComment = x.RequestComment,
+                RequestNumberOfDays = x.RequestNumberOfDays,
+                RequestType = (RequestTypes)x.RequestType,
+                RequestUID = x.RequestUID
+            }).ToList();
+
+            return View(requestsToReturn);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("Requests/AddRequestView")]
         [Authorize(Roles = "ADMIN, USER")]
-        public ActionResult AddRequestView()
+        public async Task<ActionResult> AddRequestView(Guid employeeUID)
         {
-            return View();
+            var totalDays = await ApplicationService.RequestService.RequestRequestGetTotalAvailableDays(employeeUID);
+
+            var model = new RequestViewModel()
+            {
+                TotalAvailableDays = totalDays
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -116,52 +161,19 @@ namespace VacaYAY.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("AddRequestView");
+                return PartialView("AddRequestView");
             }
 
             var request = new ApplicationRequest()
             {
                 RequestComment = model.RequestComment,
                 RequestType = model.RequestType,
-                RequestNumberOfDays = model.RequestNumberOfDays,
                 RequestStartDate = model.RequestStartDate,
                 RequestEndDate = model.RequestEndDate
             };
 
             await ApplicationService.RequestService.RequestAddRequest(User.Identity.Name, request);
-
-            //var availableDays = await DbContext.AdditionalDays.Where(x => x.EmployeeID == UserManager.FindByNameAsync(User.Identity.Name).Id)
-            //                                                  .Select(x => x.AdditionalDaysNumberOfAdditionalDays)
-            //                                                  .SumAsync();
-            //availableDays += (int) await DbContext.Employees.Where(x => x.EmployeeID == UserManager.FindByNameAsync(User.Identity.Name).Id).Select(x => x.EmployeeBacklogDays).FirstAsync();
-
-            //if(availableDays < model.RequestNumberOfDays)
-            //{
-            //    return View("Not enough available days");
-            //}
-
-            //double calcBusinessDays = 1 + ((model.RequestEndDate - model.RequestStartDate).TotalDays * 5 - (model.RequestStartDate.DayOfWeek - model.RequestEndDate.DayOfWeek) * 2) / 7;
-            //if (model.RequestEndDate.DayOfWeek == DayOfWeek.Saturday) calcBusinessDays--;
-            //if (model.RequestStartDate.DayOfWeek == DayOfWeek.Sunday) calcBusinessDays--;
-
-
-            //var request = new Request()
-            //{
-            //    EmployeeID = (await UserManager.FindByNameAsync(User.Identity.Name)).Id,
-            //    ReqeustUID = Guid.NewGuid(),
-            //    RequestType = model.RequestType,
-            //    RequestComment = model.RequestComment,
-            //    RequestStatus = (int)RequestStatus.InReview,
-            //    RequestNumberOfDays = (int)calcBusinessDays,
-            //    RequestStartDate = model.RequestStartDate,
-            //    RequestEndDate = model.RequestEndDate,
-            //    RequestCreatedOn = DateTime.UtcNow
-            //};
-
-            //DbContext.Requests.Add(request);
-            //await DbContext.SaveChangesAsync();
-
-            return View();
+            return PartialView();
         }
 
         [HttpPost]
@@ -180,71 +192,90 @@ namespace VacaYAY.Controllers
             }
             else
             {
+                var request = new ApplicationRequest()
+                {
+                    RequestUID = model.RequestUID,
+                    RequestDenialComment = model.RequestDenialComment
+                };
 
+                await ApplicationService.RequestService.RequestDeny(request);
             }
-            //var request = await DbContext.Requests.Where(x => x.ReqeustUID == model.RequestUID).FirstAsync();
-            //request.RequestDenialComment = model.RequestDenialComment;
-            //request.RequestStatus = model.RequestStatus;
 
-            //if(request.RequestStatus == (int)RequestStatus.Accepted)
-            //{
-            //    var totalDays = request.RequestNumberOfDays;
-            //    totalDays -= (int)request.Employee.EmployeeBacklogDays;
-            //    if (totalDays >= 0)
-            //    {
-            //        request.Employee.EmployeeBacklogDays = 0;
-
-            //        var result = await DbContext.AdditionalDays.Where(x => x.EmployeeID == request.EmployeeID && x.AdditionalDaysDeletedOn == null).ToListAsync();
-            //        foreach(var res in result)
-            //        {
-            //            if (totalDays == 0)
-            //                continue;
-            //            totalDays -= res.AdditionalDaysNumberOfAdditionalDays;
-            //            if (totalDays != 0)
-            //                res.AdditionalDaysDeletedOn = DateTime.UtcNow;
-            //            else
-            //                res.AdditionalDaysNumberOfAdditionalDays -= totalDays;
-            //        }
-            //    }
-            //    else
-            //        request.Employee.EmployeeBacklogDays -= totalDays;
-            //}
-            //await DbContext.SaveChangesAsync();
             return View();
-
-           // return new Json(new { HasError }); //todo ende
         }
 
+        [HttpPost]
+        [Route("Request/EditRequestView")]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditRequestView(Guid requestUID)
+        {
+            var model = new EditRequestViewModel()
+            {
+                RequestUID = requestUID
+            };
+
+            return View(model);
+        }
 
         [HttpPost]
-        [Route("Request/Alter")]
+        [Route("Request/EditRequest")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AlterRequest(AlterViewModel model)
+        public async Task<ActionResult> EditRequest(EditRequestViewModel model)
+        {
+            if (!ModelState.IsValid || model.RequestComment == null && model.RequestEndDate == null && model.RequestStartDate == null && model.RequestType == null)
+            {
+                return Json(new
+                {
+                    View = PresentationLayer.Helpers.RenderRazorViewToString(ControllerContext, "EditRequestView", model),
+                    Error = true
+                });
+            }
+
+            var request = new ApplicationRequest()
+            {
+                RequestUID = model.RequestUID,
+                RequestDenialComment = model.RequestComment,
+                RequestType = model.RequestType,
+                RequestStartDate = model.RequestStartDate,
+                RequestEndDate = model.RequestEndDate
+            };
+
+            await ApplicationService.RequestService.RequestEditRequest(request);
+
+            return PartialView();
+        }
+
+        [HttpPost]
+        [Route("Request/Search")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Search(SearchRequestViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
 
-            //var request = await DbContext.Requests.Where(x => x.ReqeustUID == model.RequestUID).FirstAsync();
-            //request.RequestStartDate = model.RequestStartDate;
-            //request.RequestEndDate = model.RequestEndDate;
-            //request.RequestType = model.RequestType;
+            var requests = await ApplicationService.RequestService.RequestSearchRequests(model.SearchParameters, model.RequestStartDate, model.RequestEndDate);
 
-            //if(User.IsInRole("ADMIN"))
-            //{
-            //    request.RequestDenialComment = model.RequestComment;
-            //}
-            //else
-            //{
-            //    request.RequestComment = model.RequestComment;
-            //}
+            var requestToReturn = requests.Select(x => new ReturnRequestViewModel()
+            {
+                RequestUID = x.RequestUID,
+                RequestNumberOfDays = x.RequestNumberOfDays,
+                RequestType = (RequestTypes)x.RequestType,
+            }).ToList();
 
-            //await DbContext.SaveChangesAsync();
+            return View("GetRequests", requestToReturn);
+        }
+
+        [HttpPost]
+        [Route("Request/Collective")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Collective(CollectiveRequestViewModel model)
+        {
+
 
             return View();
         }
-
-
+        #endregion
     }
 }

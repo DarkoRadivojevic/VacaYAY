@@ -43,10 +43,11 @@ namespace ApplicationLayer.Implementations
         {
             var contractEntitty = new ContractEntity()
             {
-                ContractUID = Guid.NewGuid(),
                 EmployeeUID = applicationContract.EmployeeUID,
                 ContractType = (int)applicationContract.ContractType,
                 ContractFile = applicationContract.ContractFile,
+                ContractNumber = applicationContract.ContractNumber,
+                ContractFileName = applicationContract.ContractFileName,
                 ContractCreatedOn = DateTime.UtcNow,
                 ContractStartDate = applicationContract.ContractStartDate,
                 ContractEndDate = applicationContract.ContractEndDate
@@ -59,9 +60,9 @@ namespace ApplicationLayer.Implementations
             await ContractWorkflow.ContractDeleteContract(contractUID);
         }
 
-        public async Task<List<ApplicationContract>> ContractGetAllContracts()
+        public async Task<List<ApplicationContract>> ContractGetAllContracts(int contractOffset, int contractCount)
         {
-            var contracts = await ContractWorkflow.ContractGetAllContracts();
+            var contracts = await ContractWorkflow.ContractGetAllContracts(contractOffset, contractCount);
 
             var toReturn = contracts.Select(x => new ApplicationContract()
             {
@@ -72,19 +73,33 @@ namespace ApplicationLayer.Implementations
             return toReturn;
         }
 
+        public async Task<ApplicationContract> ContractGetContactFile(Guid contractUID)
+        {
+            var contract = await ContractWorkflow.ContractGetContractFile(contractUID);
+
+            var contractToReturn = new ApplicationContract()
+            {
+                ContractFile = contract.ContractFile,
+                ContractFileName = contract.ContractFileName
+            };
+
+            return contractToReturn;
+        }
+
         public async Task<ApplicationContract> ContractGetContract(Guid contractUID)
         {
-            var contracts = await ContractWorkflow.ContractGetContract(contractUID);
+            var contract = await ContractWorkflow.ContractGetContract(contractUID);
 
-            var toReutn = new ApplicationContract()
+            var toReturn = new ApplicationContract()
             {
-                EmployeeUID = contracts.EmployeeUID,
-                ContractNumber = contracts.ContractNumber,
-                ContractType = (ContractTypes)contracts.ContractType,
-                ContractStartDate = contracts.ContractStartDate,
-                ContractEndDate = (DateTime)contracts.ContractEndDate
+                ContractUID = contract.ContractUID,
+                EmployeeUID = contract.EmployeeUID,
+                ContractNumber = contract.ContractNumber,
+                ContractType = (ContractTypes)contract.ContractType,
+                ContractStartDate = contract.ContractStartDate,
+                ContractEndDate = contract.ContractEndDate
             };
-            return toReutn;
+            return toReturn;
         }
 
         public async Task<List<ApplicationContract>> ContractGetContracts(string employeeName, string employeeSurname)
@@ -101,19 +116,34 @@ namespace ApplicationLayer.Implementations
             return toReturn;
         }
 
-        public async Task<List<ApplicationContract>> contractGetContracts(Guid employeeUID)
+        public async Task<List<ApplicationContract>> ContractGetContracts(Guid employeeUID)
         {
             var contracts = await ContractWorkflow.ContractGetContracts(employeeUID);
 
             var toRetrun = contracts.Select(x => new ApplicationContract()
             {
                 ContractUID = x.ContractUID,
+                ContractNumber = x.ContractNumber,
                 ContractType = (ContractTypes)x.ContractType,
                 ContractStartDate = x.ContractStartDate,
-                ContractEndDate = (DateTime)x.ContractEndDate
+                ContractEndDate = x.ContractEndDate
             }).ToList();
          
             return toRetrun;
+        }
+
+        public async Task<List<ApplicationContract>> ContractSearchContracts(string inputParameters, DateTime startDate, DateTime endDate)
+        {
+            var contracts = await ContractWorkflow.ContractSearchContract(inputParameters, startDate, endDate);
+
+            var contractsToReturn = contracts.Select(x => new ApplicationContract()
+            {
+                ContractNumber = x.ContractNumber,
+                ContractUID = x.ContractUID,
+                EmployeeUID = x.EmployeeUID
+            }).ToList();
+
+            return contractsToReturn;
         }
         #endregion
     }

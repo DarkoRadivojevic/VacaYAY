@@ -55,6 +55,7 @@ namespace DataLayer.Implementations
             else
                 return false;
         }
+
         public async Task AdditionalDaysInsert(AdditionalDay additionalDay)
         {
             DbContext.AdditionalDays.Add(additionalDay);
@@ -82,6 +83,12 @@ namespace DataLayer.Implementations
         {
             List<AdditionalDay> additionalDayToReturn = await DbContext.AdditionalDays.Where(x => x.Employee.EmployeeUID == employeeUID && x.AdditionalDaysDeletedOn == null).ToListAsync();
             return additionalDayToReturn;
+        }
+
+        public async Task<int> AdditionalDayGetTotalAdditionalDays(Guid employeeUID)
+        {
+            int totalDaysToReturn = await DbContext.AdditionalDays.Where(x => x.Employee.EmployeeUID == employeeUID).Select(x => x.AdditionalDaysNumberOfAdditionalDays).SumAsync();
+            return totalDaysToReturn;
         }
         #endregion
     }

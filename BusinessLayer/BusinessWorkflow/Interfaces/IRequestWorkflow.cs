@@ -9,10 +9,14 @@ namespace BusinessLayer.BusinessWorkflow.Interfaces
 {
     public interface IRequestWorkflow
     {
-        Task<List<RequestsEntity>> RequestGetRequests(int requestCount, int requestOffset);
-        Task<RequestsEntity> RequestGetRequest(Guid requestUID);
-        Task RequestAddRequest(string employeeEmail, RequestsEntity requestsEntitiy);
+        Task<List<RequestEntity>> RequestGetRequests(int requestCount, int requestOffset);
+        Task<RequestEntity> RequestGetRequest(Guid requestUID);
+        Task RequestAddRequest(string employeeEmail, RequestEntity requestEntity);
         Task RequestPermit(Guid requestUID);
         Task RequestDeny(Guid requestUID, string denialComment);
+        Task<List<RequestEntity>> RequestsGetRequests(Guid employeeUID);
+        Task<int> RequestGetTotalAvailableDays(Guid employeeUID);
+        Task RequestEditRequest(RequestEntity requestEntity);
+        Task<List<RequestEntity>> RequestSearchRequests(string inputString, DateTime startDate, DateTime endDate);
     }
 }

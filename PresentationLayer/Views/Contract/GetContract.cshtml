@@ -1,0 +1,23 @@
+﻿@model  VacaYAY.Models.ReturnContractViewModel
+@{
+    Layout = null;
+}
+@Html.AntiForgeryToken()
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card-body">Employee name: @Model.EmployeeName</div>
+        <div class="card-body">Employee Surname: @Model.EmployeeSurname</div>
+        <div class="card-body">Contract number: @Model.ContractNumber</div>
+        <div class="card-body">Contract type: @Model.ContractType</div>
+        <div class="card-body">Start date: @Model.ContractStartDate.ToShortDateString()</div>
+        @{
+            if (Model.ContractType == SolutionEnums.ContractTypes.Temporary)
+            {
+                <div class="card-body"> End date: @Model.ContractEndDate.Value.ToShortDateString()</div>
+            }
+        }          
+    <div class="col mr-2 row d-flex align-content-end flex-column justify-content-between">
+        <button type="button" id="donwloadContract-@Model.ContractUID" class="btn btn-danger btn-sm">Download</button>
+    </div>
+</div>
+

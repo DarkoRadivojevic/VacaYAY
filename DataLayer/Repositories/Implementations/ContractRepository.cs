@@ -23,7 +23,7 @@ namespace DataLayer.Implementations
         #endregion
         #region Properties
         public VacaYAYContext DbContext
-        {   get
+        { get
             {
                 return _dbContext;
             }
@@ -41,9 +41,13 @@ namespace DataLayer.Implementations
             await this.ContractSave();
         }
 
-        public async Task<List<Contract>> ContractGetAllContracts()
+        public async Task<List<Contract>> ContractGetAllContracts(int contractOffset, int contractCount)
         {
-            List<Contract> contractsToReturn = await DbContext.Contracts.Where(x => x.ContractDeletedOn == null).ToListAsync();
+            List<Contract> contractsToReturn = await DbContext.Contracts.Where(x => x.ContractDeletedOn == null)
+                                                                        .OrderBy(x => x.ContractCreatedOn)
+                                                                        .Skip(contractOffset * (contractCount - 1))
+                                                                        .Take(contractOffset)
+                                                                        .ToListAsync();
             return contractsToReturn;
         }
 
@@ -71,15 +75,39 @@ namespace DataLayer.Implementations
 
         public async Task<Contract> ContactGetContract(Guid contractUID)
         {
-            var contractToReturn = await DbContext.Contracts.Where(x => x.ContractUID == contractUID).FirstAsync();
+            Contract contractToReturn = await DbContext.Contracts.Where(x => x.ContractUID == contractUID).FirstAsync();
             return contractToReturn;
         }
 
         public async Task<List<Contract>> ContractGetAllContracts(string employeeNmae, string employeeSurname)
         {
-            var contractsToReturn = await DbContext.Contracts.Where(x => x.Employee.EmployeeName.Contains(employeeNmae) || x.Employee.EmployeeSurname.Contains(employeeSurname) && x.ContractDeletedOn == null)
-                                                     .ToListAsync();
+            List<Contract> contractsToReturn = await DbContext.Contracts.Where(x => x.Employee.EmployeeName.Contains(employeeNmae) || x.Employee.EmployeeSurname.Contains(employeeSurname) &&
+                                                                               x.ContractDeletedOn == null)
+                                                                        .ToListAsync();
             return contractsToReturn;
+        }
+
+        public async Task<Contract> ContractGetContractFile(Guid contractUID)
+        {
+            Contract contractToReturn = await DbContext.Contracts.Where(x => x.ContractUID == contractUID).FirstAsync();
+
+            return contractToReturn;
+        }
+
+        public async Task<List<Contract>> ContractSearchContracts(string[] searchParameters, DateTime startDate, DateTime endDate)
+        {
+
+            IQueryable<Contract> queryableContracts = DbContext.Contracts.AsQueryable();
+
+            queryableContracts = queryableContracts.Where(x => x.ContractDeletedOn == null && x.ContractStartDate >= startDate && (x.ContractEndDate ?? DateTime.MaxValue) <= endDate ||
+                                                          searchParameters.Contains(x.ContractFileName) || searchParameters.Contains(x.ContractNumber.ToString()) ||
+                                                          searchParameters.Contains(x.ContractType.ToString()) || searchParameters.Contains(x.Employee.EmployeeName) ||
+                                                          searchParameters.Contains(x.Employee.EmployeeSurname));
+
+            List<Contract> contractsToReturn = await queryableContracts.ToListAsync();
+
+            return contractsToReturn;
+
         }
         #endregion
     }

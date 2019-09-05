@@ -19,7 +19,7 @@
           <Key>
             <PropertyRef Name="AdditionalDaysID" />
           </Key>
-          <Property Name="AdditionalDaysID" Type="int" Nullable="false" />
+          <Property Name="AdditionalDaysID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmployeeID" Type="int" Nullable="false" />
           <Property Name="AdditionaDaysUID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="AdditionalDaysNumberOfAdditionalDays" Type="int" Nullable="false" />
@@ -82,11 +82,12 @@
           <Key>
             <PropertyRef Name="ContractID" />
           </Key>
-          <Property Name="ContractID" Type="int" Nullable="false" />
+          <Property Name="ContractID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmployeeID" Type="int" Nullable="false" />
           <Property Name="ContractUID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="ContractNumber" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContractNumber" Type="int" Nullable="false" />
           <Property Name="ContractType" Type="int" Nullable="false" />
+          <Property Name="ContractFileName" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="ContractFile" Type="varbinary(max)" Nullable="false" />
           <Property Name="ContractStartDate" Type="date" Nullable="false" />
           <Property Name="ContractEndDate" Type="date" />
@@ -114,11 +115,12 @@
           <Property Name="RequestID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmployeeID" Type="int" Nullable="false" />
           <Property Name="RequestUID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="RequestType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="RequestType" Type="int" Nullable="false" />
           <Property Name="RequestComment" Type="nvarchar" MaxLength="256" />
           <Property Name="RequestStatus" Type="int" Nullable="false" />
           <Property Name="RequestDenialComment" Type="nvarchar" MaxLength="256" />
           <Property Name="RequestNumberOfDays" Type="int" Nullable="false" />
+          <Property Name="RequestFileName" Type="nvarchar" MaxLength="200" />
           <Property Name="RequestFile" Type="varbinary(max)" />
           <Property Name="RequestStartDate" Type="date" Nullable="false" />
           <Property Name="RequestEndDate" Type="date" Nullable="false" />
@@ -303,7 +305,7 @@
           <Key>
             <PropertyRef Name="AdditionalDaysID" />
           </Key>
-          <Property Name="AdditionalDaysID" Type="Int32" Nullable="false" />
+          <Property Name="AdditionalDaysID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmployeeID" Type="Int32" Nullable="false" />
           <Property Name="AdditionaDaysUID" Type="Guid" Nullable="false" />
           <Property Name="AdditionalDaysNumberOfAdditionalDays" Type="Int32" Nullable="false" />
@@ -366,11 +368,12 @@
           <Key>
             <PropertyRef Name="ContractID" />
           </Key>
-          <Property Name="ContractID" Type="Int32" Nullable="false" />
+          <Property Name="ContractID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmployeeID" Type="Int32" Nullable="false" />
           <Property Name="ContractUID" Type="Guid" Nullable="false" />
-          <Property Name="ContractNumber" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContractNumber" Type="Int32" Nullable="false" />
           <Property Name="ContractType" Type="Int32" Nullable="false" />
+          <Property Name="ContractFileName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ContractFile" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <Property Name="ContractStartDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="ContractEndDate" Type="DateTime" Precision="0" />
@@ -403,11 +406,12 @@
           <Property Name="RequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmployeeID" Type="Int32" Nullable="false" />
           <Property Name="RequestUID" Type="Guid" Nullable="false" />
-          <Property Name="RequestType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RequestType" Type="Int32" Nullable="false" />
           <Property Name="RequestComment" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="RequestStatus" Type="Int32" Nullable="false" />
           <Property Name="RequestDenialComment" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="RequestNumberOfDays" Type="Int32" Nullable="false" />
+          <Property Name="RequestFileName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="RequestFile" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="RequestStartDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="RequestEndDate" Type="DateTime" Nullable="false" Precision="0" />
@@ -627,6 +631,7 @@
                 <ScalarProperty Name="ContractUID" ColumnName="ContractUID" />
                 <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
                 <ScalarProperty Name="ContractType" ColumnName="ContractType" />
+                <ScalarProperty Name="ContractFileName" ColumnName="ContractFileName" />
                 <ScalarProperty Name="ContractFile" ColumnName="ContractFile" />
                 <ScalarProperty Name="ContractStartDate" ColumnName="ContractStartDate" />
                 <ScalarProperty Name="ContractEndDate" ColumnName="ContractEndDate" />
@@ -661,6 +666,7 @@
                 <ScalarProperty Name="RequestStatus" ColumnName="RequestStatus" />
                 <ScalarProperty Name="RequestDenialComment" ColumnName="RequestDenialComment" />
                 <ScalarProperty Name="RequestNumberOfDays" ColumnName="RequestNumberOfDays" />
+                <ScalarProperty Name="RequestFileName" ColumnName="RequestFileName" />
                 <ScalarProperty Name="RequestFile" ColumnName="RequestFile" />
                 <ScalarProperty Name="RequestStartDate" ColumnName="RequestStartDate" />
                 <ScalarProperty Name="RequestEndDate" ColumnName="RequestEndDate" />

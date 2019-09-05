@@ -9,6 +9,10 @@
         <div class="card-body">Request type: @Model.RequestType</div>
         <div class="card-body">Starts on: @Model.RequestStartDate.ToShortDateString()</div>
         <div class="card-body">Ends on: @Model.RequestEndDate.ToShortDateString()</div>
+        <div class="card-body">Number of days: @Model.RequestNumberOfDays</div>
+    </div>
+    <div class="col" id="editRequest-@Model.RequestUID">
+
     </div>
     <div class="col mr-2 row d-flex align-content-end flex-column justify-content-between">
         <button type="button" id="approve-@Model.RequestUID" value="0" class="btn btn-success  btn-sm">Approve</button>

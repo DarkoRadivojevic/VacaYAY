@@ -9,7 +9,7 @@
     <div class="card border" id="item-@req.EmployeeUID">
         <div class="card-header" id="heading @req.EmployeeUID">
             <h5 class="mb-0">
-                <button class="btn btn-link collapsed" value="@req.EmployeeUID" data-toggle="collapse" data-target="#@req.EmployeeUID" aria-expanded="false" aria-controls="heading @req.EmployeeUID">
+                <button class="btn btn-link collapsed" value="@req.EmployeeUID" id="btnLink-@req.EmployeeUID" data-toggle="collapse" data-target="#@req.EmployeeUID" aria-expanded="false" aria-controls="heading @req.EmployeeUID">
                     @req.EmployeeName @req.EmployeeSurname
                 </button>
             </h5>
@@ -24,10 +24,6 @@
 }
 <script src="~/Scripts/AdminView/admin.scripts.js"></script>
 <script>
-    $(document).ready(function () {
-        var requestDetailsUrl = '@Url.Action("GetEmployee", "Employee")';
-        $('.btn').each(function (i, element) {
-            element.onclick = ( () => GetEmployeeDetails(element, requestDetailsUrl))
-        });
-    });
+    var url = '@Url.Action("GetEmployee", "Employee")';
+    BindInnerButtonsForEmployees(url);
 </script>

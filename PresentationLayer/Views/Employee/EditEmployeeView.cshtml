@@ -1,0 +1,57 @@
+﻿@model VacaYAY.Models.EditEmployeeViewModel
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("EditEmployee", "Employee", FormMethod.Post, new { @class = "form-horizontal p-0 m-0", role = "form", id = "employeeForm-" + Model.EmployeeUID }))
+{
+
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.HiddenFor(m => m.EmployeeUID, new { @id = "EmployeeFormUID"})
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmployeeName, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.EmployeeName, new { @class = "form-control form-control-sm" })
+            @Html.ValidationMessageFor(m => m.EmployeeName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmployeeSurname, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.EmployeeSurname, new { @class = "form-control form-control-sm" })
+            @Html.ValidationMessageFor(m => m.EmployeeSurname, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmployeeCardIDNumber, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.EmployeeCardIDNumber, new { @class = "form-control form-control-sm" })
+            @Html.ValidationMessageFor(m => m.EmployeeCardIDNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmployeeEmploymentDate, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.EmployeeEmploymentDate, new { @class = "form-control datepicker", autocomplete = "off" })
+            @Html.ValidationMessageFor(m => m.EmployeeEmploymentDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmployeeRole, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.EnumDropDownListFor(m => m.EmployeeRole, new { @class = "form-control form-control-sm" })
+            @Html.ValidationMessageFor(m => m.EmployeeRole, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group justify-content-center">
+        <input type="submit" value="Change" id="editEmployee" class="btn btn-sm btn-success" />
+        <button type="button" id="employeeCancel" onclick="RestoreEmployeeCard('@Model.EmployeeUID')" class="btn btn-sm btn-danger">Cancel</button>
+    </div>
+}
+<script>
+    SubmitEditEmployee('@Model.EmployeeUID');
+    InitializeEditEmployeePikady();
+</script>

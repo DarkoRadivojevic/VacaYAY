@@ -1,0 +1,68 @@
+﻿@model VacaYAY.Models.ContractAddViewModel
+@{
+    Layout = null;
+}
+
+@using (var form = Html.BeginForm("AddContract", "Contract", FormMethod.Post, new { @class = "form-horizontal m-0", role = "form", id = "addContractForm-" + Model.EmployeeUID, enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.HiddenFor(m => m.EmployeeUID, new { @id = "EmployeeFormUID" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ContractNumber, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.ContractNumber, new { @class = "form-control form-control-sm" })
+            @Html.ValidationMessageFor(m => m.ContractNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ContractType, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.EnumDropDownListFor(m => m.ContractType, new { @class = "form-control form-control-sm" })
+            @Html.ValidationMessageFor(m => m.ContractType, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ContractStartDate, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.ContractStartDate, new { @class = "form-control datepicker", autocomplete = "off", id = "contractStartDate-" + Model.EmployeeUID })
+            @Html.ValidationMessageFor(m => m.ContractStartDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ContractEndDate, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.ContractEndDate, new { @class = "form-control datepicker", autocomplete = "off", id = "contractEndDate-" + Model.EmployeeUID })
+            @Html.ValidationMessageFor(m => m.ContractEndDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ContractFile, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.ContractFile, new { type = "file" })
+            @Html.ValidationMessageFor(m => m.ContractFile, "", new { @clas = "text-danger" })
+        </div>
+        @*<div class="col-md-10 ">
+                <div class="file-field">
+                    <div class="btn btn-primary btn-sm m-0 float-left">
+                        <span>Choose file</span>
+                        <input type="file" name="ContractFileName">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Upload your file">
+                    </div>
+                </div>
+            </div>*@
+    </div>
+    <div class="form-group justify-content-center">
+        <input type="submit" value="Add Contract" id="addContract" class="btn btn-sm btn-success" />
+        <button type="button" id="contractCanel-@Model.EmployeeUID" onclick="RemoveAddContractForm(this)" value="@Model.EmployeeUID" class="btn btn-sm btn-danger">Cancel</button>
+    </div>
+    <script>
+        InitializeAddContractPikady('@Model.EmployeeUID');
+        SubmitAddContract('@Model.EmployeeUID');
+
+        UpdateFileName();
+    </script>
+}

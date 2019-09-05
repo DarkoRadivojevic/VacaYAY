@@ -1,0 +1,34 @@
+﻿@model VacaYAY.Models.AddAdditionalDaysModel
+@{
+    Layout = null;
+}
+
+@using (var form = Html.BeginForm("AddAdditionalDays", "AdditionalDays", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "additionalDaysForm-" + Model.EmployeeUID }))
+{ 
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.HiddenFor(m => m.EmployeeUID, new { @id = "EmployeeFormUID" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.AdditionalDaysReason, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.AdditionalDaysReason, new { @class = "form-control form-control-sm" })
+            @Html.ValidationMessageFor(m => m.AdditionalDaysReason, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.AdditionalDaysNumberOfDays, new { @class = "col control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.AdditionalDaysNumberOfDays, new { @class = "form-control form-control-sm" })
+            @Html.ValidationMessageFor(m => m.AdditionalDaysNumberOfDays, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group justify-content-center">
+        <input type="submit" value="Add Days" id="addAdditionalDays" class="btn btn-sm btn-success" />
+        <button type="button" id="additionalDaysCancel" onclick="RemoveAdditionalDaysForm(this)" value="@Model.EmployeeUID" class="btn btn-sm btn-danger">Cancel</button>
+    </div>
+
+    <script>
+        SubmitAdditionalDay('@Model.EmployeeUID');
+    </script>
+}

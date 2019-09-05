@@ -109,14 +109,21 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
 
             if (employeeEntitiy.EmployeeName != null)
                 employee.EmployeeName = employeeEntitiy.EmployeeName;
+
             if (employeeEntitiy.EmployeeSurname != null)
                 employee.EmployeeSurname = employeeEntitiy.EmployeeSurname;
+
             if (employeeEntitiy.EmployeeCardIDNumber != null)
                 employee.EmlpoyeeCardIDNumber = employeeEntitiy.EmployeeCardIDNumber;
-            if (employeeEntitiy.EmployeeEmploymentDate != null)
-                employee.EmployeeEmploymentDate = employeeEntitiy.EmployeeEmploymentDate;
 
-            await AccountRepository.AccountChangeRole(employee.EmployeeUID, employeeRole);
+            if (employeeEntitiy.EmployeeEmploymentDate != DateTime.MinValue)
+                employee.EmployeeEmploymentDate = (DateTime)employeeEntitiy.EmployeeEmploymentDate;
+            
+
+            if(employeeEntitiy.EmployeeRole != null)
+                await AccountRepository.AccountChangeRole(employee.EmployeeUID, employeeRole);
+
+            await EmployeeRepository.EmployeeSave();
         }
 
         public async Task<EmployeeEntity> EmployeeFindCurrentEmployee(string employeeEmail)
@@ -149,9 +156,11 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             return employeesToReturn;
         }
 
-        public async Task<List<EmployeeEntity>> EmployeeFindEmployeesByName(string employeeName, string employeeSurname)
+        public async Task<List<EmployeeEntity>> EmployeeFindEmployeesByName(string searchParameters, DateTime employeeEmploymentDate)
         {
-            var employees = await EmployeeRepository.EmployeeGetEmployees(employeeName, employeeSurname);
+            var searchString = searchParameters.Split(' ');       
+ 
+            var employees = await EmployeeRepository.EmployeeSearchEmployees(searchString, employeeEmploymentDate);
 
             var employeesToReturn = employees.Select(x => new EmployeeEntity()
             {

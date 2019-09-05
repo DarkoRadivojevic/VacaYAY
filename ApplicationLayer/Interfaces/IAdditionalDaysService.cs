@@ -11,6 +11,7 @@ namespace ApplicationLayer.Interfaces
     {
         Task<List<ApplicationAdditionalDays>> AdditionDaysGetAllAdditionalDaysOff(Guid employeeUID);
         Task<ApplicationAdditionalDays> AdditionalDaysGetAdditionalDay(Guid additionalDayUID);
+        Task AdditionalDaysAddAdditionalDays(ApplicationAdditionalDays additionalDays);
         Task<int> AdditionalDaysGetNumberOfDays(Guid employeeUID);
     }
 }

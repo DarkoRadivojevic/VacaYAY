@@ -13,13 +13,13 @@
             Do you want to approve the selected request?
         </div>
         <div class="modal-footer row justify-content-between mx-0">
-            <button type="button" id="yes" onclick="action()" class="btn btn-success" data-dismiss="modal">Yes</button>
+            <button type="button" id="yes" onclick="approve()" class="btn btn-success" data-dismiss="modal">Yes</button>
             <button type="button" id="no" class="btn btn-danger " data-dismiss="modal">No</button>
         </div>
     </div>
 </div>
 <script>
-    function action() {
+    function approve() {
         $(document).ready(function () {
             var requestUrl = '@Url.Action("PermitOrDenyRequest", "Request")';
             ApproveRequest(requestUrl);

@@ -1,12 +1,10 @@
 ﻿using ApplicationLayer;
-using Microsoft.AspNet.Identity.Owin;
+using ApplicationLayer.Entities;
+using Enums;
+using SolutionEnums;
 using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using VacaYAY.Models;
 
@@ -41,20 +39,15 @@ namespace VacaYAY.Controllers
             }
         }
         #endregion
-        [HttpGet]
-        [Authorize(Roles = "ADMIN")]
-        //[ValidateAntiForgeryToken]
-        public ActionResult Find()
-        {
-            return View();
-        }
-
-
-        [HttpGet]
-        [Authorize(Roles = "ADMIN, USER")]
+        #region Methods
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> FindCurrentEmployee()
         {
             var email = User.Identity.Name;
+            if (email == null)
+                return PartialView("NullView");
+
 
             var employee = await ApplicationService.EmployeeService.EmployeeFindCurrentEmployee(email);
             var employeeToReturn = new ReturnEmployeeViewModel()
@@ -67,45 +60,49 @@ namespace VacaYAY.Controllers
 
             return PartialView(employeeToReturn);
         }
-        [HttpGet]
+
+        [HttpPost]
         [Authorize(Roles = "ADMIN")]
-        [Route("Employees/{EmployeeName}/{EmployeeSurname}")]
-        public async Task<ActionResult> FindEmployeesByName(FindByNameViewModel model)
-        {
+        [Route("Employees/FindByName}")]
+        public async Task<ActionResult> Search(FindEmployeeViewModel model)
+       {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
+            if (model.EmployeeEmploymentDate == null)
+                model.EmployeeEmploymentDate = DateTime.MinValue;
 
-            return PartialView(model);
-        }
 
-        [HttpGet]
-        [Authorize(Roles = "ADMIN")]
-        [Route("Employees/{EmployeeEmploymentDate}")]
-        public async Task<ActionResult> FindEmployeesByEmploymentDate(FindByEmploymentDateViewModel model)
-        {
-            if(!ModelState.IsValid)
+            var employees = await ApplicationService.EmployeeService.EmployeeFindEmployeesByName(model.SearchParameters, (DateTime)model.EmployeeEmploymentDate);
+
+            var employeesToReturn = employees.Select(x => new ReturnEmployeeViewModel()
             {
-                return View(model);
-            }
+                EmployeeUID = x.EmployeeUID,
+                EmployeeName = x.EmployeeName,
+                EmployeeSurname = x.EmployeeSurname
+            }).ToList();
 
-   
-            return View();
+            return PartialView("GetEmployees", employeesToReturn);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("Employee/BacklogDays")]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> GetEmployeesWithBacklogDays()
         {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
+            var employees = await ApplicationService.EmployeeService.EmployeeGetEmployeesWithBacklogDays();
 
-            return View();
+            var employeesToReturn = employees.Select(x => new ReturnEmployeeViewModel()
+            {
+                EmployeeUID = x.EmployeeUID,
+                EmployeeName = x.EmployeeName,
+                EmployeeSurname = x.EmployeeSurname
+            }).ToList();
+
+            return View(employeesToReturn);
         }
 
         [HttpPost]
@@ -127,7 +124,7 @@ namespace VacaYAY.Controllers
                 EmployeeSurname = employee.EmployeeSurname,
                 EmployeeBacklogDays = employee.EmployeeBacklogDays,
                 EmployeeCardIDNumber = employee.EmployeeCardIDNumber,
-                EmployeeEmploymentDate = employee.EmployeeEmploymentDate,
+                EmployeeEmploymentDate = (DateTime)employee.EmployeeEmploymentDate,
                 EmployeeRole = employee.EmployeeRole
             };
             return View(employeeToReturn);
@@ -153,45 +150,101 @@ namespace VacaYAY.Controllers
             return View(employeesToReturn);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize(Roles = "ADMIN")]
+        [Route("Employee/GetDeleted")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> GetDeletedEmployees()
         {
-            if (!ModelState.IsValid)
+            var employees = await ApplicationService.EmployeeService.EmployeeGetDeletedEmployees();
+
+            var employeesToReturn = employees.Select(x => new ReturnEmployeeViewModel()
             {
-                return View();
-            }
+                EmployeeUID = x.EmployeeUID,
+                EmployeeName = x.EmployeeName,
+                EmployeeSurname = x.EmployeeSurname
+            }).ToList();
 
-
-            return View();
+            return View(employeesToReturn);
         }
 
         [HttpPost]
         [Authorize(Roles = "ADMIN")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditEmployee(EditViewModel model)
+        public ActionResult EditEmployeeView(EditEmployeeViewModel model)
+        {
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "ADMIN")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditEmployee(EditEmployeeViewModel model)
+        {
+            if (!ModelState.IsValid || model.EmployeeName == null && model.EmployeeSurname == null && model.EmployeeRole == null && model.EmployeeCardIDNumber == null && model.EmployeeEmploymentDate == null)
+            {
+                return Json(new
+                {
+                    View = PresentationLayer.Helpers.RenderRazorViewToString(ControllerContext, "EditEmployeeView", model),
+                    Error = true
+                });
+            }
+
+            var employee = new ApplicationEmployee();
+
+            if (model.EmployeeName != null)
+                employee.EmployeeName = model.EmployeeName;
+
+            if (model.EmployeeSurname != null)
+                employee.EmployeeSurname = model.EmployeeSurname;
+
+            if (model.EmployeeCardIDNumber != null)
+                employee.EmployeeCardIDNumber = model.EmployeeCardIDNumber;
+
+            if (model.EmployeeRole != null)
+                employee.EmployeeRole = Helpers.AccountTypesConverter((AccountTypes)model.EmployeeRole);
+
+            if (model.EmployeeEmploymentDate != null)
+                employee.EmployeeEmploymentDate = (DateTime)model.EmployeeEmploymentDate;
+            else
+                employee.EmployeeEmploymentDate = DateTime.MinValue;
+
+
+            employee.EmployeeUID = model.EmployeeUID;
+
+            await ApplicationService.EmployeeService.EmployeeEditEmployee(employee, employee.EmployeeRole);
+            var employeeToReturn = await ApplicationService.EmployeeService.EmployeeGetEmployee(employee.EmployeeUID);
+
+            model.EmployeeName = employeeToReturn.EmployeeName;
+            model.EmployeeSurname = employeeToReturn.EmployeeSurname;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("Employee/DeleteEmployeeModal")]
+        [Authorize(Roles = "ADMIN")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteEmployeeModal()
+        {
+            return View("~/Views/Modal/DeleteEmployeeModal.cshtml");
+        }
+
+        [HttpPost]
+        [Route("Employee/DeleteEmployee")]
+        [Authorize(Roles = "ADMIN")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteEmployee(Guid employeeUID)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(employeeUID);
             }
+
+            await ApplicationService.EmployeeService.EmployeeDeleteEmployee(employeeUID);
 
             return View();
         }
-
-        [HttpDelete]
-        [Route("Employee/{UID}")]
-        [Authorize(Roles = "ADMIN")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteEmployee(Guid UID)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(UID);
-            }
-
-           
-            return View(UID);
-        }
+        #endregion
     }
 }

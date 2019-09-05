@@ -14,7 +14,7 @@
     <Key>
       <PropertyRef Name="AdditionalDaysID" />
     </Key>
-    <Property Name="AdditionalDaysID" Type="Int32" Nullable="false" />
+    <Property Name="AdditionalDaysID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="EmployeeID" Type="Int32" Nullable="false" />
     <Property Name="AdditionaDaysUID" Type="Guid" Nullable="false" />
     <Property Name="AdditionalDaysNumberOfAdditionalDays" Type="Int32" Nullable="false" />
@@ -77,11 +77,12 @@
     <Key>
       <PropertyRef Name="ContractID" />
     </Key>
-    <Property Name="ContractID" Type="Int32" Nullable="false" />
+    <Property Name="ContractID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="EmployeeID" Type="Int32" Nullable="false" />
     <Property Name="ContractUID" Type="Guid" Nullable="false" />
-    <Property Name="ContractNumber" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ContractNumber" Type="Int32" Nullable="false" />
     <Property Name="ContractType" Type="Int32" Nullable="false" />
+    <Property Name="ContractFileName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="ContractFile" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
     <Property Name="ContractStartDate" Type="DateTime" Nullable="false" Precision="0" />
     <Property Name="ContractEndDate" Type="DateTime" Precision="0" />
@@ -114,11 +115,12 @@
     <Property Name="RequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="EmployeeID" Type="Int32" Nullable="false" />
     <Property Name="RequestUID" Type="Guid" Nullable="false" />
-    <Property Name="RequestType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="RequestType" Type="Int32" Nullable="false" />
     <Property Name="RequestComment" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
     <Property Name="RequestStatus" Type="Int32" Nullable="false" />
     <Property Name="RequestDenialComment" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
     <Property Name="RequestNumberOfDays" Type="Int32" Nullable="false" />
+    <Property Name="RequestFileName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <Property Name="RequestFile" Type="Binary" MaxLength="Max" FixedLength="false" />
     <Property Name="RequestStartDate" Type="DateTime" Nullable="false" Precision="0" />
     <Property Name="RequestEndDate" Type="DateTime" Nullable="false" Precision="0" />

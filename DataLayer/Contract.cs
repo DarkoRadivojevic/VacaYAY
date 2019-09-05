@@ -19,6 +19,7 @@ namespace DataLayer
         public System.Guid ContractUID { get; set; }
         public int ContractNumber { get; set; }
         public int ContractType { get; set; }
+        public string ContractFileName { get; set; }
         public byte[] ContractFile { get; set; }
         public System.DateTime ContractStartDate { get; set; }
         public Nullable<System.DateTime> ContractEndDate { get; set; }

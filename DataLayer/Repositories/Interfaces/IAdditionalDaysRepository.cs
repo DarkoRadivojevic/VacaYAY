@@ -10,6 +10,7 @@ namespace DataLayer
     {
         Task<List<AdditionalDay>> AdditonalDaysGetAllAdditionalDays(Guid employeeUID);
         Task<AdditionalDay> AdditionalDaysGetAdditionalDay(Guid additonalDayUID);
+        Task<int> AdditionalDayGetTotalAdditionalDays(Guid employeeUID);
         Task AdditionalDaysInsert(AdditionalDay additionalDay);
         Task AdditonalDaysDelete(Guid additionalDayUID);
         Task AdditionalDaysSave();

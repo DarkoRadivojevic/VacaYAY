@@ -77,6 +77,7 @@
           <ScalarProperty Name="ContractUID" ColumnName="ContractUID" />
           <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
           <ScalarProperty Name="ContractType" ColumnName="ContractType" />
+          <ScalarProperty Name="ContractFileName" ColumnName="ContractFileName" />
           <ScalarProperty Name="ContractFile" ColumnName="ContractFile" />
           <ScalarProperty Name="ContractStartDate" ColumnName="ContractStartDate" />
           <ScalarProperty Name="ContractEndDate" ColumnName="ContractEndDate" />
@@ -111,6 +112,7 @@
           <ScalarProperty Name="RequestStatus" ColumnName="RequestStatus" />
           <ScalarProperty Name="RequestDenialComment" ColumnName="RequestDenialComment" />
           <ScalarProperty Name="RequestNumberOfDays" ColumnName="RequestNumberOfDays" />
+          <ScalarProperty Name="RequestFileName" ColumnName="RequestFileName" />
           <ScalarProperty Name="RequestFile" ColumnName="RequestFile" />
           <ScalarProperty Name="RequestStartDate" ColumnName="RequestStartDate" />
           <ScalarProperty Name="RequestEndDate" ColumnName="RequestEndDate" />

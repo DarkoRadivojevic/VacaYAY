@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DataLayer
@@ -11,6 +9,7 @@ namespace DataLayer
         Task<List<Request>> RequestGetRequests(int requestCount, int requestSize);
         Task<Request> RequestsGetRequest(Guid requestUID);
         Task<List<Request>> RequestGetAllEmployeeRequests(Guid employeeUID);
+        Task<List<Request>> RequestSearchRequest(string[] searchString, DateTime startDate, DateTime endDate);
         Task RequestInsert(Request request);
         Task RequestDelete(Guid requestUID);
         void ReqeustUpdate(Request request);

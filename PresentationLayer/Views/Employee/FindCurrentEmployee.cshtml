@@ -3,22 +3,16 @@
     Layout = null;
 }
 @Html.Hidden("EmployeeUID", Model.EmployeeUID)
+@Html.Hidden("getEmployeeAction", Url.Action("GetEmployee", "Employee"))
 @Html.AntiForgeryToken()
-<div class="">
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Employee Name: @Model.EmployeeName</li>
-        <li class="list-group-item">Employee Surname: @Model.EmployeeSurname</li>
-        <li class="list-group-item">Employee Backlog days: @Model.EmployeeBacklogDays</li>
-    </ul>
-    <div class="card-body ">
-        <a class="card-title">Post a new request</a>
-        <button class="btn btn-sm" id="show">New request</button>
-    </div>
-</div>
+
+<ul class="nav navbar-nav ml-auto">
+    <li class="nav-item"><div class="text-white">Welcome: @Model.EmployeeName @Model.EmployeeSurname</div></li>
+    <li class="nav-item"><div class="text-white">Your backlog days: @Model.EmployeeBacklogDays</div></li>
+    <li class="nav-item"><button class="btn btn-block btn-sm" id="showRequestForm" value='@Model.EmployeeUID'><span class="small">New request</span></button></li>
+</ul>
+
 <script>
     var url = "@Url.Action("AddRequestView", "Request")";
-    $('#show').on("click", action);
-    function action() {
-        RequestForm(url);
-    }
+    BindActionToRequestForm(url);
 </script>

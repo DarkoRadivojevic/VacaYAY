@@ -63,7 +63,9 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 ContractStartDate = contractEntity.ContractStartDate,
                 ContractEndDate = contractEntity.ContractEndDate,
                 ContractCreatedOn = DateTime.UtcNow,
-                ContractFile = contractEntity.ContractFile
+                ContractFile = contractEntity.ContractFile,
+                ContractNumber = contractEntity.ContractNumber,
+                ContractFileName = contractEntity.ContractFileName
             };
 
             await ContractRepository.ContractInsert(contract);
@@ -74,9 +76,9 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             await ContractRepository.ContractDelete(contractUID);
         }
 
-        public async Task<List<ContractEntity>> ContractGetAllContracts()
+        public async Task<List<ContractEntity>> ContractGetAllContracts(int contractOffset, int contractCount)
         {
-            var contracts = await ContractRepository.ContractGetAllContracts();
+            var contracts = await ContractRepository.ContractGetAllContracts(contractOffset, contractCount);
 
             List<ContractEntity> contractsToReturn = new List<ContractEntity>();
 
@@ -95,15 +97,26 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             var contract = await ContractRepository.ContactGetContract(contractUID);
             return new ContractEntity()
             {
+                EmployeeUID = contract.Employee.EmployeeUID,
                 ContractUID = contract.ContractUID,
                 ContractNumber = contract.ContractNumber,
                 ContractType = contract.ContractType,
-                ContractFile = contract.ContractFile,
                 ContractStartDate = contract.ContractStartDate,
                 ContractEndDate = contract.ContractEndDate,
-                ContractCreatedOn = contract.ContractCreatedOn,
-                ContractDeletedOn = contract.ContractDeletedOn
             };
+        }
+
+        public async Task<ContractEntity> ContractGetContractFile(Guid contactUID)
+        {
+            var contract = await ContractRepository.ContractGetContractFile(contactUID);
+
+            var contractToReturn = new ContractEntity()
+            {
+                ContractFile = contract.ContractFile,
+                ContractFileName = contract.ContractFileName
+            };
+
+            return contractToReturn;
         }
 
         public async Task<List<ContractEntity>> ContractGetContracts(string employeeName, string employeeSurname)
@@ -131,8 +144,26 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             {
                 ContractUID = x.ContractUID,
                 ContractNumber = x.ContractNumber,
-                ContractType = x.ContractType
+                ContractType = x.ContractType,
+                ContractStartDate = x.ContractStartDate,
+                ContractEndDate = x.ContractEndDate
             }).ToList();       
+
+            return contractsToReturn;
+        }
+
+        public async Task<List<ContractEntity>> ContractSearchContract(string inputParameters, DateTime startDate, DateTime endDate)
+        {
+            var searchParameters = inputParameters.Split(' ');
+
+            var contracts = await ContractRepository.ContractSearchContracts(searchParameters, startDate, endDate);
+
+            var contractsToReturn = contracts.Select(x => new ContractEntity()
+            {
+                ContractNumber = x.ContractNumber,
+                ContractUID = x.ContractUID,
+                EmployeeUID = x.Employee.EmployeeUID
+            }).ToList();
 
             return contractsToReturn;
         }

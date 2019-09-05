@@ -8,7 +8,7 @@
     <div class="card border" id="item-@req.RequestUID" >
         <div class="card-header" id="heading @req.RequestUID">
             <h5 class="mb-0">
-                <button class="btn btn-link collapsed" value="@req.RequestUID" data-toggle="collapse" data-target="#@req.RequestUID" aria-expanded="false" aria-controls="heading @req.RequestUID">
+                <button class="btn btn-link collapsed" value="@req.RequestUID" id="btnLink-@req.RequestUID" data-toggle="collapse" data-target="#@req.RequestUID" aria-expanded="false" aria-controls="heading @req.RequestUID">
                     New @req.RequestType request
                 </button>
             </h5>
@@ -21,12 +21,8 @@
         </div>
     </div>
 }
-<script src="~/Scripts/AdminView/admin.scripts.js"></script>
+
 <script>
-    $(document).ready(function () {
-        var requestDetailsUrl = '@Url.Action("GetRequest", "Request")';
-        $('.btn').each(function (i, element) {
-            element.onclick = (function () { GetRequestDetails(element, requestDetailsUrl) });
-        });
-    });
+    var url = '@Url.Action("GetRequest", "Request")';
+    BindInnerButtonsForRequests(url);
 </script>

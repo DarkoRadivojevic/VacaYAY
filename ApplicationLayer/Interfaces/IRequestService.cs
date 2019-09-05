@@ -9,10 +9,14 @@ namespace ApplicationLayer.Interfaces
 {
     public interface IRequestService
     {
-        Task<List<ApplicationRequest>> RquestGetRequests(int requestCount, int requestOffset);
+        Task<List<ApplicationRequest>> RequestGetRequests(int requestCount, int requestOffset);
         Task<ApplicationRequest> RequestGetRequest(Guid requestGuid);
         Task RequestAddRequest(string employeeEmail, ApplicationRequest applicationRequest);
+        Task<int> RequestRequestGetTotalAvailableDays(Guid employeeUID);
         Task RequestPermit(Guid requestUID);
         Task RequestDeny(ApplicationRequest applicationRequest);
+        Task<List<ApplicationRequest>> RequestGetRequests(Guid employeeUID);
+        Task RequestEditRequest(ApplicationRequest applicationRequest);
+        Task<List<ApplicationRequest>> RequestSearchRequests(string searchInput, DateTime? startDate, DateTime? endDate);
     }
 }

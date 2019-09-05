@@ -132,6 +132,7 @@
     <Compile Include="BusinessWorkflow\Interfaces\IEmployeeWorkflow.cs" />
     <Compile Include="BusinessWorkflow\Interfaces\IRequestWorkflow.cs" />
     <Compile Include="DependencyInjectionExtensionBL.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

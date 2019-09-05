@@ -43,7 +43,7 @@ namespace ApplicationLayer.Implementations
                 EmployeeUID = Guid.NewGuid(),
                 EmployeeName = applicationEmployee.EmployeeName,
                 EmployeeSurname = applicationEmployee.EmployeeSurname,
-                EmployeeEmploymentDate = applicationEmployee.EmployeeEmploymentDate,
+                EmployeeEmploymentDate = (DateTime)applicationEmployee.EmployeeEmploymentDate,
                 EmployeCreatedOn = DateTime.UtcNow,
                 EmployeeBacklogDays = 0,
                 EmployeeCardIDNumber = applicationEmployee.EmployeeCardIDNumber,

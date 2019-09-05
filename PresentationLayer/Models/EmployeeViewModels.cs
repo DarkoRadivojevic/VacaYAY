@@ -1,63 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SolutionEnums;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace VacaYAY.Models
 {
-    public class EditViewModel
+    public class EditEmployeeViewModel
     {
         [Required]
         [DataType(DataType.Text)]
         public Guid EmployeeUID { get; set; }
+
         [DataType(DataType.Text)]
         [Display(Name = "Name")]
         [StringLength(70, ErrorMessage = "No longer than 70 charachters")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Use letters only please")]
         [MaxLength(70)]
         public string EmployeeName { get; set; }
+
         [DataType(DataType.Text)]
         [Display(Name = " Surname")]
-        [StringLength(70, ErrorMessage = "No longer than 70 charachters")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Use letters only please")]
         [MaxLength(70)]
         public string EmployeeSurname { get; set; }
+
         [DataType(DataType.Text)]
         [Display(Name = "ID Card Number")]
-        [StringLength(9, ErrorMessage = "ID Card number must be nine digits")]
-        [MaxLength(9)]
-        [MinLength(9)]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Use numbers only please")]
+        [MaxLength(9, ErrorMessage = "ID Card number must be nine digits")]
+        [MinLength(9, ErrorMessage = "ID Card number must be nine digits")]
         public string EmployeeCardIDNumber { get; set; }
-        [DataType(DataType.Text)]
+
         [Display(Name = "Role")]
-        [StringLength(10, ErrorMessage = "No longer than 10 charachters")]
-        public string EmployeeRole { get; set; }
+        [EnumDataType(typeof(AccountTypes))]
+        public AccountTypes? EmployeeRole { get; set; }
+
         [DataType(DataType.Date)]
         [Display(Name = "Employment date")]
-        public DateTime EmployeeEmploymentDate { get; set; }
+        public DateTime? EmployeeEmploymentDate { get; set; }
     }
 
-    public class FindByNameViewModel
+    public class FindEmployeeViewModel
     {
-        [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Name")]
-        [StringLength(70, ErrorMessage = "No longer than 70 charachters")]
-        [MaxLength(70)]
-        public string EmployeeName { get; set; }
-        [Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Surname")]
-        [StringLength(70, ErrorMessage = "No longer than 70 charachters")]
-        [MaxLength(70)]
-        public string EmployeeSurname { get; set; }
-    }
+        [Display(Name = "Employee Name")]
+        [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "Use letters only please")]
+        [MaxLength(140)]
+        public string SearchParameters { get; set; }
 
-    public class FindByEmploymentDateViewModel
-    {
-        [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Employment Date")]
-        public DateTime EmployeeEmploymentDate { get; set; }
+        public DateTime? EmployeeEmploymentDate { get; set; }
     }
 
     public class ReturnEmployeeViewModel

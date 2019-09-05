@@ -11,7 +11,7 @@ namespace BusinessLayer.BusinessWorkflow.Interfaces
     {
         Task<EmployeeEntity> EmployeeGetEmployee(Guid employeeUID);
         Task<EmployeeEntity> EmployeeFindCurrentEmployee(string employeeEmail);
-        Task<List<EmployeeEntity>> EmployeeFindEmployeesByName(string employeeName, string employeeSurname);
+        Task<List<EmployeeEntity>> EmployeeFindEmployeesByName(string searchParameters, DateTime employeeEmploymentDate);
         Task<List<EmployeeEntity>> EmployeeFindEmployeesByEmploymentDate(DateTime employeeEmploymentDate);
         Task<List<EmployeeEntity>> EmployeeGetEmployeesWithBacklogDays();
         Task<List<EmployeeEntity>> EmployeeGetEmployees(int employeeCount, int employeeOffset);

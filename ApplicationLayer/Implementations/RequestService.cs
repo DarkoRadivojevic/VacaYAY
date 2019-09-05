@@ -43,16 +43,16 @@ namespace ApplicationLayer.Implementations
         {
 
 
-            var requestEntity = new RequestsEntity()
+            var requestEntity = new RequestEntity()
             {
                 RequestUID = Guid.NewGuid(),
                 RequestComment = applicationRequest.RequestComment,
                 RequestCreatedOn = DateTime.UtcNow,
                 RequestNumberOfDays = applicationRequest.RequestNumberOfDays,
-                RequestStardDate = applicationRequest.RequestStartDate,
-                RequestEndDate = applicationRequest.RequestEndDate,
+                RequestStartDate = (DateTime)applicationRequest.RequestStartDate,
+                RequestEndDate = (DateTime)applicationRequest.RequestEndDate,
                 RequestStatus = (int)RequestStatus.InReview,
-                RequestType = applicationRequest.RequestType
+                RequestType = (RequestTypes)applicationRequest.RequestType
             };
             await RequestWorkflow.RequestAddRequest(employeeEmail, requestEntity);
         }
@@ -73,7 +73,7 @@ namespace ApplicationLayer.Implementations
                 EmployeeUID = request.EmployeeUID,
                 RequestDenialComment = request.RequestDenialComment,
                 RequestType = request.RequestType,
-                RequestStartDate = request.RequestStardDate,
+                RequestStartDate = request.RequestStartDate,
                 RequestEndDate = request.RequestEndDate,
                 RequestNumberOfDays = request.RequestNumberOfDays,
                 RequestStatus = (RequestStatus)request.RequestStatus,
@@ -88,7 +88,7 @@ namespace ApplicationLayer.Implementations
             await RequestWorkflow.RequestPermit(requestUID);
         }
 
-        public async Task<List<ApplicationRequest>> RquestGetRequests(int requestCount, int requestOffset)
+        public async Task<List<ApplicationRequest>> RequestGetRequests(int requestCount, int requestOffset)
         {
             var requests = await RequestWorkflow.RequestGetRequests(requestCount, requestOffset);
 
@@ -100,6 +100,73 @@ namespace ApplicationLayer.Implementations
             }).ToList();
 
             return requestsToReturn;
+        }
+
+        public async Task<List<ApplicationRequest>> RequestGetRequests(Guid employeeUID)
+        {
+            var requests = await RequestWorkflow.RequestsGetRequests(employeeUID);
+
+            var requestsToReturn = requests.Select(x => new ApplicationRequest()
+            {
+                RequestUID = x.RequestUID,
+                RequestType = x.RequestType,
+                RequestComment = x.RequestComment,
+                RequestStatus = (RequestStatus)x.RequestStatus,
+                RequestStartDate = x.RequestStartDate,
+                RequestEndDate = x.RequestEndDate,
+                RequestDenialComment = x.RequestDenialComment,
+                RequestNumberOfDays = x.RequestNumberOfDays,
+                RequestFile = x.RequestFile
+            }).ToList();
+
+            return requestsToReturn;
+        }
+
+        public async Task RequestEditRequest(ApplicationRequest applicationRequest)
+        {
+            var request = new RequestEntity()
+            {
+                RequestUID = applicationRequest.RequestUID,
+                RequestDenialComment = applicationRequest.RequestDenialComment,
+            };
+
+            if (applicationRequest.RequestType == 0)
+                request.RequestType = (RequestTypes)applicationRequest.RequestType;
+
+            if (applicationRequest.RequestStartDate != null)
+                request.RequestStartDate = (DateTime)applicationRequest.RequestStartDate;
+
+            if (applicationRequest.RequestEndDate != null)
+                request.RequestEndDate = (DateTime)applicationRequest.RequestEndDate;
+
+            await RequestWorkflow.RequestEditRequest(request);
+        }
+
+        public async Task<List<ApplicationRequest>> RequestSearchRequests(string searchInput, DateTime? startDate, DateTime? endDate)
+        {
+            if (startDate == null)
+                startDate = DateTime.MinValue;
+            if (endDate == null)
+                endDate = DateTime.MaxValue;
+
+            var requests = await RequestWorkflow.RequestSearchRequests(searchInput, (DateTime)startDate, (DateTime)endDate);
+
+            var requestToReturn = requests.Select(x => new ApplicationRequest()
+            {
+                RequestUID = x.RequestUID,
+                RequestType = x.RequestType,
+                RequestNumberOfDays = x.RequestNumberOfDays
+
+            }).ToList();
+
+            return requestToReturn;
+        }
+
+        public async Task<int> RequestRequestGetTotalAvailableDays(Guid employeeUID)
+        {
+            var totalDaysToReturn = await RequestWorkflow.RequestGetTotalAvailableDays(employeeUID);
+
+            return totalDaysToReturn;
         }
         #endregion
     }

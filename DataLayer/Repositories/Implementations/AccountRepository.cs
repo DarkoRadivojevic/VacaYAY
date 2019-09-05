@@ -131,7 +131,9 @@ namespace DataLayer
         public async Task AccountChangeRole(Guid employeeUID, string employeeRole)
         {
             var user = await DbContext.AspNetUsers.Where(x => x.Employee.EmployeeUID == employeeUID).FirstAsync();
-            await UserManager.RemoveFromRoleAsync(user.Id, user.AspNetRoles.FirstOrDefault().ToString());
+            var userRole = user.AspNetRoles.Where(x => x.Name != employeeRole).Select(x => x.Name).First();
+
+            await UserManager.RemoveFromRoleAsync(user.Id, userRole);
             await UserManager.AddToRoleAsync(user.Id, employeeRole);
         }
 

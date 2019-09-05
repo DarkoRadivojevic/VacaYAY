@@ -1,4 +1,5 @@
-﻿@{
+﻿@model VacaYAY.Models.ProcessRequestViewModel
+@{
     Layout = null;
 }
 @Html.AntiForgeryToken()
@@ -9,18 +10,23 @@
             <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
-            Do you want to deny the selected request?
+            <div class="form-group">
+                @Html.LabelFor(m => m.RequestDenialComment, new { @class = "col control-label" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(m => m.RequestDenialComment, new { @class = "form-control form-control-sm", id = "denial-" + Model.RequestUID })
+                    @Html.ValidationMessageFor(m => m.RequestDenialComment, "", new { @class = "text-danger" })
+                </div>
+            </div>
         </div>
         <div class="modal-footer row justify-content-between mx-0">
-            <button type="button" id="yes" onlick="action()" class="btn btn-success" data-dismiss="modal">Yes</button>
+            <button type="button" id="yes" onclick="deny()" class="btn btn-success" data-dismiss="modal">Yes</button>
             <button type="button" id="no" class="btn btn-danger " data-dismiss="modal">No</button>
         </div>
     </div>
 </div>
 <script>
-    function action() {
-        $(document).ready(function () {
-            console.log('uso sam');
+    function deny() {
+         $(document).ready(function () {
             var requestUrl = '@Url.Action("PermitOrDenyRequest", "Request")';
             DenyRequest(requestUrl);
         });

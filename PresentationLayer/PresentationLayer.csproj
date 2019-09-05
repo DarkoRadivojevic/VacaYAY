@@ -269,6 +269,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdditionaDaysController.cs" />
     <Compile Include="Controllers\ContractController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -277,7 +278,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AdditionalDaysViewModel.cs" />
     <Compile Include="Models\ContractViewModels.cs" />
     <Compile Include="Models\EmployeeViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -296,7 +299,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\paper-dashboard.css" />
     <Content Include="Content\paper-dashboard.min.css" />
+    <Content Include="Content\pikaday.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\customHelpers.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -340,14 +345,18 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\paper-dashboard.js" />
     <Content Include="Scripts\paper-dashboard.min.js" />
+    <Content Include="Scripts\Pickaday\pikaday.scripts.js" />
+    <Content Include="Scripts\pikaday.jquery.js" />
     <Content Include="Scripts\plugins\bootstrap-notify.js" />
     <Content Include="Scripts\plugins\chartjs.min.js" />
     <Content Include="Scripts\plugins\perfect-scrollbar.jquery.min.js" />
+    <Content Include="Scripts\pikaday.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\AdminView\admin.scripts.js" />
+    <Content Include="Scripts\shared.scripts.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
@@ -375,12 +384,8 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
     <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Employee\FindEmployeesByName.cshtml" />
@@ -409,6 +414,25 @@
     <Content Include="Views\Request\AddRequestView.cshtml" />
     <Content Include="Views\Employee\GetEmployees.cshtml" />
     <Content Include="Views\Employee\GetEmployee.cshtml" />
+    <Content Include="Views\Employee\EditEmployeeView.cshtml" />
+    <Content Include="Views\Modal\DeleteEmployeeModal.cshtml" />
+    <Content Include="Views\Contract\GetContracts.cshtml" />
+    <Content Include="Views\Contract\GetContract.cshtml" />
+    <Content Include="Views\Contract\GetEmployeeContracts.cshtml" />
+    <Content Include="Views\Request\GetEmployeeRequests.cshtml" />
+    <Content Include="Views\Contract\AddContractView.cshtml" />
+    <Content Include="Views\AdditionalDays\AddAdditionalDaysView.cshtml" />
+    <Content Include="Views\AdditionalDays\AddAdditionalDays.cshtml" />
+    <Content Include="Views\Employee\EditEmployee.cshtml" />
+    <Content Include="Views\Contract\AddContract.cshtml" />
+    <Content Include="Views\Request\EditRequestView.cshtml" />
+    <Content Include="Views\Request\EditRequest.cshtml" />
+    <Content Include="Views\Employee\FindEmployees.cshtml" />
+    <Content Include="Views\Employee\Search.cshtml" />
+    <Content Include="Views\Request\Search.cshtml" />
+    <Content Include="Views\Request\SearchByDate.cshtml" />
+    <Content Include="Views\Shared\NullView.cshtml" />
+    <Content Include="Views\Shared\Success.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

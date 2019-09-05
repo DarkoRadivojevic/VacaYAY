@@ -44,13 +44,14 @@ namespace DataLayer.Implementations
         public void ReqeustUpdate(Request request)
         {
             DbContext.Entry(request).State = EntityState.Modified;
+
         }
 
         public async Task RequestDelete(Guid requestUID)
         {
             Request request = await DbContext.Requests.Where(x => x.RequestUID == requestUID && x.RequestDeletedOn == null).FirstAsync();
             request.RequestDeletedOn = DateTime.UtcNow;
-          
+
             await this.RequestSave();
         }
 
@@ -58,7 +59,7 @@ namespace DataLayer.Implementations
         {
             List<Request> requestToReturn = await DbContext.Requests.Where(x => x.RequestDeletedOn == null && x.RequestStatus == (int)RequestStatus.InReview)
                                                                     .OrderBy(x => x.RequestCreatedOn)
-                                                                    .Skip(requestCount * (requestCount - 1))
+                                                                    .Skip(requestOffset * (requestCount - 1))
                                                                     .Take(requestOffset).ToListAsync();
 
             return requestToReturn;
@@ -80,6 +81,22 @@ namespace DataLayer.Implementations
         public async Task<List<Request>> RequestGetAllEmployeeRequests(Guid employeeUID)
         {
             List<Request> requestsToReturn = await DbContext.Requests.Where(x => x.Employee.EmployeeUID == employeeUID).ToListAsync();
+            return requestsToReturn;
+        }
+
+        public async Task<List<Request>> RequestSearchRequest(string[] searchString, DateTime startDate, DateTime endDate)
+        {
+            IQueryable<Request> queryableRequests = DbContext.Requests.AsQueryable();
+
+            queryableRequests = queryableRequests.Where(x => x.RequestDeletedOn == null && x.RequestStatus == (int)RequestStatus.InReview &&
+                                                        x.RequestStartDate >= startDate && x.RequestEndDate <= endDate &&
+                                                        ( searchString.Any(s => x.RequestComment.Contains(s))  || searchString.Any(s => x.RequestDenialComment.Contains(s)) ||
+                                                        searchString.Contains(x.RequestFileName) || searchString.Contains(x.RequestNumberOfDays.ToString()) ||
+                                                        searchString.Contains(((RequestTypes)x.RequestType).ToString()) || searchString.Contains(x.Employee.EmployeeName) || 
+                                                        searchString.Contains(x.Employee.EmployeeSurname)));
+
+            List<Request> requestsToReturn = await queryableRequests.ToListAsync();
+
             return requestsToReturn;
         }
         #endregion

@@ -1,18 +1,15 @@
 ﻿
 <div class="row">
-        @if (!Request.IsAuthenticated)
-        {
-            <h2>Welcome</h2>
-            <p>
-                Promaseno
-                Pleaase login to your account.
-            </p>
-        }
-        else
-        {
-            @Html.Partial("HomeView");
-        }
-    </div>
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+    @if (!Request.IsAuthenticated)
+    {
+        <h2>Welcome</h2>
+        <p>
+            Promaseno
+            Pleaase login to your account.
+        </p>
+    }
+    else
+    {
+        @Html.Partial("HomeView");
+    }
+</div>

@@ -1,0 +1,28 @@
+﻿@model List<VacaYAY.Models.ReturnContractViewModel>
+@{
+    Layout = null;
+}
+@Html.AntiForgeryToken()
+@foreach (var req in Model)
+{
+    <div class="card border" id="item-@req.ContractUID">
+        <div class="card-header" id="heading @req.ContractUID">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" value="@req.ContractUID" data-toggle="collapse" data-target="#@req.ContractUID" aria-expanded="false" aria-controls="heading @req.ContractUID">
+                    Contract number: @req.ContractNumber
+                </button>
+            </h5>
+        </div>
+
+        <div id="@req.ContractUID" class="collapse " aria-labelledby="heading @req.ContractUID" data-parent="#accordion">
+            <div class="card-body" id="card-@req.ContractUID">
+
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/AdminView/admin.scripts.js"></script>
+<script>
+    var url = '@Url.Action("GetContract", "Contract")';
+    BindInnerButtonsForContracts(url);
+</script>

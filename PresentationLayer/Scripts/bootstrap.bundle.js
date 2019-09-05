@@ -2214,7 +2214,8 @@ function runModifiers(modifiers, data, ends) {
   modifiersToRun.forEach(function (modifier) {
     if (modifier['function']) {
       // eslint-disable-line dot-notation
-      console.warn('`modifier.function` is deprecated, use `modifier.fn`!');
+      
+        .warn('`modifier.function` is deprecated, use `modifier.fn`!');
     }
     var fn = modifier['function'] || modifier.fn; // eslint-disable-line dot-notation
     if (modifier.enabled && isFunction(fn)) {

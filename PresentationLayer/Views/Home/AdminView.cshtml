@@ -6,26 +6,58 @@
 @Html.Hidden("pageOffset", 0)
 @Html.Hidden("requestUrl", Url.Action("GetRequests", "Request"))
 @Html.Hidden("currentEmployeeUrl", Url.Action("FindCurrentEmployee", "Employee"))
+@Html.Hidden("previousButton", " ")
+@Html.Hidden("findByEmploymentDateEmployees", Url.Action("FindByDate", "Employee"))
+@Html.Hidden("findByNameEmployees", Url.Action("FindByName", "Employee"))
+@Html.Hidden("getEmployeeDetails", Url.Action("GetEmployee", "Employee"))
+@Html.Hidden("findByParametersEmployees", Url.Action("Search", "Employee"))
+@Html.Hidden("findByParametersContracts", Url.Action("Search", "Contract"))
+@Html.Hidden("findByParametersRequests", Url.Action("Search", "Request"))
 @Html.AntiForgeryToken()
-    <div class="container-fluid">
-        <div class="row justify-content-sm-start m-3">
-            <button class="btn btn-primary m-0 ml-1" id="requestShow">Requests</button>
-            <button class="btn btn-primary m-0 ml-1" id="employeesShow">Employees</button>
-            <button class="btn btn-primary m-0 ml-1">Contracts</button>
-            <input class="form-control" placeholder="Name"/>
+<div class="container-fluid">
+    <div class="row align-items-center m-0">
+        <div class="row col-12 col-md-7 col-lg-4 p-0 justify-content-sm-between justify-content-around m-auto m-sm-0">
+            <button class="btn btn-primary " id="requestShow">Requests</button>
+            <button class="btn btn-primary " id="employeesShow">Employees</button>
+            <button class="btn btn-primary " id="contractsShow">Contracts</button>
         </div>
-        <div class="row">
-            <div class="col-md-2 " id="currentUser"></div>
-            <div class="col-md-8">
-                <div id="accordion">
-                </div>
-                <div id="request"></div>
+        <div class="row col-12 col-md-4 col-lg-8">
+            <div id="requestSearch">
+                <input type="text" id="requestStartSearchField" placeholder="Request start date" autocomplete="off" />
+                <input type="text" id="requestSearchField" placeholder="Enter search parameters" />
+                <input type="text" id="requestEndSearchField" placeholder="Request end date" autocomplete="off" />
             </div>
-            <div class="col-md-2"></div>
+            <div id="employeeSearch" hidden="hidden">
+                <input type="text" id="employeeSearchField" placeholder="Enter employee name " />
+                <input type="text" id="employeeEmploymentSearchField" placeholder="Employee employment start date" autocomplete="off" />
+            </div>
+            <div id="contractSearch" hidden="hidden">
+                <input type="text" id="contractSearchField" placeholder="Enter search parameters" />
+                <input type="text" id="contractStartSearchField" placeholder="Contract start date" autocomplete="off" />
+                <input type="text" id="contractEndSearchField" placeholder="Contract end date" autocomplete="off" />
+            </div>
         </div>
     </div>
-<div class="modal" id="myModal"></div>
-<script src="~/Scripts/AdminView/admin.scripts.js"></script>
+    <div class="row p-0">
+        <div class="col-md-8">
+            <div id="accordion" style="">
+            </div>
+            <div id="request"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+<div class="modal " id="myModal"></div>
 <script>
-    StartUp();
+    $(document).ready(StartUp());
+    $(document).ready(InitializeSearchPikaday());
+
+
+    //ako treba da accordion bude scrollable mada mi se ne svidja izgleda ruznije
+    $(document).ready(function () {
+        var height = parseInt($('#pageOffset').val()) * 95;
+        //$('#accordion').attr('style', 'height: ' + height + 'px; overflow-y: auto;');
+    });
+
 </script>
+

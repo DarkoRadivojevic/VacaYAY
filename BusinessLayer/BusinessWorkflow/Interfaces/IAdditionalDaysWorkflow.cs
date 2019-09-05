@@ -11,7 +11,7 @@ namespace BusinessLayer.BusinessWorkflow.Interfaces
     {
         Task<List<AdditionalDaysEntity>> AdditionalDaysGetAllAdditionalDays(Guid employeeUID);
         Task<AdditionalDaysEntity> AdditionalDaysGetAdditionalDay(Guid additionalDayUID);
-        Task AdditionalDaysInsert(int employeeID, AdditionalDaysEntity additionalDays);
+        Task AdditionalDaysInsert(Guid employeeUID, AdditionalDaysEntity additionalDays);
         Task<int> AdditionalDaysGetNumberOfDays(Guid employeeUID);
         Task AdditionalDaysRemove(Guid employeeUID, int numberOfDays);
         Task<bool> AdditionalDaysValidateHasDaysOff(Guid employeeUID, DateTime startDate, DateTime endDate);

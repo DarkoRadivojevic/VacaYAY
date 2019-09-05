@@ -92,8 +92,10 @@ namespace ApplicationLayer.Implementations
                 EmployeeName = applicationEmployee.EmployeeName,
                 EmployeeSurname = applicationEmployee.EmployeeSurname,
                 EmployeeCardIDNumber = applicationEmployee.EmployeeCardIDNumber,
-                EmployeeEmploymentDate = applicationEmployee.EmployeeEmploymentDate
-            };
+                EmployeeEmploymentDate = applicationEmployee.EmployeeEmploymentDate,
+                EmployeeRole = employeeRole
+            };  
+
             await EmployeeWorkflow.EmployeeEditEmployee(employeeEntitiy, employeeRole);
         }
 
@@ -112,16 +114,15 @@ namespace ApplicationLayer.Implementations
             return employeeToReturn;
         }
 
-        public async Task<List<ApplicationEmployee>> EmployeeFindEmployeesByName(string employeeName, string employeeSurname)
+        public async Task<List<ApplicationEmployee>> EmployeeFindEmployeesByName(string searchParameters, DateTime employeeEmploymentDate)
         {
-            var employees = await EmployeeWorkflow.EmployeeFindEmployeesByName(employeeName, employeeSurname);
+            var employees = await EmployeeWorkflow.EmployeeFindEmployeesByName(searchParameters, employeeEmploymentDate);
 
             var employeesToReturn = employees.Select(x => new ApplicationEmployee()
             {
                 EmployeeUID = x.EmployeeUID,
                 EmployeeName = x.EmployeeName,
                 EmployeeSurname = x.EmployeeSurname,
-                EmployeeEmploymentDate = x.EmployeeEmploymentDate
             }).ToList();
 
             return employeesToReturn;

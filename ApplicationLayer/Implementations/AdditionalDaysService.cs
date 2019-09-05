@@ -1,5 +1,6 @@
 ﻿using ApplicationLayer.Entities;
 using ApplicationLayer.Interfaces;
+using BusinessLayer.BusinessEntity;
 using BusinessLayer.BusinessWorkflow.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -68,6 +69,17 @@ namespace ApplicationLayer.Implementations
             }).ToList();
 
             return toReturn;
+        }
+
+        public async Task AdditionalDaysAddAdditionalDays(ApplicationAdditionalDays additionalDays)
+        {
+            var additional = new AdditionalDaysEntity()
+            {
+                AdditionalDaysReason = additionalDays.AdditionalDaysReason,
+                AdditionalDaysNumberOfAdditionalDays = additionalDays.AdditionalDaysNumberOfDays,
+            };
+
+            await AdditionalDaysWorkflow.AdditionalDaysInsert(additionalDays.EmployeeUID, additional);
         }
         #endregion
     }

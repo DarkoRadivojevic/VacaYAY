@@ -40,7 +40,7 @@ namespace DataLayer.Implementations
             Employee employee = await DbContext.Employees.Where(x => x.EmployeeUID == employeeUID).FirstAsync();
             employee.EmployeeDeletedOn = DateTime.UtcNow;
 
-            this.EmployeeUpdate(employee);
+            await this.EmployeeSave();
         }
 
         public async Task EmlpoyeeInsert(Employee employee)
@@ -92,14 +92,17 @@ namespace DataLayer.Implementations
 
         }
 
-        public async Task<List<Employee>> EmployeeGetEmployees(string employeeName, string employeeSurname)
+        public async Task<List<Employee>> EmployeeSearchEmployees(string[] searchString, DateTime employeeEmploymentDate)
         {
-            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeName.Contains(employeeName) || x.EmployeeSurname.Contains(employeeSurname) && x.EmployeeDeletedOn == null).ToListAsync();
+            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => (searchString.Any(p => x.EmployeeName.Contains(p)) || searchString.Any(p => x.EmployeeSurname.Contains(p))) && 
+                                                                               x.EmployeeDeletedOn == null && x.EmployeeEmploymentDate >= employeeEmploymentDate)
+                                                                        .ToListAsync();
             return employeesToReturn;
         }
+
         public async Task<bool> EmployeeGetCardIDNumber(string employeeCardIDNumber)
         {
-            var result = await DbContext.Employees.Where(x => x.EmlpoyeeCardIDNumber == employeeCardIDNumber).FirstAsync();
+            Employee result = await DbContext.Employees.Where(x => x.EmlpoyeeCardIDNumber == employeeCardIDNumber).FirstAsync();
             if (result == null)
                 return true;
             else
@@ -118,8 +121,14 @@ namespace DataLayer.Implementations
 
         public async Task<Employee> EmployeeGetEmployee(int employeeID)
         {
-            var employee = await DbContext.Employees.Where(x => employeeID == x.EmployeeID).FirstAsync();
+            Employee employee = await DbContext.Employees.Where(x => employeeID == x.EmployeeID).FirstAsync();
             return employee;
+        }
+
+        public async Task<int> EmployeeGetEmployeeBacklogDays(Guid employeeUID)
+        {
+            int daysToReturn = await DbContext.Employees.Where(x => x.EmployeeUID == employeeUID).Select(x => x.EmployeeBacklogDays).FirstAsync() ?? 0;
+            return daysToReturn;
         }
         #endregion
     }

@@ -14,7 +14,7 @@
     <Key>
       <PropertyRef Name="AdditionalDaysID" />
     </Key>
-    <Property Name="AdditionalDaysID" Type="int" Nullable="false" />
+    <Property Name="AdditionalDaysID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="EmployeeID" Type="int" Nullable="false" />
     <Property Name="AdditionaDaysUID" Type="uniqueidentifier" Nullable="false" />
     <Property Name="AdditionalDaysNumberOfAdditionalDays" Type="int" Nullable="false" />
@@ -77,11 +77,12 @@
     <Key>
       <PropertyRef Name="ContractID" />
     </Key>
-    <Property Name="ContractID" Type="int" Nullable="false" />
+    <Property Name="ContractID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="EmployeeID" Type="int" Nullable="false" />
     <Property Name="ContractUID" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="ContractNumber" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ContractNumber" Type="int" Nullable="false" />
     <Property Name="ContractType" Type="int" Nullable="false" />
+    <Property Name="ContractFileName" Type="nvarchar" MaxLength="150" Nullable="false" />
     <Property Name="ContractFile" Type="varbinary(max)" Nullable="false" />
     <Property Name="ContractStartDate" Type="date" Nullable="false" />
     <Property Name="ContractEndDate" Type="date" />
@@ -109,11 +110,12 @@
     <Property Name="RequestID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="EmployeeID" Type="int" Nullable="false" />
     <Property Name="RequestUID" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="RequestType" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="RequestType" Type="int" Nullable="false" />
     <Property Name="RequestComment" Type="nvarchar" MaxLength="256" />
     <Property Name="RequestStatus" Type="int" Nullable="false" />
     <Property Name="RequestDenialComment" Type="nvarchar" MaxLength="256" />
     <Property Name="RequestNumberOfDays" Type="int" Nullable="false" />
+    <Property Name="RequestFileName" Type="nvarchar" MaxLength="200" />
     <Property Name="RequestFile" Type="varbinary(max)" />
     <Property Name="RequestStartDate" Type="date" Nullable="false" />
     <Property Name="RequestEndDate" Type="date" Nullable="false" />

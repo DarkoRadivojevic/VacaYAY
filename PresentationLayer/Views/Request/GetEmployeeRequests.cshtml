@@ -1,0 +1,14 @@
+﻿@model List<VacaYAY.Models.ReturnRequestViewModel>
+@Html.AntiForgeryToken()
+@{
+    Layout = null;
+}
+
+@foreach (var req in Model)
+{
+    <div class="border border-info m-2">
+        <div class="card-body">@req.RequestStartDate</div>
+        <div class="card-body">@req.RequestEndDate</div>
+        <div class="card-body">@req.RequestType</div>
+    </div>
+}

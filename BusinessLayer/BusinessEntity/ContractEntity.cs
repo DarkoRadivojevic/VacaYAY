@@ -13,6 +13,7 @@ namespace BusinessLayer.BusinessEntity
         public int ContractNumber { get; set; }
         public int ContractType { get; set; }
         public  byte[] ContractFile { get; set; }
+        public string ContractFileName { get; set; }
         public DateTime ContractStartDate { get; set; }
         public DateTime? ContractEndDate { get; set; }
         public DateTime ContractCreatedOn { get; set; }

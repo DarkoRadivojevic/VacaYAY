@@ -1,0 +1,19 @@
+﻿@model List<VacaYAY.Models.ReturnContractViewModel>
+
+@Html.AntiForgeryToken()
+@{
+    Layout = null;
+}
+
+@foreach (var req in Model)
+{
+    <div class="border border-info m-2 rounded">
+        <div class="card-body">Contract type: @req.ContractType</div>
+        <div class="card-body">Contract number: @req.ContractNumber</div>
+        <div class="card-body">Contract start date: @req.ContractStartDate.ToShortDateString()</div>
+        @if (req.ContractType == SolutionEnums.ContractTypes.Temporary)
+        {
+            <div class="card-body">Contract end date: @req.ContractEndDate.Value.ToShortDateString()</div>
+        }
+    </div>
+}

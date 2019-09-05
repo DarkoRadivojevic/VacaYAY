@@ -13,14 +13,16 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
     {
         #region Atributes
         private IAdditionalDaysRepository _additionalDaysRepository;
+        private IEmployeeRepository _employeeRepository;
         #endregion
         #region Constructors
         public AdditionalDaysWorkflow()
         {
         }
-        public AdditionalDaysWorkflow(IAdditionalDaysRepository additionalDaysRepository)
+        public AdditionalDaysWorkflow(IAdditionalDaysRepository additionalDaysRepository, IEmployeeRepository employeeRepository)
         {
             AdditionalDaysRepository = additionalDaysRepository;
+            EmployeeRepository = employeeRepository;
         }
         #endregion
         #region Properties
@@ -33,6 +35,17 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             private set
             {
                 _additionalDaysRepository = value;
+            }
+        }
+        public IEmployeeRepository EmployeeRepository
+        {
+            get
+            {
+                return _employeeRepository;
+            }
+            set
+            {
+                _employeeRepository = value;
             }
         }
         #endregion
@@ -70,15 +83,17 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             return numberOfDaysToReturn;
         }
 
-        public async Task AdditionalDaysInsert(int employeeID, AdditionalDaysEntity additionalDays)
+        public async Task AdditionalDaysInsert(Guid employeeUID, AdditionalDaysEntity additionalDays)
         {
+            var employee = await EmployeeRepository.EmployeeGetEmployee(employeeUID);
+
             var days = new AdditionalDay()
             {
-                EmployeeID = employeeID,
                 AdditionaDaysUID = Guid.NewGuid(),
                 AdditionalDaysNumberOfAdditionalDays = additionalDays.AdditionalDaysNumberOfAdditionalDays,
                 AdditionalDaysReason = additionalDays.AdditionalDaysReason,
-                AdditionalDaysCreatedOn = DateTime.UtcNow
+                AdditionalDaysCreatedOn = DateTime.UtcNow,
+                EmployeeID = employee.EmployeeID
             };
 
             await AdditionalDaysRepository.AdditionalDaysInsert(days);
