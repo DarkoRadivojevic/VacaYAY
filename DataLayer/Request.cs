@@ -10,9 +10,8 @@
 namespace DataLayer
 {
     using System;
-    using System.Collections.Generic;
-    
-    public partial class Request
+
+    public partial class Request 
     {
         public int RequestID { get; set; }
         public int EmployeeID { get; set; }

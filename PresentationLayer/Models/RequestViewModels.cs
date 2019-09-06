@@ -90,6 +90,7 @@ namespace VacaYAY.Models
         public Guid RequestUID { get; set; }
         public string EmployeeName { get; set; }
         public string EmployeeSurname { get; set; }
+        public int EmployeeAvailableDays { get; set; }
         public RequestTypes RequestType { get; set; }
         public string RequestComment { get; set; }
         public int RequestNumberOfDays { get; set; }
@@ -99,7 +100,16 @@ namespace VacaYAY.Models
 
     public class CollectiveRequestViewModel
     {
+        [Required]
+        [DataType(DataType.Text)]
+        public int RequestID { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
     }
 }

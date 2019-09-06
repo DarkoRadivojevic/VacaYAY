@@ -105,13 +105,15 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             foreach (var day in daysOff)
             {
                 numberOfDays -= day.AdditionalDaysNumberOfAdditionalDays;
-                if (numberOfDays > 0)
-                    day.AdditionalDaysDeletedOn = DateTime.UtcNow;
-                else if (numberOfDays < 0)
+                if (numberOfDays < 0)
+                {
                     day.AdditionalDaysNumberOfAdditionalDays += numberOfDays;
-                else
                     break;
+                }
+                if (numberOfDays >= 0)
+                    day.AdditionalDaysDeletedOn = DateTime.UtcNow;
             }
+            await AdditionalDaysRepository.AdditionalDaysSave();
         }
         public async Task<bool> AdditionalDaysValidateHasDaysOff(Guid employeeUID, DateTime startDate, DateTime endDate)
         {

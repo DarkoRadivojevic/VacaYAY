@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -76,10 +77,10 @@ namespace DataLayer.Implementations
         public async Task<List<Employee>> EmployeeGetEmployees(int employeeCount, int employeeOffset)
         {
             List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeDeletedOn == null)
-                                                                        .OrderBy(x => x.EmployeeCreatedOn)
-                                                                        .Skip(employeeOffset * (employeeCount - 1))
-                                                                        .Take(employeeOffset)
-                                                                        .ToListAsync();
+                                .OrderBy(x => x.EmployeeCreatedOn)
+                                .Skip(employeeOffset * (employeeCount - 1))
+                                .Take(employeeOffset)
+                                .ToListAsync();
 
             return employeesToReturn;
         }
@@ -129,6 +130,31 @@ namespace DataLayer.Implementations
         {
             int daysToReturn = await DbContext.Employees.Where(x => x.EmployeeUID == employeeUID).Select(x => x.EmployeeBacklogDays).FirstAsync() ?? 0;
             return daysToReturn;
+        }
+
+
+
+
+        public async Task<T> EmployeeGetEmployee<T>(Expression<Func<Employee, bool>> expressionSpecification,
+            Expression<Func<Employee, T>> expressionProjection)
+        {
+            T employeeToReturn = await DbContext.Employees
+                .Where(expressionSpecification)
+                .Select(expressionProjection)
+                .FirstOrDefaultAsync();
+
+            return employeeToReturn;
+        }
+
+        public async Task<List<T>> EmployeeGetList<T>(Expression<Func<Employee, bool>> expresionSpecification,
+            Expression<Func<Employee, T>> expressionProjection)
+        {
+            List<T> employeesToReturn = await DbContext.Employees
+                .Where(expresionSpecification)
+                .Select(expressionProjection)
+                .ToListAsync();
+
+            return employeesToReturn;
         }
         #endregion
     }

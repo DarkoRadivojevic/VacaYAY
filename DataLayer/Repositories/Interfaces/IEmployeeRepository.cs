@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DataLayer
@@ -20,5 +21,14 @@ namespace DataLayer
         Task EmlpoyeeDelete(Guid employeeUID);
         void EmployeeUpdate(Employee employee);
         Task EmployeeSave();
+
+
+    
+        Task<T> EmployeeGetEmployee<T>(Expression<Func<Employee, bool>> expressionSpecification, 
+            Expression<Func<Employee, T>> expressionProjection);
+
+        Task<List<T>> EmployeeGetList<T>(Expression<Func<Employee, bool>> expressionSpecification, 
+            Expression<Func<Employee, T>> expressionProjection);
+
     }
 }

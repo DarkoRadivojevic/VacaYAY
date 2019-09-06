@@ -168,6 +168,11 @@ namespace ApplicationLayer.Implementations
 
             return totalDaysToReturn;
         }
+
+        public async Task RequestCollective(int requestID, DateTime startDate, DateTime endDate)
+        {
+            await RequestWorkflow.RequestCollective(requestID, startDate, endDate);
+        }
         #endregion
     }
 }

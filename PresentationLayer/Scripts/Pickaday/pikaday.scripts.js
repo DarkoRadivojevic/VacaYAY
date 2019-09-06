@@ -15,6 +15,7 @@
             field: document.getElementById('RequestStartDate'),
             minDate: new Date(),
             maxDate: new Date(2020, 12, 31),
+            firstDay: 1,
             onSelect: function () {
                 startDate = this.getDate();
                 updateStartDate();
@@ -22,6 +23,7 @@
         }),
         endPicker = new Pikaday({
             field: document.getElementById('RequestEndDate'),
+            firstDay: 1,
             minDate: new Date(),
             maxDate: new Date(2020, 12, 31),
             onSelect: function () {
@@ -43,6 +45,7 @@
 
 function InitializeEditEmployeePikady() {
     statPicker = new Pikaday({
+        firstDay: 1,
         field: document.getElementById('EmployeeEmploymentDate'),
         onSelect: function () {
             endDate = this.getDate();
@@ -64,6 +67,7 @@ function InitializeAddContractPikady(id) {
             endPicker.setEndRange(endDate);
         },
         startPicker = new Pikaday({
+            firstDay: 1,
             field: document.getElementById('contractStartDate-' + id),
             maxDate: new Date(2020, 12, 31),
             onSelect: function () {
@@ -72,6 +76,7 @@ function InitializeAddContractPikady(id) {
             },
         }),
         endPicker = new Pikaday({
+            firstDay: 1,
             field: document.getElementById('contractEndDate-' + id),
             minDate: new Date(),
             maxDate: new Date(2020, 12, 31),
@@ -106,6 +111,7 @@ function InitializeEditRequestPikady(id) {
             endPicker.setEndRange(endDate);
         },
         startPicker = new Pikaday({
+            firstDay: 1,
             field: document.getElementById('requestStart-' + id),
             minDate: new Date(),
             maxDate: new Date(2020, 12, 31),
@@ -115,6 +121,7 @@ function InitializeEditRequestPikady(id) {
             },
         }),
         endPicker = new Pikaday({
+            firstDay: 1,
             field: document.getElementById('requestEnd-' + id),
             minDate: new Date(),
             maxDate: new Date(2020, 12, 31),
@@ -155,6 +162,7 @@ function RequestSearchPikaday() {
             endPicker.setEndRange(endDate);
         },
         startPicker = new Pikaday({
+            firstDay: 1,
             field: document.getElementById('requestStartSearchField'),
             maxDate: new Date(2020, 12, 31),
             onSelect: function () {
@@ -163,6 +171,7 @@ function RequestSearchPikaday() {
             },
         }),
         endPicker = new Pikaday({
+            firstDay: 1,
             field: document.getElementById('requestEndSearchField'),
             minDate: new Date(),
             maxDate: new Date(2020, 12, 31),
@@ -185,6 +194,7 @@ function RequestSearchPikaday() {
 
 function EmployeeSearchPikaday() {
     statPicker = new Pikaday({
+        firstDay: 1,
         field: document.getElementById('employeeEmploymentSearchField'),
         onSelect: function () {
             endDate = this.getDate();
@@ -206,6 +216,7 @@ function ContractSearchPikaday() {
             endPicker.setEndRange(endDate);
         },
         startPicker = new Pikaday({
+            firstDay: 1,
             field: document.getElementById('contractStartSearchField'),
             maxDate: new Date(2020, 12, 31),
             onSelect: function () {
@@ -214,6 +225,7 @@ function ContractSearchPikaday() {
             },
         }),
         endPicker = new Pikaday({
+            firstDay: 1,
             field: document.getElementById('contractEndSearchField'),
             minDate: new Date(),
             maxDate: new Date(2020, 12, 31),

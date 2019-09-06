@@ -9,7 +9,8 @@
         <div class="card-body">Request type: @Model.RequestType</div>
         <div class="card-body">Starts on: @Model.RequestStartDate.ToShortDateString()</div>
         <div class="card-body">Ends on: @Model.RequestEndDate.ToShortDateString()</div>
-        <div class="card-body">Number of days: @Model.RequestNumberOfDays</div>
+        <div class="card-body">Number of days requested: @Model.RequestNumberOfDays</div>
+        <div class="card-body">Number of days available: @Model.EmployeeAvailableDays</div>
     </div>
     <div class="col" id="editRequest-@Model.RequestUID">
 

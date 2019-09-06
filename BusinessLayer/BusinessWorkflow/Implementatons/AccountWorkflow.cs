@@ -11,16 +11,18 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
         #region Atributes
         private IAccountRepository _accountRepository;
         private IEmployeeRepository _employeeRepository;
+        private IEmployeeWorkflow _employeeWorkflow;
         #endregion
         #region Constructors
         public AccountWorkflow()
         {
 
         }
-        public AccountWorkflow(IAccountRepository accountRepository, IEmployeeRepository employeeRepository)
+        public AccountWorkflow(IAccountRepository accountRepository, IEmployeeRepository employeeRepository, IEmployeeWorkflow employeeWorkflow)
         {
             AccountRepository = accountRepository;
             EmployeeRepository = employeeRepository;
+            EmployeeWorkflow = employeeWorkflow;
         }
         #endregion
         #region Properties
@@ -46,24 +48,25 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 _employeeRepository = value;
             }
         }
+        public IEmployeeWorkflow EmployeeWorkflow
+        {
+            get
+            {
+                return _employeeWorkflow;
+            }
+            private set
+            {
+                _employeeWorkflow = value;
+            }
+        }
         #endregion
         #region Methods
         public async Task AccountRegister(string accountEmail, string accountPassowrd, EmployeeEntity employeeEntity)
         {
             var result = await AccountRepository.AccountRegister(accountEmail, accountPassowrd, employeeEntity.EmployeeRole);
 
-            var employee = new Employee()
-            {
-                EmlpoyeeCardIDNumber = employeeEntity.EmployeeCardIDNumber,
-                EmployeeID = result,
-                EmployeeUID = Guid.NewGuid(),
-                EmployeeCreatedOn = DateTime.UtcNow,
-                EmployeeBacklogDays = 0,
-                EmployeeEmploymentDate = employeeEntity.EmployeeEmploymentDate,
-                EmployeeName = employeeEntity.EmployeeName,
-                EmployeeSurname = employeeEntity.EmployeeSurname
-            };
-            await EmployeeRepository.EmlpoyeeInsert(employee);
+            await EmployeeWorkflow.EmployeeAddEmployee(result, employeeEntity);
+
         }
         public async Task<bool> AccountValidateEmail(string accountEmail)
         {

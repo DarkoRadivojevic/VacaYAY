@@ -2,18 +2,36 @@
 
 namespace BusinessLayer
 {
-    public static class Helper
+    public static class DateTimeExtensions
     {
-        public static double GetBusinessDays(DateTime startD, DateTime endD)
+        public static int GetBusinessDaysTo(this DateTime startDate, DateTime endDate)
         {
             double calcBusinessDays =
-                1 + ((endD - startD).TotalDays * 5 -
-                (startD.DayOfWeek - endD.DayOfWeek) * 2) / 7;
+               1 + ((endDate - startDate).TotalDays * 5 -
+               (startDate.DayOfWeek - endDate.DayOfWeek) * 2) / 7;
 
-            if (endD.DayOfWeek == DayOfWeek.Saturday) calcBusinessDays--;
-            if (startD.DayOfWeek == DayOfWeek.Sunday) calcBusinessDays--;
+            if (endDate.DayOfWeek == DayOfWeek.Saturday) calcBusinessDays--;
+            if (startDate.DayOfWeek == DayOfWeek.Sunday) calcBusinessDays--;
 
-            return calcBusinessDays;
+            return (int)calcBusinessDays;
+        }
+
+        public static int GetNumberOfMonths(this DateTime startDate, DateTime endDate)
+        {
+            var number = ((startDate.Year - endDate.Year) * 12) + startDate.Month - endDate.Month;
+            return number;
+        }
+
+        public static double GetContractExpression()
+        {
+            return 20 / 12;
+        }
+    }
+    public static class CommentExtension
+    {
+        public static string CollevtiveCommentTo(this string comment)
+        {
+            return "Collective leave";
         }
     }
 }

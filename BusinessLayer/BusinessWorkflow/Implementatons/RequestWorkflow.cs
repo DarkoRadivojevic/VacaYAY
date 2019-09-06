@@ -5,7 +5,7 @@ using SolutionEnums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace BusinessLayer.BusinessWorkflow.Implementatons
@@ -16,17 +16,21 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
         private IRequestRepository _requestRepository;
         private IEmployeeRepository _employeeRepository;
         private IAdditionalDaysRepository _additionalDaysRepository;
+        private IAdditionalDaysWorkflow _additionalDaysWorkflow;
+        private IEmployeeWorkflow _employeeWorkflow;
         #endregion
         #region Constructors
         public RequestWorkflow()
         {
 
         }
-        public RequestWorkflow(IRequestRepository requestRepository, IEmployeeRepository employeeRepository, IAdditionalDaysRepository additionalDaysRepository)
+        public RequestWorkflow(IRequestRepository requestRepository, IEmployeeRepository employeeRepository, IAdditionalDaysRepository additionalDaysRepository, IAdditionalDaysWorkflow additionalDaysWorkflow, IEmployeeWorkflow employeeWorkflow)
         {
             RequestRepository = requestRepository;
             EmployeeRepository = employeeRepository;
             AdditionalDaysRepository = additionalDaysRepository;
+            AdditionalDaysWorkflow = additionalDaysWorkflow;
+            EmployeeWorkflow = employeeWorkflow;
         }
         #endregion
         #region Properties
@@ -58,9 +62,32 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             {
                 return _additionalDaysRepository;
             }
-            set
+            private set
             {
                 _additionalDaysRepository = value;
+            }
+        }
+        public IAdditionalDaysWorkflow AdditionalDaysWorkflow
+        {
+            get
+            {
+                return _additionalDaysWorkflow;
+            }
+            private set
+            {
+                _additionalDaysWorkflow = value;
+            }
+
+        }
+        public IEmployeeWorkflow EmployeeWorkflow
+        {
+            get
+            {
+                return _employeeWorkflow;
+            }
+            private set
+            {
+                _employeeWorkflow = value;
             }
         }
         #endregion
@@ -110,9 +137,16 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
         {
             var request = await RequestRepository.RequestsGetRequest(requestUID);
             request.RequestStatus = (int)RequestStatus.Accepted;
+
+            int remianing = await EmployeeWorkflow.EmployeeRemoveBacklogDays(request.Employee.EmployeeUID, request.RequestNumberOfDays);
+
+            if (remianing > 0)
+                await AdditionalDaysWorkflow.AdditionalDaysRemove(request.Employee.EmployeeUID, remianing);
+
             await RequestRepository.RequestSave();
-            
+
         }
+
         public async Task RequestAddRequest(string employeeEmail, RequestEntity requestsEntitiy)
         {
 
@@ -123,7 +157,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 EmployeeID = employee.EmployeeID,
                 RequestUID = Guid.NewGuid(),
                 RequestType = (int)requestsEntitiy.RequestType,
-                RequestNumberOfDays = (int)Helper.GetBusinessDays(requestsEntitiy.RequestStartDate, requestsEntitiy.RequestEndDate),
+                RequestNumberOfDays = requestsEntitiy.RequestStartDate.GetBusinessDaysTo(requestsEntitiy.RequestEndDate),
                 RequestComment = requestsEntitiy.RequestComment,
                 RequestStartDate = requestsEntitiy.RequestStartDate,
                 RequestEndDate = requestsEntitiy.RequestEndDate,
@@ -169,7 +203,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             if (requestEntity.RequestEndDate != DateTime.MinValue)
                 request.RequestEndDate = requestEntity.RequestEndDate;
 
-            request.RequestNumberOfDays = (int)Helper.GetBusinessDays(request.RequestStartDate, request.RequestEndDate);
+            request.RequestNumberOfDays = request.RequestStartDate.GetBusinessDaysTo(request.RequestEndDate);
 
             request.RequestStatus = (int)RequestStatus.Adjusted;
 
@@ -201,6 +235,38 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             var totalDaysToReturn = additionalDays + employeeBacklogDays;
 
             return totalDaysToReturn;
+        }
+
+        public async Task RequestCollective(int requestId, DateTime startDate, DateTime endDate)
+        {
+            var numberOfDays = startDate.GetBusinessDaysTo(endDate);
+
+            Expression<Func<Employee, bool>> emplSpec = x => x.EmployeeDeletedOn == null;
+
+            Expression<Func<Employee, int>> emplProj = x => x.EmployeeID;
+ 
+            var employees = await EmployeeRepository.EmployeeGetListOfIntegers(emplSpec, emplProj);
+
+            string comment = "";
+            comment.CollevtiveCommentTo();
+
+            //new guid, created on ide u konstruktor da nije dbfirst, 
+            var requests = employees.Select(x => new Request()
+            {
+                EmployeeID = x,
+                RequestUID = Guid.NewGuid(),
+                RequestType = (int)RequestTypes.Annual,
+                RequestComment = comment,
+                RequestCreatedOn = DateTime.UtcNow,
+                RequestStatus = (int)RequestStatus.Accepted,
+                RequestNumberOfDays = numberOfDays,
+                RequestID = requestId,
+                RequestStartDate = startDate,
+                RequestEndDate = endDate
+            }).ToList();
+
+            requests.Select(async x => await RequestRepository.RequestInsert(x));
+
         }
         #endregion
     }

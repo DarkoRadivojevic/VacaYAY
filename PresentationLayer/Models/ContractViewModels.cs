@@ -39,7 +39,7 @@ namespace VacaYAY.Models
     public class SearchContractViewModel
     {
         [DataType(DataType.Text)]
-        [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "Use letters only please")]
+        [RegularExpression(@"^[0-9a-zA-Z ]+$", ErrorMessage = "Use letters only please")]
         [MaxLength(70)]
         public string SearchParameters { get; set; }
 

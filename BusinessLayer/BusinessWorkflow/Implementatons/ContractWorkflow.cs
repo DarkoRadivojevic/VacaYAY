@@ -14,16 +14,18 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
         #region Atributes
         private IContractRepository _contractRepository;
         private IEmployeeRepository _employeeRepository;
+        private IEmployeeWorkflow _employeeWorkflow;
         #endregion
         #region Constructors
         public ContractWorkflow()
         {
 
         }
-        public ContractWorkflow(IContractRepository contractRepository, IEmployeeRepository employeeRepository)
+        public ContractWorkflow(IContractRepository contractRepository, IEmployeeRepository employeeRepository, IEmployeeWorkflow employeeWorkflow)
         {
             ContractRepository = contractRepository;
             EmployeeRepository = employeeRepository;
+            EmployeeWorkflow = employeeWorkflow;
         }
         #endregion
         #region Properties
@@ -49,6 +51,17 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 _employeeRepository = value;
             }
         }
+        public IEmployeeWorkflow EmployeeWorkflow
+        {
+            get
+            {
+                return _employeeWorkflow;
+            }
+            private set
+            {
+                _employeeWorkflow = value;
+            }
+        }
         #endregion
         #region Methods
         public async Task ContractAddContract(ContractEntity contractEntity)
@@ -69,6 +82,8 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             };
 
             await ContractRepository.ContractInsert(contract);
+
+            var result = EmployeeWorkflow.EmployeeCalculateDaysOff(contractEntity);
         }
 
         public async Task ContractDeleteContract(Guid contractUID)

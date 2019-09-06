@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DataLayer.Implementations
@@ -37,20 +38,27 @@ namespace DataLayer.Implementations
         #region Methods
         public async Task<AdditionalDay> AdditionalDaysGetAdditionalDay(Guid additonalDayUID)
         {
-            AdditionalDay additionalDayToReturn = await DbContext.AdditionalDays.Where(x => x.AdditionaDaysUID == additonalDayUID).FirstAsync();
+            AdditionalDay additionalDayToReturn = await DbContext.AdditionalDays
+                .Where(x => x.AdditionaDaysUID == additonalDayUID)
+                .FirstAsync();
             return additionalDayToReturn;
         }
 
         public async Task<bool> AdditionalDaysHasDaysOff(Guid emploeeUID, int numberOfDays)
         {
-            var employeeDays = await DbContext.Employees.Where(x => x.EmployeeUID == emploeeUID).Select(x => x.EmployeeBacklogDays).FirstAsync();
+            var employeeDays = await DbContext.Employees
+                .Where(x => x.EmployeeUID == emploeeUID)
+                .Select(x => x.EmployeeBacklogDays)
+                .FirstAsync();
 
             if ((numberOfDays - (int)employeeDays) <= 0)
                 return true;
 
-            var additionalDays = await DbContext.AdditionalDays.Where(x => x.Employee.EmployeeUID == emploeeUID && x.AdditionalDaysDeletedOn == null).Select(x => x.AdditionalDaysNumberOfAdditionalDays).SumAsync();
+            var additionalDays = await DbContext.AdditionalDays
+                .Where(x => x.Employee.EmployeeUID == emploeeUID && x.AdditionalDaysDeletedOn == null)
+                .SumAsync(x => x.AdditionalDaysNumberOfAdditionalDays);
 
-            if ((numberOfDays - (int)employeeDays - additionalDays ) <= 0)
+            if ((numberOfDays - (int)employeeDays - additionalDays) <= 0)
                 return true;
             else
                 return false;
@@ -74,20 +82,29 @@ namespace DataLayer.Implementations
 
         public async Task AdditonalDaysDelete(Guid additionalDaysUID)
         {
-            AdditionalDay additionalDay = await DbContext.AdditionalDays.Where(x => x.AdditionaDaysUID == additionalDaysUID).FirstAsync();
+            AdditionalDay additionalDay = await DbContext.AdditionalDays
+                .Where(x => x.AdditionaDaysUID == additionalDaysUID).FirstAsync();
+
             additionalDay.AdditionalDaysDeletedOn = DateTime.UtcNow;
+
             await this.AdditionalDaysSave();
         }
 
         public async Task<List<AdditionalDay>> AdditonalDaysGetAllAdditionalDays(Guid employeeUID)
         {
-            List<AdditionalDay> additionalDayToReturn = await DbContext.AdditionalDays.Where(x => x.Employee.EmployeeUID == employeeUID && x.AdditionalDaysDeletedOn == null).ToListAsync();
+            List<AdditionalDay> additionalDayToReturn = await DbContext.AdditionalDays
+                .Where(x => x.Employee.EmployeeUID == employeeUID && x.AdditionalDaysDeletedOn == null)
+                .ToListAsync();
+
             return additionalDayToReturn;
         }
 
         public async Task<int> AdditionalDayGetTotalAdditionalDays(Guid employeeUID)
         {
-            int totalDaysToReturn = await DbContext.AdditionalDays.Where(x => x.Employee.EmployeeUID == employeeUID).Select(x => x.AdditionalDaysNumberOfAdditionalDays).SumAsync();
+            var totalDaysToReturn = await DbContext.AdditionalDays
+                .Where(x => x.Employee.EmployeeUID == employeeUID && x.AdditionalDaysDeletedOn == null)
+                .Select(x => x.AdditionalDaysNumberOfAdditionalDays).SumAsync();
+
             return totalDaysToReturn;
         }
         #endregion

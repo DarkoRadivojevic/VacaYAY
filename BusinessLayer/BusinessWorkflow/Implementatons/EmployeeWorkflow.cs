@@ -1,9 +1,11 @@
 ﻿using BusinessLayer.BusinessEntity;
 using BusinessLayer.BusinessWorkflow.Interfaces;
 using DataLayer;
+using SolutionEnums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace BusinessLayer.BusinessWorkflow.Implementatons
@@ -95,9 +97,9 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
 
             var requests = await RequestRepository.RequestGetAllEmployeeRequests(employeeUID);
             requests.Select(async x => await RequestRepository.RequestDelete(x.RequestUID));
-          
+
             var contracts = await ContractRepository.ContractsGetContractByEmployee(employeeUID);
-            contracts.Select(async x => await ContractRepository.ContractDelete(x.ContractUID));       
+            contracts.Select(async x => await ContractRepository.ContractDelete(x.ContractUID));
 
             var additionalDays = await AdditionalDaysRepository.AdditonalDaysGetAllAdditionalDays(employeeUID);
             additionalDays.Select(async x => await AdditionalDaysRepository.AdditonalDaysDelete(x.AdditionaDaysUID));
@@ -118,9 +120,9 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
 
             if (employeeEntitiy.EmployeeEmploymentDate != DateTime.MinValue)
                 employee.EmployeeEmploymentDate = (DateTime)employeeEntitiy.EmployeeEmploymentDate;
-            
 
-            if(employeeEntitiy.EmployeeRole != null)
+
+            if (employeeEntitiy.EmployeeRole != null)
                 await AccountRepository.AccountChangeRole(employee.EmployeeUID, employeeRole);
 
             await EmployeeRepository.EmployeeSave();
@@ -128,15 +130,32 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
 
         public async Task<EmployeeEntity> EmployeeFindCurrentEmployee(string employeeEmail)
         {
-            var employee = await EmployeeRepository.EmployeeGetEmployee(employeeEmail);
+
+            Expression<Func<Employee, bool>> spec = x => x.AspNetUser.Email == employeeEmail;
+
+
+            Expression<Func<Employee, MojTestDTO>> proj = x => new MojTestDTO()
+            {
+                EmployeeUID = x.EmployeeUID,
+                EmployeeName = x.EmployeeName,
+                EmployeeSurname = x.EmployeeSurname,
+                EmployeeBacklogDays = x.EmployeeBacklogDays
+            };
+
+
+            var employee = await EmployeeRepository.EmployeeGetEmployee<MojTestDTO>(spec, proj);
+
+            //var employee = (MojTestDTO)await EmployeeRepository.EmployeeGetData(spec, proj);
+
 
             EmployeeEntity employeeToReturn = new EmployeeEntity()
             {
-                EmployeeUID = employee.EmployeeUID,
+                EmployeeUID = (Guid)employee.EmployeeUID,
                 EmployeeName = employee.EmployeeName,
                 EmployeeSurname = employee.EmployeeSurname,
                 EmployeeBacklogDays = employee.EmployeeBacklogDays
             };
+
 
             return employeeToReturn;
         }
@@ -152,14 +171,14 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 EmployeeSurname = x.EmployeeSurname,
                 EmployeeEmploymentDate = x.EmployeeEmploymentDate
             }).ToList();
-        
+
             return employeesToReturn;
         }
 
         public async Task<List<EmployeeEntity>> EmployeeFindEmployeesByName(string searchParameters, DateTime employeeEmploymentDate)
         {
-            var searchString = searchParameters.Split(' ');       
- 
+            var searchString = searchParameters.Split(' ');
+
             var employees = await EmployeeRepository.EmployeeSearchEmployees(searchString, employeeEmploymentDate);
 
             var employeesToReturn = employees.Select(x => new EmployeeEntity()
@@ -168,7 +187,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 EmployeeName = x.EmployeeName,
                 EmployeeSurname = x.EmployeeSurname
             }).ToList();
-     
+
             return employeesToReturn;
         }
 
@@ -214,7 +233,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 EmployeeName = x.EmployeeName,
                 EmployeeSurname = x.EmployeeSurname
             }).ToList();
-        
+
             return employeesToReturn;
         }
 
@@ -229,7 +248,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 EmployeeSurname = x.EmployeeSurname,
                 EmployeeBacklogDays = x.EmployeeBacklogDays
             }).ToList();
-          
+
             return employeesToReturn;
         }
 
@@ -239,13 +258,13 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             {
                 EmployeeID = employeeID,
                 EmployeeUID = Guid.NewGuid(),
-                EmployeeName = employeeEntitiy.EmployeeName,
-                EmployeeSurname = employeeEntitiy.EmployeeSurname,
+                EmployeeCreatedOn = DateTime.UtcNow,
                 EmlpoyeeCardIDNumber = employeeEntitiy.EmployeeCardIDNumber,
                 EmployeeEmploymentDate = employeeEntitiy.EmployeeEmploymentDate,
-                EmployeeCreatedOn = DateTime.UtcNow,
+                EmployeeName = employeeEntitiy.EmployeeName,
+                EmployeeSurname = employeeEntitiy.EmployeeSurname,
+                EmployeeBacklogDays = 0
             };
-
             await EmployeeRepository.EmlpoyeeInsert(employee);
         }
         public async Task<int> EmployeeGetBacklogDays(Guid employeeUID)
@@ -255,8 +274,56 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
         }
         public async Task<bool> EmployeeValidateCardIDNumber(string employeeCardIDNumber)
         {
-            return  await EmployeeRepository.EmployeeGetCardIDNumber(employeeCardIDNumber);
+            return await EmployeeRepository.EmployeeGetCardIDNumber(employeeCardIDNumber);
+        }
+
+        public async Task<int> EmployeeRemoveBacklogDays(Guid employeeUID, int numberOfDays)
+        {
+            var employee = await EmployeeRepository.EmployeeGetEmployee(employeeUID);
+
+            var result = employee.EmployeeBacklogDays - numberOfDays;
+
+            if (result > 0)
+            {
+                await EmployeeRepository.EmployeeSave();
+                return 0;
+            }
+            else
+            {
+                int remainingDaysToReturn = numberOfDays - (int)employee.EmployeeBacklogDays;
+
+                employee.EmployeeBacklogDays = 0;
+
+                await EmployeeRepository.EmployeeSave();
+
+                return remainingDaysToReturn;
+            }
+        }
+
+        public int EmployeeCalculateDaysOff(ContractEntity contractEntity)
+        {
+            if (contractEntity.ContractType == (int)ContractTypes.Temporary)
+            {
+                var amountOfDays = contractEntity.ContractStartDate.GetNumberOfMonths((DateTime)contractEntity.ContractEndDate) * DateTimeExtensions.GetContractExpression();
+
+                return (int)amountOfDays;
+            }
+
+            return 20;
         }
         #endregion
+    }
+
+
+    public class MojTestDTO
+    {
+        public Guid EmployeeUID { get; set;}
+
+        public string EmployeeName { get; set; }
+
+        public string EmployeeSurname { get; set; }
+
+        public int? EmployeeBacklogDays { get; set; }
+
     }
 }

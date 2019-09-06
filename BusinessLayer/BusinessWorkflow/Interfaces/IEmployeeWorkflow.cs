@@ -19,6 +19,8 @@ namespace BusinessLayer.BusinessWorkflow.Interfaces
         Task EmployeeEditEmployee(EmployeeEntity employeeEntity, string employeeRole);
         Task EmployeeDeleteEmployee(Guid employeeUID);
         Task EmployeeAddEmployee(int employeeID, EmployeeEntity employeeEntity);
+        int EmployeeCalculateDaysOff(ContractEntity contractEntity);
         Task<bool> EmployeeValidateCardIDNumber(string employeeCardIDNumber);
+        Task<int> EmployeeRemoveBacklogDays(Guid employeeUID, int numberOfDays);
     }
 }

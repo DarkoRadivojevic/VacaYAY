@@ -12,7 +12,7 @@ namespace DataLayer
     using System;
     using System.Collections.Generic;
     
-    public partial class Contract
+    public partial class Contract 
     {
         public int ContractID { get; set; }
         public int EmployeeID { get; set; }

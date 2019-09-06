@@ -68,13 +68,10 @@ namespace VacaYAY.Controllers
         [Route("Requests/GetRequests")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ActionResult> GetRequests()
+        public async Task<ActionResult> GetRequests(int pageCount, int pageOffset)
         {
 
-            int requestOffset = Int32.Parse(Request["pageOffset"]);
-            int requestCount = Int32.Parse(Request["pageCount"]);
-
-            var requests = await ApplicationService.RequestService.RequestGetRequests((int)requestCount, (int)requestOffset);
+            var requests = await ApplicationService.RequestService.RequestGetRequests(pageCount, pageOffset);
             var requestsToReturn = requests.Select(x => new ReturnRequestViewModel()
             {
                 RequestUID = x.RequestUID,
@@ -89,13 +86,11 @@ namespace VacaYAY.Controllers
         [ValidateAntiForgeryToken]
         [Route("Requests/GetRequest")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ActionResult> GetRequest(Guid? UID)
+        public async Task<ActionResult> GetRequest(Guid requestUID)
         {
-
-            var requestUID = Guid.Parse(Request["requestUID"]);
-
             var request = await ApplicationService.RequestService.RequestGetRequest(requestUID);
             var employee = await ApplicationService.EmployeeService.EmployeeGetEmployee(request.EmployeeUID);
+            var totalDays = await ApplicationService.RequestService.RequestRequestGetTotalAvailableDays(employee.EmployeeUID);
 
             var requestToReturn = new ReturnRequestViewModel()
             {
@@ -105,6 +100,7 @@ namespace VacaYAY.Controllers
                 RequestStartDate = (DateTime)request.RequestStartDate,
                 RequestEndDate = (DateTime)request.RequestEndDate,
                 RequestNumberOfDays = request.RequestNumberOfDays,
+                EmployeeAvailableDays = totalDays,
                 RequestUID = request.RequestUID,
                 RequestComment = request.RequestComment ?? "No employee comment"
             };
@@ -273,6 +269,7 @@ namespace VacaYAY.Controllers
         public async Task<ActionResult> Collective(CollectiveRequestViewModel model)
         {
 
+            await ApplicationService.RequestService.RequestCollective(model.RequestID, model.StartDate, model.EndDate);
 
             return View();
         }

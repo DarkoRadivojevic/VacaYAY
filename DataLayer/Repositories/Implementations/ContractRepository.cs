@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolutionEnums;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace DataLayer.Implementations
         #endregion
         #region Properties
         public VacaYAYContext DbContext
-        { get
+        {
+            get
             {
                 return _dbContext;
             }
@@ -96,15 +98,14 @@ namespace DataLayer.Implementations
 
         public async Task<List<Contract>> ContractSearchContracts(string[] searchParameters, DateTime startDate, DateTime endDate)
         {
-
-            IQueryable<Contract> queryableContracts = DbContext.Contracts.AsQueryable();
-
-            queryableContracts = queryableContracts.Where(x => x.ContractDeletedOn == null && x.ContractStartDate >= startDate && (x.ContractEndDate ?? DateTime.MaxValue) <= endDate ||
-                                                          searchParameters.Contains(x.ContractFileName) || searchParameters.Contains(x.ContractNumber.ToString()) ||
-                                                          searchParameters.Contains(x.ContractType.ToString()) || searchParameters.Contains(x.Employee.EmployeeName) ||
-                                                          searchParameters.Contains(x.Employee.EmployeeSurname));
-
-            List<Contract> contractsToReturn = await queryableContracts.ToListAsync();
+            var contractsToReturn = await DbContext.Contracts
+                .Where(x => x.ContractDeletedOn == null && x.ContractStartDate >= startDate &&
+                (x.ContractEndDate ?? DateTime.MaxValue) <= endDate &&
+                searchParameters.Any(p => x.ContractFileName.Contains(p)) ||
+                searchParameters.Any(p => x.ContractNumber.ToString().Contains(p)) ||
+                searchParameters.Any(p => ((ContractTypes)x.ContractType).ToString().Contains(p)) ||
+                searchParameters.Any(p => x.Employee.EmployeeName.Contains(p)) ||
+                searchParameters.Any(p => x.Employee.EmployeeSurname.Contains(p))).ToListAsync();
 
             return contractsToReturn;
 

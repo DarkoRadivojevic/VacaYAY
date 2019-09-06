@@ -109,13 +109,13 @@ namespace DataLayer
             await UserManager.AddToRoleAsync(user.Id, accountRole);
 
             var token = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-            await UserManager.EmailService.SendAsync(new IdentitiyMessageModified()
-            {
-                Destination = accountEmail,
-                Token = HttpUtility.UrlEncode(token),
-                ID = user.Id,
-                Subject = "Confirm email"
-            });
+            //await UserManager.EmailService.SendAsync(new IdentitiyMessageModified()
+            //{
+            //    Destination = accountEmail,
+            //    Token = HttpUtility.UrlEncode(token),
+            //    ID = user.Id,
+            //    Subject = "Confirm email"
+            //});
 
             return user.Id;
         }
@@ -180,7 +180,7 @@ namespace DataLayer
             if (user == null)
                 return;
 
-            var result = await UserManager.ResetPasswordAsync(user.Id, token, accountPassword);
+           await UserManager.ResetPasswordAsync(user.Id, token, accountPassword);
         }
 
         public async Task<string> AccountGetAccountRole(Guid employeeUID)
