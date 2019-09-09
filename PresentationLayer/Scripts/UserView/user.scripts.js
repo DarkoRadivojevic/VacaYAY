@@ -13,7 +13,8 @@ function GetPendingRequests() {
         data: { "__RequestVerificationToken": token },
         success: function (data) {
             $('#accordion').html(data);
-        }
+        },
+        error: errorNotification
     });
 }
 
@@ -25,6 +26,7 @@ function GetUserContracts() {
         data: { "__RequestVerificationToken": token },
         success: function (data) {
             $('#contractAccordion').html(data);
-        }
+        },
+        error: errorNotification
     });
 }

@@ -34,7 +34,8 @@ function GetCurrentEmployee() {
             data: { "__RequestVerificationToken": token },
             success: function (PartialViewData) {
                 $('#navbarCollapse').append(PartialViewData);
-            }
+            },
+            error: errorNotification
         }));
 }
 
@@ -60,7 +61,8 @@ function BindEmployeeSearch() {
                     success: function (PartialViewData) {
                         $('#accordion').html(PartialViewData);
                         $('#employeesShow').val(0);
-                    }
+                    },
+                    error: errorNotification
                 });
             }
             else {
@@ -90,7 +92,8 @@ function BindRequestSearch() {
                     success: function (PartialViewData) {
                         $('#accordion').html(PartialViewData);
                         $('#requestShow').val(0);
-                    }
+                    },
+                    error: errorNotification
                 });
             }
             else {
@@ -120,7 +123,8 @@ function BindContractSearch() {
                     success: function (PartialViewData) {
                         $('#accordion').html(PartialViewData);
                         $('#contractsShow').val(0);
-                    }
+                    },
+                    error: errorNotification
                 });
             }
             else {
@@ -147,7 +151,8 @@ function BindEmployeeNameSearch() {
                     data: { "__RequestVerificationToken": token, "FullName": inputString },
                     success: function (PartialViewData) {
                         $('#accordion').html(PartialViewData);
-                    }
+                    },
+                    error: errorNotification
                 });
             }
             else {
@@ -173,7 +178,8 @@ function BindEmployeeEmploymentSearch() {
                     data: { "__RequestVerificationToken": token, "EmployeeEmploymentDate": input },
                     success: function (PartialViewData) {
                         $('#accordion').html(PartialViewData);
-                    }
+                    },
+                    error: errorNotification
                 });
             }
             else {
@@ -204,7 +210,8 @@ function GetRequests() {
                 var count = parseInt($('#pageCount').val());
                 $("#pageCount").val(count + 1)
                 locker = false;
-            }
+            },
+            error: errorNotification
         });
     };
 }
@@ -220,7 +227,8 @@ function GetRequestDetails(collapse, requestUrl) {
             success: function (partialViewData) {
                 $('#card-' + collapse.value).html(partialViewData)
                 ButtonAddValue(collapse, false)
-            }
+            },
+            error: errorNotification
         });
     });
     collapse.onclick = null;
@@ -268,7 +276,8 @@ function ShowAddContractComponents(id) {
         data: { "__RequestVerificationToken": token, EmployeeUID: id },
         success: function (PartialViewData) {
             $('#addContainer-' + id).html(PartialViewData);
-        }
+        },
+        error: errorNotification
     });
 }
 
@@ -283,7 +292,8 @@ function ShowAddAdditionalDaysComponents(id) {
             $('#addContainer-' + id).html(PartialViewData);
             AddEmployeeUID(id);
             $('#addContainer-' + id + ' #additionalDaysCancel').val(id);
-        }
+        },
+        error: errorNotification
     });
 }
 
@@ -307,7 +317,8 @@ function ShowRequestApproveModal(value) {
             $('#myModal').html(partialViewData);
             $('#myModal').modal('show');
             $('#yes').val(value);
-        }
+        },
+        error: errorNotification
     });
 }
 
@@ -319,7 +330,9 @@ function ApproveRequest(url) {
         data: ({ "__RequestVerificationToken": token, "RequestUID": $('#yes').val(), "RequestStatus": 'Accepted' }),
         success: function () {
             $('#item-' + $('#yes').val()).remove();
-        }
+            successNotification();
+        },
+        error: errorNotification
     })
 }
 
@@ -336,7 +349,9 @@ function DenyRequest(url) {
         data: ({ "__RequestVerificationToken": token, "RequestUID": $('#yes').val(), "RequestStatus": "Rejected", "RequestComment": comment }),
         success: function () {
             $('#item-' + $('#yes').val()).remove();
-        }
+            successNotification();
+        },
+        error: errorNotification
     })
 }
 
@@ -351,7 +366,8 @@ function ShowRequestDenyModal(value) {
             $('#myModal').html(partialViewData);
             $('#myModal').modal('show');
             $('#yes').val(value);
-        }
+        },
+        error: errorNotification
     });
 }
 
@@ -366,7 +382,8 @@ function ShowRequestEditComponents(id) {
             $('#editRequest-' + id).html(PartialViewData);
 
             $('#editRequest-' + id + ' #requestCancel').val(id);
-        }
+        },
+        error: errorNotification
     });
 }
 
@@ -388,7 +405,9 @@ function SubmitEditRequest(id) {
                         $('#item-' + id).remove();
                     }, 2000);
                 }
-            }
+                successNotification();
+            },
+            error: errorNotification
         });
     });
 }
@@ -484,7 +503,8 @@ function GetEmployees() {
                 var count = parseInt($('#pageCount').val());
                 $("#pageCount").val(count + 1)
                 locker = false;
-            }
+            },
+            error: errorNotification
         });
     };
 }
@@ -507,7 +527,8 @@ function GetContracts() {
                 var count = parseInt($('#pageCount').val());
                 $("#pageCount").val(count + 1)
                 locker = false;
-            }
+            },
+            error: errorNotification
         });
     }
 
@@ -524,7 +545,8 @@ function GetContractDetails(collapse, requestDetailsUrl) {
             success: function (PartialViewData) {
                 $('#card-' + collapse.value).html(PartialViewData);
                 ButtonAddDownload(collapse.value);
-            }
+            },
+            error: errorNotification
         });
     });
 }
@@ -547,11 +569,10 @@ function ButtonAddDownload(id) {
                 link.download = file.ContractFileName;
                 link.click();
 
+                successNotification();
             },
-            error: function (xhr, textStatus, error) {
-                console.log(xhr.statusText);
-                console.log(textStatus);
-                console.log(error);
+            error: function () {
+                errorNotification()
             }
         });
     });
@@ -576,7 +597,8 @@ function GetEmployeeDetails(collapse, requestDetailsUrl) {
                 $('#card-' + collapse.value).html(PartialViewData)
                 ButtonAddValue(collapse, true)
                 AddColoumData(collapse.value);
-            }
+            },
+            error: errorNotification
         });
         collapse.onclick = null;
     });
@@ -597,7 +619,8 @@ function AddColoumData(id) {
             }
             $('#contracts-' + id).html(PartialViewData);
 
-        }
+        },
+        error: errorNotification
     });
     $.ajax({
         type: 'POST',
@@ -610,7 +633,8 @@ function AddColoumData(id) {
                 $('.dynamic-size').height(250);
             }
             $('#vacations-' + id).html(PartialViewData);
-        }
+        },
+        error: errorNotification
     });
 }
 
@@ -624,7 +648,8 @@ function ShowEmployeeEditComponents(id) {
         success: function (PartialViewData) {
             $('#editEmployeeDiv-' + id).html(PartialViewData);
             BindEmployeeUID(id);
-        }
+        },
+        error: errorNotification
     });
 }
 
@@ -645,10 +670,9 @@ function SubmitEditEmployee(id) {
                     url = $('#getEmployeeDetails').val();
                     GetEmployeeDetails(collapse, url);
                 }
-
-
-
-            }
+                successNotification();
+            },
+            error: errorNotification
         });
     });
 }
@@ -666,7 +690,9 @@ function SubmitAddContract(id) {
             contentType: false,
             success: function (data) {
                 $('#addContainer-' + id).html(data);
-            }
+                successNotification();
+            },
+            error: errorNotification
         });
     });
 }
@@ -684,7 +710,9 @@ function SubmitAdditionalDay(id) {
                 setTimeout(function () {
                     $('#addContainer-' + id).html(" ");
                 }, 1500)
-            }
+                successNotification();
+            },
+            error: errorNotification
         });
     });
 }
@@ -700,7 +728,8 @@ function ShowDeleteEmployeeModal(id) {
             $('#myModal').html(PartialViewData);
             $('#myModal').modal('show');
             $('#yes').val(id);
-        }
+        },
+        error: errorNotification
     });
 }
 
@@ -714,7 +743,9 @@ function DeleteEmployee(url) {
         datatype: 'html',
         success: function (PartialViewData) {
             $('#item-' + uid).remove();
-        }
+            successNotification();
+        },
+        error: errorNotification
     });
 }
 
@@ -783,7 +814,8 @@ function GetCollectiveForm() {
         datatype: 'html',
         success: function (PartialViewData) {
             $('#request').html(PartialViewData);
-        }
+        },
+        error: errorNotification
     });
 }
 
@@ -806,7 +838,9 @@ function SubmitCollective() {
             data: $(this).serialize(),
             success: function (data) {
                 $('#request').html(data);
-            }
+                successNotification();
+            },
+            error: errorNotification
         });
     });
 }

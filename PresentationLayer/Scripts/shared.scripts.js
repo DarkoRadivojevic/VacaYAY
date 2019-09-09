@@ -32,7 +32,8 @@ function ShowRequestForm(url) {
         data: { "__RequestVerificationToken": token, "EmployeeUID": uid },
         success: function (partialViewData) {
             $('#request').html(partialViewData);
-        }
+        },
+        error: errorNotification
     });
 }
 
@@ -48,7 +49,19 @@ function SubmitRequest() {
                 setTimeout(function () {
                     BackButton();
                 }, 1500)
-            }
+                successNotification();
+            },
+            error: errorNotification
         });
     });
+}
+
+function successNotification() {
+    var message = "Action completed succesfully!"
+    setTimeout(function () { $('#userNotification').html(message) }, 2000);
+}
+
+function errorNotification() {
+    var message = "Action completed unsuccesfuly, try again!"
+    setTimeout(function () { $('#userNotification').html(message) }, 2000);
 }

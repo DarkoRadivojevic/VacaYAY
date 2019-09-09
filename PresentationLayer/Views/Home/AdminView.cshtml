@@ -16,26 +16,28 @@
 @Html.AntiForgeryToken()
 <div class="container-fluid">
     <div class="row align-items-center m-0">
-        <div class="row col-12 col-md-7 col-lg-4 p-0 justify-content-sm-between justify-content-around m-auto m-sm-0">
+        <div class="row align-self-auto col-6 p-0">
             <button class="btn btn-primary " id="requestShow">Requests</button>
             <button class="btn btn-primary " id="employeesShow">Employees</button>
             <button class="btn btn-primary " id="contractsShow">Contracts</button>
         </div>
-        <div class="row col-12 col-md-4 col-lg-8">
+        <div class="row col-4 p-0">
             <div id="requestSearch">
-                <input type="text" id="requestStartSearchField" placeholder="Request start date" autocomplete="off" />
-                <input type="text" id="requestSearchField" placeholder="Enter search parameters" />
-                <input type="text" id="requestEndSearchField" placeholder="Request end date" autocomplete="off" />
+                <input class="col-4" type="text" id="requestSearchField" placeholder="Search" autocomplete="off" />
+                <input class="col-4" type="text" id="requestStartSearchField" placeholder="Start date" autocomplete="off" />
+                <input class="col-4" type="text" id="requestEndSearchField" placeholder="End date" autocomplete="off" />
             </div>
             <div id="employeeSearch" hidden="hidden">
-                <input type="text" id="employeeSearchField" placeholder="Enter employee name " />
-                <input type="text" id="employeeEmploymentSearchField" placeholder="Employee employment start date" autocomplete="off" />
+                <input class="col-5" type="text" id="employeeSearchField" placeholder="Search" autocomplete="off"/>
+                <input class="col-5" type="text" id="employeeEmploymentSearchField" placeholder="Employment date" autocomplete="off" />
             </div>
             <div id="contractSearch" hidden="hidden">
-                <input type="text" id="contractSearchField" placeholder="Enter search parameters" />
-                <input type="text" id="contractStartSearchField" placeholder="Contract start date" autocomplete="off" />
-                <input type="text" id="contractEndSearchField" placeholder="Contract end date" autocomplete="off" />
+                <input class="col-4" type="text" id="contractSearchField" placeholder="Search" autocomplete="off"/>
+                <input class="col-4" type="text" id="contractStartSearchField" placeholder="Start date" autocomplete="off" />
+                <input class="col-4" type="text" id="contractEndSearchField" placeholder="End date" autocomplete="off" />
             </div>
+        </div>
+        <div class="row col-2 p-0">
             <button class="btn btn-outline-danger" id="collective">New collective days off</button>
         </div>
     </div>
@@ -45,7 +47,7 @@
             </div>
             <div id="request"></div>
         </div>
-        <div class="col-md-2"></div>
+        <div class="col-md-2" id="userNotification"></div>
     </div>
 </div>
 <div class="modal " id="myModal"></div>
