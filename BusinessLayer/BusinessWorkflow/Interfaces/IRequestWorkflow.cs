@@ -19,5 +19,6 @@ namespace BusinessLayer.BusinessWorkflow.Interfaces
         Task RequestEditRequest(RequestEntity requestEntity);
         Task<List<RequestEntity>> RequestSearchRequests(string inputString, DateTime startDate, DateTime endDate);
         Task RequestCollective(int requestID, DateTime startDate, DateTime endDate);
+        Task<List<RequestEntity>> RequestGetPendingRequests(Guid employeeUID);
     }
 }

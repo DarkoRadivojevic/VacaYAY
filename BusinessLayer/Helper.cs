@@ -29,9 +29,9 @@ namespace BusinessLayer
     }
     public static class CommentExtension
     {
-        public static string CollevtiveCommentTo(this string comment)
+        public static string CollectiveCommentTo(this string comment)
         {
-            return "Collective leave";
+            return  "Collective leave";
         }
     }
 }

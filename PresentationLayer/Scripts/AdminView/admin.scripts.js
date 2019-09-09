@@ -8,6 +8,7 @@ function StartUp() {
         SetButtons();
         GetRequests();
         BindSearchFunctions();
+        AddCollectiveLink();
     });
 }
 
@@ -27,14 +28,14 @@ function InfiniteRegister() {
 function GetCurrentEmployee() {
     var token = $('input[name="__RequestVerificationToken"]').val();
     $(document).ready(
-    $.ajax({
-        type: 'POST',
-        url: "Employee/FindCurrentEmployee",
-        data: { "__RequestVerificationToken": token },
-        success: function (PartialViewData) {
-            $('#navbarCollapse').append(PartialViewData);
-        }
-    }));
+        $.ajax({
+            type: 'POST',
+            url: "Employee/FindCurrentEmployee",
+            data: { "__RequestVerificationToken": token },
+            success: function (PartialViewData) {
+                $('#navbarCollapse').append(PartialViewData);
+            }
+        }));
 }
 
 function BindSearchFunctions() {
@@ -55,7 +56,7 @@ function BindEmployeeSearch() {
                 $.ajax({
                     type: 'POST',
                     url: url,
-                    data: { "__RequestVerificationToken": token, "SearchParameters": input, "EmployeeEmploymentDate": inputStart},
+                    data: { "__RequestVerificationToken": token, "SearchParameters": input, "EmployeeEmploymentDate": inputStart },
                     success: function (PartialViewData) {
                         $('#accordion').html(PartialViewData);
                         $('#employeesShow').val(0);
@@ -191,8 +192,7 @@ function GetRequests() {
     var token = $('input[name="__RequestVerificationToken"]').val();
     requestUrl = $('#requestUrl').val();
 
-    if (locker == false)
-    {
+    if (locker == false) {
         locker = true;
         $.ajax({
             type: 'POST',
@@ -326,7 +326,9 @@ function ApproveRequest(url) {
 function DenyRequest(url) {
     var token = $('input[name="__RequestVerificationToken"]').val();
     var id = $('#yes').val();
+    console.log('#denial-' + id)
     var comment = $('#denial-' + id).val();
+    console.log(comment);
 
     $.ajax({
         type: 'POST',
@@ -392,16 +394,23 @@ function SubmitEditRequest(id) {
 }
 
 
-function RestoreMain() {
-    var isChanged = true;
-    $('.btn-primary').each(function (index, element) {
-        if (element.value == 1)
-            isChanged = false;
-    });
-    if (isChanged) {
-        $('#requestForm').remove();
-        $('#accordion').show();
-        $('.btn-primary').val(1);
+function RestoreMain(form) {
+    if ($('#accordion').attr('data') == 1) {
+        var isChanged = true;
+        $('.btn-primary').each(function (index, element) {
+            if (element.value == 1)
+                isChanged = false;
+        });
+        if (isChanged) {
+            $('#' + form).remove();
+            $('#accordion').show();
+            $('.btn-primary').val(1);
+        }
+    }
+    else {
+        $('#' + form).remove();
+        $('#userRequests').show();
+        $('#userContracts').show();
     }
 }
 
@@ -638,7 +647,7 @@ function SubmitEditEmployee(id) {
                 }
 
 
-             
+
             }
         });
     });
@@ -742,7 +751,8 @@ function BindInnerButtonsForEmployees(url) {
 function BindInnerButtonsForContracts(url) {
     $(document).ready(function () {
         $('.btn-link').each(function (i, element) {
-            element.onclick = (() => GetContractDetails(element, url))
+            if($(element).attr('data') == "con")
+                element.onclick = (() => GetContractDetails(element, url))
         });
     })
 }
@@ -756,5 +766,47 @@ function UpdateFileName() {
     $('input[type="file"]').change(function (e) {
         var fileName = e.target.files[0].name;
         $('.file-path').attr('placeholder', fileName);
+    });
+}
+
+function AddCollectiveLink() {
+    $('#collective').on('click', GetCollectiveForm);
+}
+
+function GetCollectiveForm() {
+    var token = $('input[name="__RequestVerificationToken"]').val();
+    HideAccordion();
+    $.ajax({
+        type: 'POST',
+        url: 'Request/CollectiveView',
+        data: { "__RequestVerificationToken": token },
+        datatype: 'html',
+        success: function (PartialViewData) {
+            $('#request').html(PartialViewData);
+        }
+    });
+}
+
+function HideAccordion() {
+    $('#accordion').hide();
+    $('.btn-primary').each(function (index, element) {
+        if (element.value == 1) {
+            $('#previousButton').val(element.id);
+        }
+        element.value = 0;
+    })
+}
+
+function SubmitCollective() {
+    $('#collectiveForm').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr('action') || windows.location.pathname,
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function (data) {
+                $('#request').html(data);
+            }
+        });
     });
 }

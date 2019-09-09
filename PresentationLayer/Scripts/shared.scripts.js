@@ -6,13 +6,19 @@
 }
 
 function RequestForm(url) {
-    $('#accordion').hide()
-    $('.btn-primary').each(function (index, element) {
-        if (element.value == 1) {
-            $('#previousButton').val(element.id);
-        }
-        element.value = 0;
-    })
+    if ($('#accordion').attr('data') == "1") {
+        $('#accordion').hide()
+        $('.btn-primary').each(function (index, element) {
+            if (element.value == 1) {
+                $('#previousButton').val(element.id);
+            }
+            element.value = 0;
+        })
+    }
+    else {
+        $('#userRequests').hide();
+        $('#userContracts').hide();
+    }
     ShowRequestForm(url);
 }
 
@@ -45,13 +51,4 @@ function SubmitRequest() {
             }
         });
     });
-}
-
-function BackButton() {
-        RestoreMain();
-        ClearRequest();
-}
-
-function ClearRequest() {
-    $('#requestSucces').html(' ')
 }

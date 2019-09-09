@@ -19,5 +19,6 @@ namespace ApplicationLayer.Interfaces
         Task RequestEditRequest(ApplicationRequest applicationRequest);
         Task<List<ApplicationRequest>> RequestSearchRequests(string searchInput, DateTime? startDate, DateTime? endDate);
         Task RequestCollective(int requestID, DateTime startDate, DateTime endDate);
+        Task<List<ApplicationRequest>> RequestGetPendingRequests(Guid employeeUID);
     }
 }

@@ -11,7 +11,7 @@ using VacaYAY.Models;
 
 namespace VacaYAY.Controllers
 {
-    [Authorize(Roles = "ADMIN")]
+    [Authorize]
     public class ContractController : Controller
     {
         #region Atributes
@@ -44,6 +44,7 @@ namespace VacaYAY.Controllers
         #region Methods
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ADMIN")]
         [Route("Contract/AddContractView")]
         public ActionResult AddContractView(Guid EmployeeUID)
         {
@@ -58,6 +59,7 @@ namespace VacaYAY.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Contract/GetContracts")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> GetContracts()
         {
             int contractOffset = Int32.Parse(Request["pageOffset"]);
@@ -78,6 +80,7 @@ namespace VacaYAY.Controllers
         [HttpPost]
         [Route("Contract/GetContract")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ADMIN, USER")]
         public async Task<ActionResult> GetContract(Guid contractUID)
         {
             if(!ModelState.IsValid)
@@ -108,6 +111,7 @@ namespace VacaYAY.Controllers
         [HttpPost]
         [Route("Contract/GetContractFile")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ADMIN")]
         public async Task<JsonResult> GetContractFile(Guid contractUID)
         {
             var contract = await ApplicationService.ContractService.ContractGetContactFile(contractUID);
@@ -122,6 +126,7 @@ namespace VacaYAY.Controllers
         [HttpPost]
         [Route("Contract/GetEmployeeContracts")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> GetEmployeeContracts(Guid employeeUID)
         {
             if(!ModelState.IsValid)
@@ -144,21 +149,32 @@ namespace VacaYAY.Controllers
         }
 
         [HttpPost]
-        [Route("Contract/SearhByEmployeeName")]
+        [Route("Contract/GetUserContracts")]
+        [Authorize(Roles = "USER")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> GetContractsByEmployee(SearchContractViewModel model)
+        public async Task<ActionResult> GetUserContracts()
         {
             if(!ModelState.IsValid)
             {
-                return View(model);
+                return View();
             }
 
+            var employee = await ApplicationService.EmployeeService.EmployeeFindCurrentEmployee(User.Identity.Name);
 
-            return View();
+            var contracts = await ApplicationService.ContractService.ContractGetContracts(employee.EmployeeUID);
+
+            var contractsToReturn = contracts.Select(x => new ReturnContractViewModel()
+            {
+                ContractUID = x.ContractUID,
+                ContractNumber = x.ContractNumber
+            }).ToList();
+
+            return View("GetContracts", contractsToReturn);
         }
         
         [HttpPost]
         [Route("Contract/Search")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> Search(SearchContractViewModel model)
         {
             if(!ModelState.IsValid)
@@ -186,6 +202,7 @@ namespace VacaYAY.Controllers
 
         [HttpPost]
         [Route("Contract/AddContract")]
+        [Authorize(Roles = "ADMIN")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddContract(ContractAddViewModel model)
         {

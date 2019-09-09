@@ -1,9 +1,6 @@
 ﻿using SolutionEnums;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace VacaYAY.Models
 {
@@ -92,7 +89,9 @@ namespace VacaYAY.Models
         public string EmployeeSurname { get; set; }
         public int EmployeeAvailableDays { get; set; }
         public RequestTypes RequestType { get; set; }
+        public RequestStatus RequestStatus { get; set; }
         public string RequestComment { get; set; }
+        public string RequestDenialComment { get; set; }
         public int RequestNumberOfDays { get; set; }
         public DateTime RequestStartDate { get; set; }
         public DateTime RequestEndDate { get; set; }
@@ -102,14 +101,19 @@ namespace VacaYAY.Models
     {
         [Required]
         [DataType(DataType.Text)]
+        [Range(1, Int32.MaxValue, ErrorMessage = "Numbers only")]
+        [RegularExpression(@"^[a-zA-Z0-9 ]+$", ErrorMessage = "Numbers and letters only")]
+        [Display(Name = "Request ID")]
         public int RequestID { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
+        [Display(Name = "Collective start date")]
         public DateTime StartDate { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
+        [Display(Name = "Collective end date")]
         public DateTime EndDate { get; set; }
     }
 }

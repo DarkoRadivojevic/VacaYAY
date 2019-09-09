@@ -103,7 +103,9 @@ namespace DataLayer.Implementations
         {
             var totalDaysToReturn = await DbContext.AdditionalDays
                 .Where(x => x.Employee.EmployeeUID == employeeUID && x.AdditionalDaysDeletedOn == null)
-                .Select(x => x.AdditionalDaysNumberOfAdditionalDays).SumAsync();
+                .Select(x => x.AdditionalDaysNumberOfAdditionalDays)
+                .DefaultIfEmpty()
+                .SumAsync();
 
             return totalDaysToReturn;
         }

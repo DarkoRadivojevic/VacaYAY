@@ -11,20 +11,37 @@
         <div class="card-body">Ends on: @Model.RequestEndDate.ToShortDateString()</div>
         <div class="card-body">Number of days requested: @Model.RequestNumberOfDays</div>
         <div class="card-body">Number of days available: @Model.EmployeeAvailableDays</div>
+        <div class="card-body">Request status: @SolutionEnums.EnumExtenssion.RequestStatusToString(Model.RequestStatus)</div>
     </div>
     <div class="col" id="editRequest-@Model.RequestUID">
 
     </div>
     <div class="col mr-2 row d-flex align-content-end flex-column justify-content-between">
-        <button type="button" id="approve-@Model.RequestUID" value="0" class="btn btn-success  btn-sm">Approve</button>
+        @if (User.IsInRole("ADMIN"))
+        {
+            <button type="button" id="approve-@Model.RequestUID" value="0" class="btn btn-success  btn-sm">Approve</button>
+        }
+        else
+        {
+            <button type="button" id="approve-@Model.RequestUID" value="0" class="btn btn-success  btn-sm">Accept</button>
+        }
         <button type="button" id="edit-@Model.RequestUID" value="0" class="btn btn-warning btn-sm">Edit</button>
-        <button type="button" id="deny-@Model.RequestUID" value="0" class="btn btn-danger btn-sm">Deny</button>
+        @if (User.IsInRole("ADMIN"))
+        {
+            <button type="button" id="deny-@Model.RequestUID" value="0" class="btn btn-danger btn-sm">Deny</button>
+        }
+        else
+        {
+            <button type="button" id="cancel-@Model.RequestUID" value="0" class="btn btn-danger btn-sm">Cancel</button>
+        }
     </div>
 </div>
 <div class="row d-flex">
     <div class="col">
         <div class="card-body">Employee Comment: </div>
         <div class="card-body border m-2">@Model.RequestComment</div>
+        <div class="card-body">HR Comment: </div>
+        <div class="card-body border m-2"> @Model.RequestDenialComment</div>
     </div>
 </div>
 

@@ -42,7 +42,6 @@ namespace VacaYAY.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-
             return View();
         }
         #endregion

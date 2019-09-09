@@ -133,7 +133,6 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
 
             Expression<Func<Employee, bool>> spec = x => x.AspNetUser.Email == employeeEmail;
 
-
             Expression<Func<Employee, MojTestDTO>> proj = x => new MojTestDTO()
             {
                 EmployeeUID = x.EmployeeUID,
@@ -144,9 +143,6 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
 
 
             var employee = await EmployeeRepository.EmployeeGetEmployee<MojTestDTO>(spec, proj);
-
-            //var employee = (MojTestDTO)await EmployeeRepository.EmployeeGetData(spec, proj);
-
 
             EmployeeEntity employeeToReturn = new EmployeeEntity()
             {

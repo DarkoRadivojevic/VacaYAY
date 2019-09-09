@@ -39,7 +39,8 @@ namespace VacaYAY
             bundles.Add(new ScriptBundle("~/bundles/appscripts").Include(
                 "~/Scripts/AdminView/admin.scripts.js",
                 "~/Scripts/Pickaday/pikaday.scripts.js",
-                "~/Scripts/shared.scripts.js"
+                "~/Scripts/shared.scripts.js",
+                "~/Scripts/UserView/user.scripts.js"
                 ));
         }
     }

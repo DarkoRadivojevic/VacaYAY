@@ -57,7 +57,8 @@ namespace VacaYAY.Controllers
             var result = await ApplicationService.AccountService.AccountLogin(model.Email, model.Password, model.RememberMe);
             if (result)
             {
-                return View("~/Views/Home/Index.cshtml");
+
+                return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -237,9 +238,11 @@ namespace VacaYAY.Controllers
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ADMIN, USER")]
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            Session.Abandon();
             return RedirectToAction("Index", "Home");
         }
 

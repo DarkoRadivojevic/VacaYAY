@@ -85,7 +85,7 @@ namespace VacaYAY.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Requests/GetRequest")]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN, USER")]
         public async Task<ActionResult> GetRequest(Guid requestUID)
         {
             var request = await ApplicationService.RequestService.RequestGetRequest(requestUID);
@@ -102,9 +102,36 @@ namespace VacaYAY.Controllers
                 RequestNumberOfDays = request.RequestNumberOfDays,
                 EmployeeAvailableDays = totalDays,
                 RequestUID = request.RequestUID,
-                RequestComment = request.RequestComment ?? "No employee comment"
+                RequestComment = request.RequestComment ?? "No employee comment",
+                RequestStatus = request.RequestStatus,
+                RequestDenialComment = request.RequestDenialComment
             };
             return View(requestToReturn);
+        }
+
+        [HttpPost]
+        [Route("Requests/GetPendingRequests")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "USER")]
+        public async Task<ActionResult> GetPendingRequests()
+        {
+            if(!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var employee = await ApplicationService.EmployeeService.EmployeeFindCurrentEmployee(User.Identity.Name);
+
+            var requests = await ApplicationService.RequestService.RequestGetPendingRequests(employee.EmployeeUID);
+
+            var model = requests.Select(x => new ReturnRequestViewModel()
+            {
+                RequestUID = x.RequestUID,
+                RequestType = (RequestTypes)x.RequestType,
+                RequestStatus = x.RequestStatus
+            }).ToList();
+
+            return View("GetRequests", model);
         }
 
         [HttpPost]
@@ -157,7 +184,7 @@ namespace VacaYAY.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return PartialView("AddRequestView");
+                return PartialView("AddRequestView", model);
             }
 
             var request = new ApplicationRequest()
@@ -264,10 +291,28 @@ namespace VacaYAY.Controllers
         }
 
         [HttpPost]
+        [Route("Request/CollectiveView")]
+        [ValidateAntiForgeryToken]
+        public  ActionResult CollectiveView()
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            return View();
+        }
+
+
+        [HttpPost]
         [Route("Request/Collective")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Collective(CollectiveRequestViewModel model)
         {
+            if(!ModelState.IsValid)
+            {
+                return View("CollectiveView", model);
+            }
 
             await ApplicationService.RequestService.RequestCollective(model.RequestID, model.StartDate, model.EndDate);
 

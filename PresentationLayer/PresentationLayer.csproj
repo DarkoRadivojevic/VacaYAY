@@ -361,6 +361,7 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Scripts\UserView\user.scripts.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -430,9 +431,12 @@
     <Content Include="Views\Employee\FindEmployees.cshtml" />
     <Content Include="Views\Employee\Search.cshtml" />
     <Content Include="Views\Request\Search.cshtml" />
-    <Content Include="Views\Request\SearchByDate.cshtml" />
+    <Content Include="Views\Request\Collective.cshtml" />
     <Content Include="Views\Shared\NullView.cshtml" />
     <Content Include="Views\Shared\Success.cshtml" />
+    <Content Include="Views\Request\CollectiveView.cshtml" />
+    <Content Include="Views\Request\GetPendingRequests.cshtml" />
+    <Content Include="Views\Contract\GetUserContracts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

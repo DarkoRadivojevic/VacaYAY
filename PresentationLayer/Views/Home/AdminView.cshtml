@@ -36,11 +36,12 @@
                 <input type="text" id="contractStartSearchField" placeholder="Contract start date" autocomplete="off" />
                 <input type="text" id="contractEndSearchField" placeholder="Contract end date" autocomplete="off" />
             </div>
+            <button class="btn btn-outline-danger" id="collective">New collective days off</button>
         </div>
     </div>
     <div class="row p-0">
         <div class="col-md-8">
-            <div id="accordion" style="">
+            <div id="accordion" data='1'>
             </div>
             <div id="request"></div>
         </div>
@@ -56,7 +57,7 @@
     //ako treba da accordion bude scrollable mada mi se ne svidja izgleda ruznije
     $(document).ready(function () {
         var height = parseInt($('#pageOffset').val()) * 95;
-        //$('#accordion').attr('style', 'height: ' + height + 'px; overflow-y: auto;');
+        $('#accordion').attr('style', 'height: ' + height + 'px; overflow-y: auto;');
     });
 
 </script>

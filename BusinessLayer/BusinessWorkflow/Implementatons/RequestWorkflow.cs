@@ -110,7 +110,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 RequestUID = request.RequestUID,
                 RequestType = (RequestTypes)request.RequestType,
                 RequestComment = request.RequestComment,
-                RequestStatus = request.RequestStatus,
+                RequestStatus = (RequestStatus)request.RequestStatus,
                 RequestDenialComment = request.RequestDenialComment,
                 RequestNumberOfDays = request.RequestNumberOfDays,
                 RequestStartDate = request.RequestStartDate,
@@ -128,7 +128,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 RequestType = (RequestTypes)x.RequestType,
                 RequestNumberOfDays = x.RequestNumberOfDays,
                 RequestStartDate = x.RequestStartDate,
-                RequestStatus = x.RequestStatus
+                RequestStatus = (RequestStatus)x.RequestStatus
             }).ToList();
 
             return requestsToReturn;
@@ -176,7 +176,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 RequestUID = x.RequestUID,
                 RequestType = (RequestTypes)x.RequestType,
                 RequestComment = x.RequestComment,
-                RequestStatus = x.RequestStatus,
+                RequestStatus = (RequestStatus)x.RequestStatus,
                 RequestStartDate = x.RequestStartDate,
                 RequestEndDate = x.RequestEndDate,
                 RequestDenialComment = x.RequestDenialComment,
@@ -195,7 +195,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 request.RequestType = (int)requestEntity.RequestType;
 
             if (requestEntity.RequestDenialComment != null)
-                request.RequestDenialComment.Concat(requestEntity.RequestDenialComment);
+                request.RequestDenialComment += requestEntity.RequestDenialComment;
 
             if (requestEntity.RequestStartDate != DateTime.MinValue)
                 request.RequestStartDate = requestEntity.RequestStartDate;
@@ -244,14 +244,14 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             Expression<Func<Employee, bool>> emplSpec = x => x.EmployeeDeletedOn == null;
 
             Expression<Func<Employee, int>> emplProj = x => x.EmployeeID;
- 
-            var employees = await EmployeeRepository.EmployeeGetListOfIntegers(emplSpec, emplProj);
 
-            string comment = "";
-            comment.CollevtiveCommentTo();
+            var employeesIDs = await EmployeeRepository.EmployeeGetList<int>(emplSpec, emplProj);
 
-            //new guid, created on ide u konstruktor da nije dbfirst, 
-            var requests = employees.Select(x => new Request()
+            string comment = " ";
+            comment = comment.CollectiveCommentTo();
+
+            //File treba da se izgenerise i mejl isto treba da se odradi 
+            var requests = employeesIDs.Select(x => new Request()
             {
                 EmployeeID = x,
                 RequestUID = Guid.NewGuid(),
@@ -265,8 +265,33 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 RequestEndDate = endDate
             }).ToList();
 
-            requests.Select(async x => await RequestRepository.RequestInsert(x));
+            foreach(var req in requests)
+            {
+                await RequestRepository.RequestInsert(req);
+            }
 
+        }
+
+        public async Task<List<RequestEntity>> RequestGetPendingRequests(Guid employeeUID)
+        {
+            var lowerBoundry = DateTime.UtcNow.AddDays(30);
+
+            Expression<Func<Request, bool>> expressionSpecification = x =>
+                x.Employee.EmployeeUID == employeeUID &&
+                x.RequestStartDate > DateTime.UtcNow && x.RequestStartDate < lowerBoundry;
+
+            Expression<Func<Request, Request>> expressionProjection = x => x;
+
+            var requests = await RequestRepository.RequestGetRequests(expressionSpecification, expressionProjection);
+
+            var requestToReturn = requests.Select(x => new RequestEntity()
+            {
+                RequestUID = x.RequestUID,
+                RequestType = (RequestTypes)x.RequestType,
+                RequestStatus = (RequestStatus)x.RequestStatus
+            }).ToList();
+
+            return requestToReturn;
         }
         #endregion
     }

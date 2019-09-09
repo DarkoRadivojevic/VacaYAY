@@ -51,7 +51,7 @@ namespace ApplicationLayer.Implementations
                 RequestNumberOfDays = applicationRequest.RequestNumberOfDays,
                 RequestStartDate = (DateTime)applicationRequest.RequestStartDate,
                 RequestEndDate = (DateTime)applicationRequest.RequestEndDate,
-                RequestStatus = (int)RequestStatus.InReview,
+                RequestStatus = RequestStatus.InReview,
                 RequestType = (RequestTypes)applicationRequest.RequestType
             };
             await RequestWorkflow.RequestAddRequest(employeeEmail, requestEntity);
@@ -76,7 +76,7 @@ namespace ApplicationLayer.Implementations
                 RequestStartDate = request.RequestStartDate,
                 RequestEndDate = request.RequestEndDate,
                 RequestNumberOfDays = request.RequestNumberOfDays,
-                RequestStatus = (RequestStatus)request.RequestStatus,
+                RequestStatus = request.RequestStatus,
                 RequestFile = request.RequestFile
             };
 
@@ -130,7 +130,7 @@ namespace ApplicationLayer.Implementations
                 RequestDenialComment = applicationRequest.RequestDenialComment,
             };
 
-            if (applicationRequest.RequestType == 0)
+            if (applicationRequest.RequestType != null)
                 request.RequestType = (RequestTypes)applicationRequest.RequestType;
 
             if (applicationRequest.RequestStartDate != null)
@@ -172,6 +172,20 @@ namespace ApplicationLayer.Implementations
         public async Task RequestCollective(int requestID, DateTime startDate, DateTime endDate)
         {
             await RequestWorkflow.RequestCollective(requestID, startDate, endDate);
+        }
+
+        public async Task<List<ApplicationRequest>> RequestGetPendingRequests(Guid employeeUID)
+        {
+            var requests = await RequestWorkflow.RequestGetPendingRequests(employeeUID);
+
+            var requestToReturn = requests.Select(x => new ApplicationRequest()
+            {
+                RequestUID = x.RequestUID,
+                RequestType = x.RequestType,
+                RequestStatus = x.RequestStatus
+            }).ToList();
+
+            return requestToReturn;
         }
         #endregion
     }

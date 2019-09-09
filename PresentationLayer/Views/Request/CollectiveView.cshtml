@@ -1,0 +1,43 @@
+﻿@model VacaYAY.Models.CollectiveRequestViewModel
+@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("Collective", "Request", new AjaxOptions { HttpMethod = "POST" }, new { @class = "form-group", role = "form", id = "collectiveForm" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Collective form</h4>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.RequestID, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.RequestID, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.RequestID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.StartDate, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control datepicker", autocomplete = "off", })
+            @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.EndDate, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control datepicker", autocomplete = "off" })
+            @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group justify-content-between">
+        <div class="col">
+            <input type="submit" value="Collective" class="btn btn-default" />
+        </div>
+        <div class="col">
+            <button type="button" id="collectiveCancel" onclick="RestoreMain('collectiveForm')" class="btn btn-default">Cancel</button>
+        </div>
+    </div>
+}
+<script>
+    InitializeAddCollectivePikaday();
+    SubmitCollective();
+</script>

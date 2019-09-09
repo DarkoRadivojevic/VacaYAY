@@ -2,10 +2,10 @@
 @if (User.IsInRole("ADMIN") && Request.IsAuthenticated)
 {
     Layout = null;
-    @Html.Partial("AdminView");
+    @Html.Partial("~/Views/Home/AdminView.cshtml");
 }
 else
 {
     Layout = null;
-    @Html.Partial("UserView");
+    @Html.Partial("~/Views/Home/UserView.cshtml");
 }
