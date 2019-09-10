@@ -10,7 +10,7 @@
         <div class="card-body">Employee Surname: @Model.EmployeeSurname</div>
         <div class="card-body">ID Card number: @Model.EmployeeCardIDNumber</div>
         <div class="card-body">Employment started: @Model.EmployeeEmploymentDate.ToShortDateString()</div>
-        <div class="card-body">Employed as: @Model.EmployeeRole.ToLower().</div>
+        <div class="card-body">Employed as: @SolutionEnums.EnumExtenssion.AccountTypesToString(Model.EmployeeRole)</div>
         <div class="card-body">Backlog days: @Model.EmployeeBacklogDays </div>
     </div>
     <div class="col" id="editEmployeeDiv-@Model.EmployeeUID">

@@ -76,16 +76,15 @@ namespace ApplicationLayer.Implementations
                 RequestStartDate = request.RequestStartDate,
                 RequestEndDate = request.RequestEndDate,
                 RequestNumberOfDays = request.RequestNumberOfDays,
-                RequestStatus = request.RequestStatus,
-                RequestFile = request.RequestFile
+                RequestStatus = request.RequestStatus
             };
 
             return requestToReturn;
         }
 
-        public async Task RequestPermit(Guid requestUID)
+        public async Task RequestPermit(Guid requestUID, string approver)
         {
-            await RequestWorkflow.RequestPermit(requestUID);
+            await RequestWorkflow.RequestPermit(requestUID, approver);
         }
 
         public async Task<List<ApplicationRequest>> RequestGetRequests(int requestCount, int requestOffset)
@@ -96,7 +95,8 @@ namespace ApplicationLayer.Implementations
             {
                 RequestUID = x.RequestUID,
                 RequestType = x.RequestType,
-                RequestNumberOfDays = x.RequestNumberOfDays
+                RequestNumberOfDays = x.RequestNumberOfDays,
+                RequestStatus = x.RequestStatus
             }).ToList();
 
             return requestsToReturn;
@@ -184,6 +184,24 @@ namespace ApplicationLayer.Implementations
                 RequestType = x.RequestType,
                 RequestStatus = x.RequestStatus
             }).ToList();
+
+            return requestToReturn;
+        }
+
+        public async Task RequestCancel(Guid requestUID)
+        {
+            await RequestWorkflow.RequestCancel(requestUID);
+        }
+
+        public async Task<ApplicationRequest> RequestGetRequestFile(Guid requestUID)
+        {
+            var request = await RequestWorkflow.RequestGetRequestFile(requestUID);
+
+            var requestToReturn = new ApplicationRequest()
+            {
+                RequestFile = request.RequestFile,
+                RequestFileName = request.RequestFileName
+            };
 
             return requestToReturn;
         }

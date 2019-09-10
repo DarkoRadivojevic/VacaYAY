@@ -84,6 +84,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
             await ContractRepository.ContractInsert(contract);
 
             var result = EmployeeWorkflow.EmployeeCalculateDaysOff(contractEntity);
+
         }
 
         public async Task ContractDeleteContract(Guid contractUID)
@@ -169,9 +170,15 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
 
         public async Task<List<ContractEntity>> ContractSearchContract(string inputParameters, DateTime startDate, DateTime endDate)
         {
-            var searchParameters = inputParameters.Split(' ');
+            List<string> searchParameters = new List<string>();
 
-            var contracts = await ContractRepository.ContractSearchContracts(searchParameters, startDate, endDate);
+            if (inputParameters != null)
+                searchParameters = inputParameters.Split(' ').ToList();
+            else
+                searchParameters.DefaultContractTypesTo();
+
+
+            var contracts = await ContractRepository.ContractSearchContracts(searchParameters.ToArray(), startDate, endDate);
 
             var contractsToReturn = contracts.Select(x => new ContractEntity()
             {

@@ -8,7 +8,7 @@
     <div class="card border" id="item-@req.RequestUID" >
         <div class="card-header" id="heading @req.RequestUID">
             <h5 class="mb-0">
-                <button class="btn btn-link collapsed" value="@req.RequestUID" id="btnLink-@req.RequestUID" data-toggle="collapse" data-target="#@req.RequestUID" aria-expanded="false" aria-controls="heading @req.RequestUID">
+                <button class="btn btn-link collapsed" data="req" data-color="@req.RequestStatus" value="@req.RequestUID" id="btnLink-@req.RequestUID" data-toggle="collapse" data-target="#@req.RequestUID" aria-expanded="false" aria-controls="heading @req.RequestUID">
                     New @req.RequestType request
                 </button>
             </h5>

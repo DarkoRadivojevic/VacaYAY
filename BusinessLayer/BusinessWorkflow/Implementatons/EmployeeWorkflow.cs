@@ -173,9 +173,23 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
 
         public async Task<List<EmployeeEntity>> EmployeeFindEmployeesByName(string searchParameters, DateTime employeeEmploymentDate)
         {
-            var searchString = searchParameters.Split(' ');
+            List<string> searchString = new List<string>();
+            Expression<Func<Employee, bool>> spec;
 
-            var employees = await EmployeeRepository.EmployeeSearchEmployees(searchString, employeeEmploymentDate);
+            if (searchParameters != null)
+            {
+                searchString = searchParameters.Split(' ').ToList();
+
+                spec = x => (searchString.Any(p => x.EmployeeName.Contains(p)) ||
+                            searchString.Any(p => x.EmployeeSurname.Contains(p)));
+            }
+            else
+            {
+                spec = x => true;
+            }
+
+
+            var employees = await EmployeeRepository.EmployeeSearchEmployees(spec, employeeEmploymentDate);
 
             var employeesToReturn = employees.Select(x => new EmployeeEntity()
             {
@@ -300,7 +314,9 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
         {
             if (contractEntity.ContractType == (int)ContractTypes.Temporary)
             {
-                var amountOfDays = contractEntity.ContractStartDate.GetNumberOfMonths((DateTime)contractEntity.ContractEndDate) * DateTimeExtensions.GetContractExpression();
+                var amountOfDays = contractEntity.ContractStartDate
+                    .GetNumberOfMonths((DateTime)contractEntity.ContractEndDate) *
+                    DateTimeExtensions.GetContractExpression();
 
                 return (int)amountOfDays;
             }
@@ -313,7 +329,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
 
     public class MojTestDTO
     {
-        public Guid EmployeeUID { get; set;}
+        public Guid EmployeeUID { get; set; }
 
         public string EmployeeName { get; set; }
 

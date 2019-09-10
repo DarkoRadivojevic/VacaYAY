@@ -40,20 +40,19 @@
     <div class="form-group">
         @Html.LabelFor(m => m.ContractFile, new { @class = "col control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.ContractFile, new { type = "file" })
             @Html.ValidationMessageFor(m => m.ContractFile, "", new { @clas = "text-danger" })
         </div>
-        @*<div class="col-md-10 ">
+        <div class="col-md-10 ">
                 <div class="file-field">
                     <div class="btn btn-primary btn-sm m-0 float-left">
                         <span>Choose file</span>
-                        <input type="file" name="ContractFileName">
+                        @Html.TextBoxFor(m => m.ContractFile, new { type = "file" })
                     </div>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text" placeholder="Upload your file">
                     </div>
                 </div>
-            </div>*@
+        </div>
     </div>
     <div class="form-group justify-content-center">
         <input type="submit" value="Add Contract" id="addContract" class="btn btn-sm btn-success" />

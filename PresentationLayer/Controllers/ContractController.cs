@@ -230,7 +230,22 @@ namespace VacaYAY.Controllers
 
             return PartialView();
         }
+        
+        [HttpPost]
+        [Route("Contracts/DeleteContract")]
+        [Authorize(Roles = "ADMIN")]
+        [ValidateAntiForgeryToken]
+        public  async Task<ActionResult> DeleteContract(Guid contractUID)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View();
+            }
 
+            await ApplicationService.ContractService.ContractDeleteContract(contractUID);
+
+            return View();
+        }
         #endregion
     }
 }

@@ -58,10 +58,20 @@ function SubmitRequest() {
 
 function successNotification() {
     var message = "Action completed succesfully!"
-    setTimeout(function () { $('#userNotification').html(message) }, 2000);
+    $('#userNotification').html(message) 
+    $('#userNotification').addClass("alert-success");
+    setTimeout(function () {
+        $('#userNotification').html(" ");
+        $('#userNotification').removeClass("alert-success")
+    }, 1000);
 }
 
 function errorNotification() {
     var message = "Action completed unsuccesfuly, try again!"
-    setTimeout(function () { $('#userNotification').html(message) }, 2000);
+    $('#userNotification').html(message)
+    $('#userNotification').addClass("alert-danger");
+    setTimeout(function () {
+        $('#userNotification').html(" ");
+        $('#userNotification').removeClass("alert-danger")
+    }, 1000);
 }

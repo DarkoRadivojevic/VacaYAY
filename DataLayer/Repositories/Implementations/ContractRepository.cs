@@ -101,11 +101,11 @@ namespace DataLayer.Implementations
             var contractsToReturn = await DbContext.Contracts
                 .Where(x => x.ContractDeletedOn == null && x.ContractStartDate >= startDate &&
                 (x.ContractEndDate ?? DateTime.MaxValue) <= endDate &&
-                searchParameters.Any(p => x.ContractFileName.Contains(p)) ||
+                (searchParameters.Any(p => x.ContractFileName.Contains(p)) ||
                 searchParameters.Any(p => x.ContractNumber.ToString().Contains(p)) ||
                 searchParameters.Any(p => ((ContractTypes)x.ContractType).ToString().Contains(p)) ||
                 searchParameters.Any(p => x.Employee.EmployeeName.Contains(p)) ||
-                searchParameters.Any(p => x.Employee.EmployeeSurname.Contains(p))).ToListAsync();
+                searchParameters.Any(p => x.Employee.EmployeeSurname.Contains(p)))).ToListAsync();
 
             return contractsToReturn;
 

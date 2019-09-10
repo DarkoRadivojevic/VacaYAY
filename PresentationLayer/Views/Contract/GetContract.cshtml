@@ -17,7 +17,12 @@
             }
         }          
     <div class="col mr-2 row d-flex align-content-end flex-column justify-content-between">
-        <button type="button" id="donwloadContract-@Model.ContractUID" class="btn btn-danger btn-sm">Download</button>
+        <button type="button" id="donwloadContract-@Model.ContractUID" class="btn btn-info btn-sm">Download</button>
+        @if (User.IsInRole("ADMIN"))
+        {
+            <button type="button" id="deleteContract-@Model.ContractUID" class="btn btn-danger btn-sm">Delete</button>
+        }
     </div>
+
 </div>
 

@@ -34,7 +34,8 @@ namespace VacaYAY
                       "~/Content/paper-dashboard.css",
                       "~/Content/site.css",
                       "~/Content/pikaday.css",
-                      "~/Content/customHelpers.css"));
+                      "~/Content/customHelpers.css",
+                      "~/Content/custom-border.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/appscripts").Include(
                 "~/Scripts/AdminView/admin.scripts.js",

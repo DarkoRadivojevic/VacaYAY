@@ -77,6 +77,7 @@ namespace VacaYAY.Controllers
                 RequestUID = x.RequestUID,
                 RequestNumberOfDays = x.RequestNumberOfDays,
                 RequestType = (RequestTypes)x.RequestType,
+                RequestStatus = x.RequestStatus
             }).ToList();
 
             return View(requestsToReturn);
@@ -107,6 +108,21 @@ namespace VacaYAY.Controllers
                 RequestDenialComment = request.RequestDenialComment
             };
             return View(requestToReturn);
+        }
+
+        [HttpPost]
+        [Route("Request/GetRequestFile")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "USER")]
+        public async Task<JsonResult> GetRequestFile(Guid requestUID)
+        {
+            var request = await ApplicationService.RequestService.RequestGetRequestFile(requestUID);
+
+            return Json(new
+            {
+                RequestFile = request.RequestFile,
+                RequestFileName = request.RequestFileName
+            });
         }
 
         [HttpPost]
@@ -211,7 +227,11 @@ namespace VacaYAY.Controllers
             }
             if (model.RequestStatus == RequestStatus.Accepted)
             {
-                await ApplicationService.RequestService.RequestPermit(model.RequestUID);
+                var employee = await ApplicationService.EmployeeService.EmployeeFindCurrentEmployee(User.Identity.Name);
+
+                var approver = employee.EmployeeName + " " + employee.EmployeeSurname;
+
+                await ApplicationService.RequestService.RequestPermit(model.RequestUID, approver);
             }
             else
             {
@@ -299,6 +319,21 @@ namespace VacaYAY.Controllers
             {
                 return View();
             }
+
+            return View();
+        }
+
+        [HttpPost]
+        [Route("Request/CancelRequest")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CancelRequest(Guid requestUID)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            await ApplicationService.RequestService.RequestCancel(requestUID);
 
             return View();
         }

@@ -133,10 +133,15 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
 
             return requestsToReturn;
         }
-        public async Task RequestPermit(Guid requestUID)
+        public async Task RequestPermit(Guid requestUID, string approver)
         {
             var request = await RequestRepository.RequestsGetRequest(requestUID);
             request.RequestStatus = (int)RequestStatus.Accepted;
+
+            var helper = new PdfHelper();
+            var pdfFile = helper.CreatePdf(request, approver);
+            request.RequestFile = pdfFile;
+            request.RequestFileName = "ApprovedVacation" + request.RequestUID.ToString() + ".pdf";
 
             int remianing = await EmployeeWorkflow.EmployeeRemoveBacklogDays(request.Employee.EmployeeUID, request.RequestNumberOfDays);
 
@@ -212,9 +217,14 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
 
         public async Task<List<RequestEntity>> RequestSearchRequests(string inputString, DateTime startDate, DateTime endDate)
         {
-            var searchString = inputString.Split(' ');
+            List<string> searchString = new List<string>();
 
-            var requests = await RequestRepository.RequestSearchRequest(searchString, startDate, endDate);
+            if (inputString != null)
+                searchString = inputString.Split(' ').ToList();
+            else
+                searchString.DefaultRequestTypesTo();
+
+            var requests = await RequestRepository.RequestSearchRequest(searchString.ToArray(), startDate, endDate);
 
             var requestToReturn = requests.Select(x => new RequestEntity()
             {
@@ -256,7 +266,7 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 EmployeeID = x,
                 RequestUID = Guid.NewGuid(),
                 RequestType = (int)RequestTypes.Annual,
-                RequestComment = comment,
+                RequestDenialComment = comment,
                 RequestCreatedOn = DateTime.UtcNow,
                 RequestStatus = (int)RequestStatus.Accepted,
                 RequestNumberOfDays = numberOfDays,
@@ -290,6 +300,24 @@ namespace BusinessLayer.BusinessWorkflow.Implementatons
                 RequestType = (RequestTypes)x.RequestType,
                 RequestStatus = (RequestStatus)x.RequestStatus
             }).ToList();
+
+            return requestToReturn;
+        }
+
+        public async Task RequestCancel(Guid requestUID)
+        {
+            await RequestRepository.RequestDelete(requestUID);
+        }
+
+        public async Task<RequestEntity> RequestGetRequestFile(Guid requestUID)
+        {
+            var request = await RequestRepository.RequestsGetRequest(requestUID);
+
+            var requestToReturn = new RequestEntity()
+            {
+                RequestFile = request.RequestFile,
+                RequestFileName = request.RequestFileName
+            };
 
             return requestToReturn;
         }

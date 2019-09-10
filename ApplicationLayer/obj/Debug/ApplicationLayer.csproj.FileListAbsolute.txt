@@ -92,3 +92,5 @@ C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\obj\Debug\Application
 C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\obj\Debug\ApplicationLayer.pdb
 C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\bin\Debug\aspnet-VacaYAY-20190806013511.mdf
 C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\bin\Debug\aspnet-VacaYAY-20190806013511_log.ldf
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\bin\Debug\itextsharp.dll
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\ApplicationLayer\bin\Debug\itextsharp.xml

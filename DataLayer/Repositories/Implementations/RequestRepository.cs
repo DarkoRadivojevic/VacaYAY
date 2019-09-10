@@ -53,6 +53,7 @@ namespace DataLayer.Implementations
             Request request = await DbContext.Requests.Where(x => x.RequestUID == requestUID && 
                     x.RequestDeletedOn == null)
                 .FirstAsync();
+            request.RequestStatus = (int)RequestStatus.Rejected;
             request.RequestDeletedOn = DateTime.UtcNow;
 
             await this.RequestSave();
@@ -99,11 +100,11 @@ namespace DataLayer.Implementations
                                                         x.RequestEndDate <= endDate &&
                                                         (searchString.Any(s => x.RequestComment.Contains(s)) ||
                                                         searchString.Any(s => x.RequestDenialComment.Contains(s)) ||
-                                                        searchString.Contains(x.RequestFileName) ||
-                                                        searchString.Contains(x.RequestNumberOfDays.ToString()) ||
-                                                        searchString.Contains(((RequestTypes)x.RequestType).ToString()) || 
-                                                        searchString.Contains(x.Employee.EmployeeName) ||
-                                                        searchString.Contains(x.Employee.EmployeeSurname)));
+                                                        searchString.Any(s => x.RequestFileName.Contains(s)) ||
+                                                        searchString.Any(s => x.RequestNumberOfDays.ToString().Contains(s)) ||
+                                                        searchString.Any(s => ((RequestTypes)x.RequestType).ToString().Contains(s)) ||
+                                                        searchString.Any(s => x.Employee.EmployeeName.Contains(s)) ||
+                                                        searchString.Any(s => x.Employee.EmployeeSurname.Contains(s))));
 
             List<Request> requestsToReturn = await queryableRequests.ToListAsync();
 

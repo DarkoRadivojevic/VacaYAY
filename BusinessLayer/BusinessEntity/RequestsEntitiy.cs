@@ -16,5 +16,6 @@ namespace BusinessLayer.BusinessEntity
         public DateTime RequestStartDate { get; set; }
         public DateTime RequestEndDate { get; set; }
         public DateTime RequestCreatedOn { get; set; }
+        public string RequestFileName { get; set; }
     }
 }

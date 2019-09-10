@@ -21,18 +21,27 @@
         {
             <button type="button" id="approve-@Model.RequestUID" value="0" class="btn btn-success  btn-sm">Approve</button>
         }
-        else
+        else if(Model.RequestStatus == SolutionEnums.RequestStatus.Adjusted)
         {
             <button type="button" id="approve-@Model.RequestUID" value="0" class="btn btn-success  btn-sm">Accept</button>
         }
-        <button type="button" id="edit-@Model.RequestUID" value="0" class="btn btn-warning btn-sm">Edit</button>
+        @if ( Model.RequestStatus != SolutionEnums.RequestStatus.Rejected && 
+            Model.RequestStatus !=  SolutionEnums.RequestStatus.Accepted)
+        {
+            <button type="button" id="edit-@Model.RequestUID" value="0" class="btn btn-warning btn-sm">Edit</button>
+        }
         @if (User.IsInRole("ADMIN"))
         {
             <button type="button" id="deny-@Model.RequestUID" value="0" class="btn btn-danger btn-sm">Deny</button>
         }
-        else
+        else if(Model.RequestStatus != SolutionEnums.RequestStatus.Rejected && 
+            Model.RequestStatus != SolutionEnums.RequestStatus.Accepted)
         {
             <button type="button" id="cancel-@Model.RequestUID" value="0" class="btn btn-danger btn-sm">Cancel</button>
+        }
+        @if(User.IsInRole("USER") && Model.RequestStatus == SolutionEnums.RequestStatus.Accepted)
+        {
+            <button type="button" id="download-@Model.RequestUID" class="btn btn-success btn-sm">Download file</button>
         }
     </div>
 </div>

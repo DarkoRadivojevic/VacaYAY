@@ -74,3 +74,13 @@ C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\obj\Debug\BusinessLayer.
 C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\obj\Debug\BusinessLayer.dll
 C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\obj\Debug\BusinessLayer.pdb
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\bin\Debug\Common.Logging.Core.dll
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\bin\Debug\Common.Logging.dll
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\bin\Debug\itextsharp.dll
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\bin\Debug\BouncyCastle.Crypto.xml
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\bin\Debug\Common.Logging.pdb
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\bin\Debug\Common.Logging.xml
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\bin\Debug\Common.Logging.Core.pdb
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\bin\Debug\Common.Logging.Core.xml
+C:\Users\ING\source\repos\VacaYAY\VacaYAY\BusinessLayer\bin\Debug\itextsharp.xml

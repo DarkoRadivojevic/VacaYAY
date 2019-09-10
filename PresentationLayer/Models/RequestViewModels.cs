@@ -95,6 +95,8 @@ namespace VacaYAY.Models
         public int RequestNumberOfDays { get; set; }
         public DateTime RequestStartDate { get; set; }
         public DateTime RequestEndDate { get; set; }
+        public byte[] RequestFile { get; set; }
+        public string RequestFileName { get; set; }
     }
 
     public class CollectiveRequestViewModel

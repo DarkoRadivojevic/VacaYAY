@@ -13,12 +13,14 @@ namespace ApplicationLayer.Interfaces
         Task<ApplicationRequest> RequestGetRequest(Guid requestGuid);
         Task RequestAddRequest(string employeeEmail, ApplicationRequest applicationRequest);
         Task<int> RequestRequestGetTotalAvailableDays(Guid employeeUID);
-        Task RequestPermit(Guid requestUID);
+        Task RequestPermit(Guid requestUID, string approver);
+        Task RequestCancel(Guid requestUID);
         Task RequestDeny(ApplicationRequest applicationRequest);
         Task<List<ApplicationRequest>> RequestGetRequests(Guid employeeUID);
         Task RequestEditRequest(ApplicationRequest applicationRequest);
         Task<List<ApplicationRequest>> RequestSearchRequests(string searchInput, DateTime? startDate, DateTime? endDate);
         Task RequestCollective(int requestID, DateTime startDate, DateTime endDate);
         Task<List<ApplicationRequest>> RequestGetPendingRequests(Guid employeeUID);
+        Task<ApplicationRequest> RequestGetRequestFile(Guid requestUID);
     }
 }

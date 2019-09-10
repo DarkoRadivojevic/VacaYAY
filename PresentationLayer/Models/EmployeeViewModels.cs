@@ -60,7 +60,7 @@ namespace VacaYAY.Models
         public string EmployeeCardIDNumber { get; set; }
         public DateTime EmployeeEmploymentDate { get; set; }
         public int? EmployeeBacklogDays { get; set; }
-        public string EmployeeRole { get; set; }
+        public AccountTypes EmployeeRole { get; set; }
     }
 }
 

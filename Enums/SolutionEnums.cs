@@ -31,7 +31,10 @@ namespace SolutionEnums
 
     public enum AccountTypes
     {
+        [Display(Name = "Admin")]
         Admin = 1,
+
+        [Display(Name = "User")]
         User
     }
 
@@ -58,6 +61,26 @@ namespace SolutionEnums
                      .GetCustomAttribute<DisplayAttribute>()?
                      .Name;
 
+        }
+
+        public static string AccountTypesToString(this AccountTypes accountTypes)
+        {
+            return accountTypes.GetType()?
+                .GetMember(accountTypes.ToString())?
+                .First()?
+                .GetCustomAttribute<DisplayAttribute>()?
+                .Name;
+        }
+
+        public static AccountTypes AccountTypesToEnum(this string accountTypes)
+        {
+            switch (accountTypes)
+            {
+                case "ADMIN":
+                    return AccountTypes.Admin;
+                default:
+                    return AccountTypes.User;
+            }
         }
     }
 }

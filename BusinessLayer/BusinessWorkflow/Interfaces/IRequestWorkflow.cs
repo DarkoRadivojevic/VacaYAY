@@ -12,7 +12,7 @@ namespace BusinessLayer.BusinessWorkflow.Interfaces
         Task<List<RequestEntity>> RequestGetRequests(int requestCount, int requestOffset);
         Task<RequestEntity> RequestGetRequest(Guid requestUID);
         Task RequestAddRequest(string employeeEmail, RequestEntity requestEntity);
-        Task RequestPermit(Guid requestUID);
+        Task RequestPermit(Guid requestUID, string approver);
         Task RequestDeny(Guid requestUID, string denialComment);
         Task<List<RequestEntity>> RequestsGetRequests(Guid employeeUID);
         Task<int> RequestGetTotalAvailableDays(Guid employeeUID);
@@ -20,5 +20,7 @@ namespace BusinessLayer.BusinessWorkflow.Interfaces
         Task<List<RequestEntity>> RequestSearchRequests(string inputString, DateTime startDate, DateTime endDate);
         Task RequestCollective(int requestID, DateTime startDate, DateTime endDate);
         Task<List<RequestEntity>> RequestGetPendingRequests(Guid employeeUID);
+        Task RequestCancel(Guid requestUID);
+        Task<RequestEntity> RequestGetRequestFile(Guid requestUID);
     }
 }

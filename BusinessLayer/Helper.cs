@@ -1,4 +1,9 @@
-﻿using System;
+﻿using DataLayer;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using SolutionEnums;
+using System;
+using System.Collections.Generic;
 
 namespace BusinessLayer
 {
@@ -18,7 +23,7 @@ namespace BusinessLayer
 
         public static int GetNumberOfMonths(this DateTime startDate, DateTime endDate)
         {
-            var number = ((startDate.Year - endDate.Year) * 12) + startDate.Month - endDate.Month;
+            var number = ((endDate.Year - startDate.Year) * 12) + endDate.Month - startDate.Month;
             return number;
         }
 
@@ -32,6 +37,26 @@ namespace BusinessLayer
         public static string CollectiveCommentTo(this string comment)
         {
             return  "Collective leave";
+        }
+    }
+
+    public static class SearchStringExtension
+    {
+        public static List<string> DefaultRequestTypesTo(this List<string> parameters)
+        {
+            parameters.Add(RequestTypes.Annual.ToString());
+            parameters.Add(RequestTypes.Paid.ToString());
+            parameters.Add(RequestTypes.Unpaid.ToString());
+
+            return parameters;
+        }
+
+        public static List<string> DefaultContractTypesTo(this List<string> parameters)
+        {
+            parameters.Add(ContractTypes.Indefinite.ToString());
+            parameters.Add(ContractTypes.Temporary.ToString());
+
+            return parameters;
         }
     }
 }

@@ -93,11 +93,12 @@ namespace DataLayer.Implementations
 
         }
 
-        public async Task<List<Employee>> EmployeeSearchEmployees(string[] searchString, DateTime employeeEmploymentDate)
+        public async Task<List<Employee>> EmployeeSearchEmployees(Expression<Func<Employee, bool>> spec, DateTime employeeEmploymentDate)
         {
-            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => (searchString.Any(p => x.EmployeeName.Contains(p)) || searchString.Any(p => x.EmployeeSurname.Contains(p))) && 
-                                                                               x.EmployeeDeletedOn == null && x.EmployeeEmploymentDate >= employeeEmploymentDate)
-                                                                        .ToListAsync();
+            List<Employee> employeesToReturn = await DbContext.Employees.Where(x => x.EmployeeDeletedOn == null &&
+                        x.EmployeeEmploymentDate >= employeeEmploymentDate).Where(spec) 
+                    .ToListAsync();
+
             return employeesToReturn;
         }
 

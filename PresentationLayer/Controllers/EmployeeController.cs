@@ -117,6 +117,7 @@ namespace VacaYAY.Controllers
             }
 
             var employee = await ApplicationService.EmployeeService.EmployeeGetEmployee(employeeUID);
+
             var employeeToReturn = new ReturnEmployeeViewModel()
             {
                 EmployeeUID = employee.EmployeeUID,
@@ -125,7 +126,7 @@ namespace VacaYAY.Controllers
                 EmployeeBacklogDays = employee.EmployeeBacklogDays,
                 EmployeeCardIDNumber = employee.EmployeeCardIDNumber,
                 EmployeeEmploymentDate = (DateTime)employee.EmployeeEmploymentDate,
-                EmployeeRole = employee.EmployeeRole
+                EmployeeRole = employee.EmployeeRole.AccountTypesToEnum()
             };
             return View(employeeToReturn);
         }

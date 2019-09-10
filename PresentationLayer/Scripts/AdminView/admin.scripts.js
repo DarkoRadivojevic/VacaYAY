@@ -239,6 +239,8 @@ function ButtonAddValue(collapse, employee) {
         $('#approve-' + collapse.value).val(collapse.value);
         $('#deny-' + collapse.value).val(collapse.value);
         $('#edit-' + collapse.value).val(collapse.value);
+        $('#cancel-' + collapse.value).val(collapse.value);
+        $('#download-' + collapse.value).val(collapse.value);
         ButtonsAddAction(collapse.value, employee);
     }
     else {
@@ -257,6 +259,8 @@ function ButtonsAddAction(id, employee) {
         $('#approve-' + id).on('click', () => ShowRequestApproveModal(id));
         $('#deny-' + id).on('click', () => ShowRequestDenyModal(id));
         $('#edit-' + id).on('click', () => ShowRequestEditComponents(id));
+        $('#cancel-' + id).on('click', () => CancelRequest(id))
+        $('#download-' + id).on('click', () => DownloadRequest(id))
     }
     else {
         $('#editEmployee-' + id).on('click', () => ShowEmployeeEditComponents(id));
@@ -346,7 +350,7 @@ function DenyRequest(url) {
     $.ajax({
         type: 'POST',
         url: url,
-        data: ({ "__RequestVerificationToken": token, "RequestUID": $('#yes').val(), "RequestStatus": "Rejected", "RequestComment": comment }),
+        data: ({ "__RequestVerificationToken": token, "RequestUID": $('#yes').val(), "RequestStatus": "Rejected", "RequestDenialComment": comment }),
         success: function () {
             $('#item-' + $('#yes').val()).remove();
             successNotification();
@@ -559,8 +563,7 @@ function ButtonAddDownload(id) {
             url: 'Contract/GetContractFile',
             data: { "__RequestVerificationToken": token, ContractUID: id },
             success: function (file) {
-
-                var arr = String.fromCharCode.apply(String, file['ContractFile']);
+                var arr = new Uint8Array(file['ContractFile']);
 
                 var blob = new Blob([arr]);
 
